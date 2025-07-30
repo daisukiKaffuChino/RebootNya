@@ -40,18 +40,6 @@
             android:exported="true"
             android:multiprocess="false"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
-        <service
-            android:name=".service.PrivilegedService"
-            android:exported="true"
-            android:process=":shizuku"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="github.daisukikaffuchino.rebootnya.service.PrivilegedService" />
-            </intent-filter>
-            <meta-data
-                android:name="rikka.shizuku.user_service"
-                android:value="true" />
-        </service>
     </application>
 
 </manifest>
