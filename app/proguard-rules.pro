@@ -21,6 +21,23 @@
 #-renamesourcefileattribute SourceFile
 -keepattributes Signature
 -keepattributes *Annotation*
+
+# 保持 ShizukuUtil 类及其方法不被混淆
+-keep class github.daisukikaffuchino.rebootnya.utils.ShizukuUtil {
+    public int shizukuProcess(java.lang.String[]);
+}
+
+# 保持 Shizuku 类的 service 字段不被混淆
+-keep class rikka.shizuku.Shizuku {
+    private static moe.shizuku.server.IShizukuService service;
+}
+
+# 保持 IShizukuService 接口不被混淆
+-keep interface moe.shizuku.server.IShizukuService { *; }
+
+# 保持 NyaRemoteProcess 类不被混淆
+-keep class github.daisukikaffuchino.rebootnya.shizuku.NyaRemoteProcess { *; }
+
 -keep class com.topjohnwu.superuser.** { *; }
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
