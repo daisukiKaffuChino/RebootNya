@@ -1,0 +1,67 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    id("stringfog")
+}
+
+apply plugin: 'stringfog'
+
+android {
+    namespace 'github.daisukikaffuchino.rebootnya'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "github.daisukikaffuchino.rebootnya"
+        minSdk 28
+        targetSdk 36
+        versionCode 250728
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+        aidl = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    stringfog {
+        enable true
+        implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
+    }
+}
+
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    implementation libs.navigation.fragment.ktx
+
+    implementation libs.core
+    implementation libs.provider
+    implementation libs.api
+    implementation libs.xor
+
+    implementation libs.core.ktx
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}

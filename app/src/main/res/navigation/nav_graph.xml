@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <dialog
+        android:id="@+id/nav_home"
+        android:name="github.daisukikaffuchino.rebootnya.fragment.HomeFragment"
+        android:label="HomeFragment" />
+    <dialog
+        android:id="@+id/nav_settings"
+        android:name="github.daisukikaffuchino.rebootnya.fragment.SettingsFragment"
+        android:label="SettingsFragment" />
+</navigation>

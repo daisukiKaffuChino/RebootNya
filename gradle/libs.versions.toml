@@ -1,0 +1,38 @@
+[versions]
+agp = "8.11.1"
+api = "13.1.5"
+core = "6.0.0"
+gradlePlugin = "5.2.0"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.10.0"
+activity = "1.8.0"
+constraintlayout = "2.1.4"
+navigationUi = "2.9.2"
+kotlin = "2.2.0"
+coreKtx = "1.16.0"
+xor = "5.0.0"
+
+[libraries]
+api = { module = "dev.rikka.shizuku:api", version.ref = "api" }
+core = { module = "com.github.topjohnwu.libsu:core", version.ref = "core" }
+gradle-plugin = { module = "com.github.megatronking.stringfog:gradle-plugin", version.ref = "gradlePlugin" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationUi" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+provider = { module = "dev.rikka.shizuku:provider", version.ref = "api" }
+xor = { module = "com.github.megatronking.stringfog:xor", version.ref = "xor" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+

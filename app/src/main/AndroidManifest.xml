@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+        android:name="android.permission.REBOOT"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.SHUTDOWN"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.DEVICE_POWER"
+        tools:ignore="ProtectedPermissions" />
+
+    <application
+        android:name=".NyaApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RebootNya">
+
+        <activity
+            android:name=".MainActivity"
+            android:excludeFromRecents="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            android:authorities="${applicationId}.shizuku"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+        <service
+            android:name=".service.PrivilegedService"
+            android:exported="true"
+            android:process=":shizuku"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="github.daisukikaffuchino.rebootnya.service.PrivilegedService" />
+            </intent-filter>
+            <meta-data
+                android:name="rikka.shizuku.user_service"
+                android:value="true" />
+        </service>
+    </application>
+
+</manifest>
