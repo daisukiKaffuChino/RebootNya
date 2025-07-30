@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">RebootNya</string>
+    <string name="confirm">确认</string>
+    <string name="close">关闭</string>
+    <string name="setting">设置</string>
+    <string name="lock_screen">锁屏</string>
+    <string name="reboot">重启</string>
+    <string name="soft_reboot">软重启</string>
+    <string name="safe_mode">安全模式</string>
+    <string name="system_ui">系统界面</string>
+    <string name="power_off">关机</string>
+    <string name="no_root">没有root权限</string>
+    <string name="exec_fail">命令执行失败</string>
+    <string name="working">工作中 -</string>
+    <string name="not_working">未工作 -</string>
+    <string name="click_request_pm">点击进行授权</string>
+    <string name="work_mode">工作模式</string>
+    <string name="dynamic_color">动态取色</string>
+    <string name="require_a12">至少需要Android12</string>
+    <string name="restart_app_effect">手动重启 App 以使主题生效</string>
+    <string name="shizuku_denied">Shizuku 权限被拒绝</string>
+    <string name="shizuku_too_old">Shizuku 版本过低</string>
+    <string name="shizuku_not_run">Shizuku 未运行</string>
+    <string name="shizuku_service_err">Shizuku 服务连接错误</string>
+    <string name="not_support">不支持</string>
+    <string name="ksu_tip">如果你是 KernelSU 用户，需要前往管理器手动授权</string>
+</resources>

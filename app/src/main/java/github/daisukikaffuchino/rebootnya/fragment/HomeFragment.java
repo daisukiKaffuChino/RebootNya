@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.IPowerManager;
-import android.os.RemoteException;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,18 +16,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.topjohnwu.superuser.Shell;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
-import github.daisukikaffuchino.rebootnya.MainActivity;
+import github.daisukikaffuchino.rebootnya.NyaApplication;
 import github.daisukikaffuchino.rebootnya.R;
-import github.daisukikaffuchino.rebootnya.shizuku.NyaRemoteProcess;
-import moe.shizuku.server.IShizukuService;
 import rikka.shizuku.Shizuku;
-import rikka.shizuku.ShizukuBinderWrapper;
-import rikka.shizuku.SystemServiceHelper;
 
 public class HomeFragment extends DialogFragment {
     private Context context;
@@ -78,53 +70,10 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void runRootCommand(String cmd) {
-        if (runRootCommandWithResult(cmd))
+        if (NyaApplication.rootUtil.runRootCommandWithResult(cmd))
             dismiss();
         else
             Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
-    }
-
-    private boolean runRootCommandWithResult(String cmd) {
-        if (Boolean.FALSE.equals(Shell.isAppGrantedRoot())) {
-            Toast.makeText(context, R.string.no_root, Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-            Shell.Result result;
-            result = Shell.cmd(cmd).exec();
-            return result.isSuccess();
-        }
-    }
-
-    private void shizukuReboot(boolean confirm, @Nullable String reason) {
-        try {
-            IPowerManager powerManager = IPowerManager.Stub.asInterface(
-                    new ShizukuBinderWrapper(SystemServiceHelper.getSystemService("power"))
-            );
-            powerManager.reboot(confirm, reason, false);
-        } catch (Exception e) {
-            e.fillInStackTrace();
-            Toast.makeText(context, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private int shizukuProcess(String[] cmd) {
-        try {
-            Field privateField = Shizuku.class.getDeclaredField("service");
-            privateField.setAccessible(true);
-            IShizukuService value = (IShizukuService) privateField.get(null);
-            try {
-                assert value != null;
-                Process process = new NyaRemoteProcess(value.newProcess(cmd, null, null));
-                return process.waitFor();
-            } catch (RemoteException e) {
-                e.fillInStackTrace();
-                Toast.makeText(context, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            e.fillInStackTrace();
-            Toast.makeText(context, "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        return 100;
     }
 
     private void funcRoot() {
@@ -148,7 +97,7 @@ public class HomeFragment extends DialogFragment {
                 runRootCommand("svc power reboot bootloader");
                 break;
             case 6:
-                if (runRootCommandWithResult("setprop persist.sys.safemode"))
+                if (NyaApplication.rootUtil.runRootCommandWithResult("setprop persist.sys.safemode"))
                     runRootCommand("svc power reboot");
                 break;
             case 7:
@@ -158,46 +107,46 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void funcShizuku() throws IOException {
-        if (!MainActivity.checkShizukuPermission()) {
-            Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!Shizuku.pingBinder()) {
             Toast.makeText(context, R.string.shizuku_not_run, Toast.LENGTH_SHORT).show();
             return;
         }
+        if (!NyaApplication.shizukuUtil.checkShizukuPermission()) {
+            Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
+            return;
+        }
         switch (checkedItem) {
             case 0:
-                int exitCode = shizukuProcess(new String[]{"input", "keyevent", "KEYCODE_POWER"});
+                int exitCode = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"input", "keyevent", "KEYCODE_POWER"});
                 if (exitCode == 0)
                     dismiss();
                 else
                     Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 1:
-                shizukuReboot(false, null);
+                NyaApplication.shizukuUtil.shizukuReboot(false, null);
                 break;
             case 2:
-                shizukuReboot(false, "userspace");
+                NyaApplication.shizukuUtil.shizukuReboot(false, "userspace");
                 break;
             case 3:
-                int exitCode2 = shizukuProcess(new String[]{"pkill", "-f", "com.android.systemui"});
+                int exitCode2 = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"pkill", "-f", "com.android.systemui"});
                 if (exitCode2 == 0)
                     dismiss();
                 else
                     Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 4:
-                shizukuReboot(false, "recovery");
+                NyaApplication.shizukuUtil.shizukuReboot(false, "recovery");
                 break;
             case 5:
-                shizukuReboot(false, "bootloader");
+                NyaApplication.shizukuUtil.shizukuReboot(false, "bootloader");
                 break;
             case 6:
-                shizukuReboot(true, "safemode");
+                NyaApplication.shizukuUtil.shizukuReboot(true, "safemode");
                 break;
             case 7:
-                shizukuProcess(new String[]{"reboot", "-p"});
+                NyaApplication.shizukuUtil.shizukuProcess(new String[]{"reboot", "-p"});
                 break;
         }
     }

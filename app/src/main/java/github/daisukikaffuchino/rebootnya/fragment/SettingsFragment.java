@@ -24,7 +24,7 @@ import com.topjohnwu.superuser.Shell;
 
 import java.util.Objects;
 
-import github.daisukikaffuchino.rebootnya.MainActivity;
+import github.daisukikaffuchino.rebootnya.NyaApplication;
 import github.daisukikaffuchino.rebootnya.R;
 import github.daisukikaffuchino.rebootnya.databinding.FragmentSettingsBinding;
 import rikka.shizuku.Shizuku;
@@ -61,7 +61,7 @@ public class SettingsFragment extends DialogFragment {
         binding.taffy.setImageResource(R.drawable.taffy_no);
         binding.cardStatus.setOnClickListener(v -> {
             if (workingMode.equals("Root"))
-                requestRoot();
+                NyaApplication.rootUtil.requestRoot();
             else {
                 if (!Shizuku.pingBinder()) {
                     Toast.makeText(context, R.string.shizuku_not_run, Toast.LENGTH_SHORT).show();
@@ -84,7 +84,7 @@ public class SettingsFragment extends DialogFragment {
 
         if (workingMode.equals("Root") && !Boolean.FALSE.equals(Shell.isAppGrantedRoot())) {
             setWorkingStatus(workingMode);
-        } else if (workingMode.equals("Shizuku") && MainActivity.checkShizukuPermission()) {
+        } else if (workingMode.equals("Shizuku") && NyaApplication.shizukuUtil.checkShizukuPermission()) {
             setWorkingStatus(workingMode);
         }
 
@@ -111,8 +111,8 @@ public class SettingsFragment extends DialogFragment {
 
     private void onRequestPermissionsResult(int requestCode, int grantResult) {
         boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
-        //Log.d("xxx", String.valueOf(granted));
-        if (granted && sp.getString("work_mode", "Root").equals("Shizuku")) {
+        if (granted && sp.getString("work_mode", "Root").equals("Shizuku")
+                && requestCode == SHIZUKU_REQUEST_CODE) {
             setWorkingStatus("Shizuku");
         }
     }
@@ -128,19 +128,6 @@ public class SettingsFragment extends DialogFragment {
             e.fillInStackTrace();
         }
         return "err";
-    }
-
-    private void requestRoot() {
-        Toast.makeText(context, R.string.ksu_tip, Toast.LENGTH_SHORT).show();
-        Process process = null;
-        try {
-            process = Runtime.getRuntime().exec("su");
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        } finally {
-            if (process != null)
-                process.destroy();
-        }
     }
 
     @SuppressLint("SetTextI18n")
