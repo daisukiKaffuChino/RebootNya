@@ -181,32 +181,37 @@ public class HomeFragment extends DialogFragment {
         switch (actionId) {
             case 0:
                 int exitCode = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"input", "keyevent", "KEYCODE_POWER"});
-                if (exitCode == 0)
-                    dismiss();
-                else
-                    Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
+                if (exitCode == 0) dismiss();
+                else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 1:
-                NyaApplication.shizukuUtil.shizukuReboot(false, null);
+                NyaApplication.shizukuUtil.shizukuReboot(null);
                 break;
             case 2:
-                NyaApplication.shizukuUtil.shizukuReboot(false, "userspace");
+                NyaApplication.shizukuUtil.shizukuReboot("userspace");
                 break;
             case 3:
+                if (Shizuku.getUid() == 2000)
+                    Toast.makeText(context, R.string.shizuku_permission_insufficient, Toast.LENGTH_SHORT).show();
                 int exitCode2 = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"pkill", "-f", "com.android.systemui"});
-                if (exitCode2 == 0)
-                    dismiss();
-                else
+                if (exitCode2 != 0)
                     Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 4:
-                NyaApplication.shizukuUtil.shizukuReboot(false, "recovery");
+                NyaApplication.shizukuUtil.shizukuReboot("recovery");
                 break;
             case 5:
-                NyaApplication.shizukuUtil.shizukuReboot(false, "bootloader");
+                NyaApplication.shizukuUtil.shizukuReboot("bootloader");
                 break;
             case 6:
-                NyaApplication.shizukuUtil.shizukuReboot(true, "safemode");
+                if (Shizuku.getUid() == 2000)
+                    Toast.makeText(context, R.string.shizuku_permission_insufficient, Toast.LENGTH_SHORT).show();
+                int exitCode3 = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"setprop", "persist.sys.safemode", "1"});
+                //Log.d("xxx", String.valueOf(exitCode3));
+                if (exitCode3 == 0) {
+                    NyaApplication.shizukuUtil.shizukuReboot(null);
+                    dismiss();
+                } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 7:
                 NyaApplication.shizukuUtil.shizukuProcess(new String[]{"reboot", "-p"});

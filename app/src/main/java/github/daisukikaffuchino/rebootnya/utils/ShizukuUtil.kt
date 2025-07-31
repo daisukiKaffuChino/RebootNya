@@ -34,12 +34,12 @@ class ShizukuUtil {
         }
     }
 
-    fun shizukuReboot(confirm: Boolean, reason: String?) {
+    fun shizukuReboot(reason: String?) {
         try {
             val powerManager = IPowerManager.Stub.asInterface(
                 ShizukuBinderWrapper(SystemServiceHelper.getSystemService("power"))
             )
-            powerManager.reboot(confirm, reason, false)
+            powerManager.reboot(false, reason, false)
         } catch (e: Exception) {
             e.fillInStackTrace()
             Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
