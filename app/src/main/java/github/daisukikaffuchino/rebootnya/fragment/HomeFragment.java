@@ -141,8 +141,11 @@ public class HomeFragment extends DialogFragment {
                 NyaApplication.shizukuUtil.shizukuReboot("bootloader");
                 break;
             case 6:
+                if (Shizuku.getUid() == 2000)
+                    Toast.makeText(context, R.string.shizuku_permission_insufficient, Toast.LENGTH_SHORT).show();
                 int exitCode3 = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"setprop", "persist.sys.safemode", "1"});
-                if (exitCode3 == 1) {
+                //Log.d("xxx", String.valueOf(exitCode3));
+                if (exitCode3 == 0) {
                     NyaApplication.shizukuUtil.shizukuReboot(null);
                     dismiss();
                 } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
