@@ -1,10 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("stringfog")
 }
-
-apply plugin: 'stringfog'
 
 android {
     namespace 'github.daisukikaffuchino.rebootnya'
@@ -22,7 +19,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        buildConfig = true
         aidl = true
     }
 
@@ -38,17 +34,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-
-    stringfog {
-        enable true
-        implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
+    kotlin {
+        jvmToolchain(21)
     }
 }
 
@@ -63,7 +54,6 @@ dependencies {
     implementation libs.core
     implementation libs.provider
     implementation libs.api
-    implementation libs.xor
 
     implementation libs.core.ktx
     testImplementation libs.junit

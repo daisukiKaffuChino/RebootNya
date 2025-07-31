@@ -59,7 +59,7 @@ class ShizukuUtil {
                 e.fillInStackTrace()
                 Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
             }
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             e.fillInStackTrace()
             Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
         }
