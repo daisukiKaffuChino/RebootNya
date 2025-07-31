@@ -97,7 +97,7 @@ public class HomeFragment extends DialogFragment {
                 runRootCommand("svc power reboot bootloader");
                 break;
             case 6:
-                if (NyaApplication.rootUtil.runRootCommandWithResult("setprop persist.sys.safemode"))
+                if (NyaApplication.rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1"))
                     runRootCommand("svc power reboot");
                 break;
             case 7:
