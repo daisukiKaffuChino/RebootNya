@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,7 +35,6 @@ import rikka.shizuku.Shizuku;
 
 public class HomeFragment extends DialogFragment {
     private Context context;
-    private View view;
 
     @NonNull
     @Override
@@ -54,10 +53,13 @@ public class HomeFragment extends DialogFragment {
             MaterialButton button = new MaterialButton(context);
             int baseColor = MaterialColors.getColor(button, com.google.android.material.R.attr.colorPrimaryFixedDim);
             int textColor = MaterialColors.getColor(button, com.google.android.material.R.attr.colorOnPrimaryContainer);
-            int translucentColor = ColorUtils.setAlphaComponent(baseColor, (int)(0.08 * 255));
-            button.setText(items[i]);
+            double baseLuminance = ColorUtils.calculateLuminance(baseColor);
+            double textLuminance = ColorUtils.calculateLuminance(textColor);
+            int translucentColor = ColorUtils.setAlphaComponent(baseColor, (int)((isDarkTheme(context) ? 0.08 : (0.2 + (baseLuminance - 0.5) * 0.2)) * 255));
+            int translucentTextColor = ColorUtils.setAlphaComponent(textColor, (int)((isDarkTheme(context) ? 0.94 : computeSigmoid(textLuminance)) * 255));
             button.setBackgroundTintList(ColorStateList.valueOf(translucentColor));
-            button.setTextColor(textColor);
+            button.setTextColor(translucentTextColor);
+            button.setText(items[i]);
             button.setCornerRadius(6);
             button.setInsetTop(2);
             button.setInsetBottom(2);
@@ -98,7 +100,6 @@ public class HomeFragment extends DialogFragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
 
-        this.view = scrollView;
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle(R.string.app_name);
         builder.setView(scrollView);
@@ -119,7 +120,6 @@ public class HomeFragment extends DialogFragment {
 
     private void handleButtonAction(int actionId) {
         SharedPreferences sp = context.getSharedPreferences("Nya", Context.MODE_PRIVATE);
-        updateAllMaterialButtons(view, false);
         if (sp.getString("work_mode", "Root").equals("Root"))
             funcRoot(actionId);
         else {
@@ -128,18 +128,6 @@ public class HomeFragment extends DialogFragment {
             } catch (IOException e) {
                 e.fillInStackTrace();
                 Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
-            }
-        }
-        updateAllMaterialButtons(view, true);
-    }
-
-    private void updateAllMaterialButtons(View view, boolean status) {
-        if (view == null) return;
-        if (view instanceof MaterialButton) {
-            view.setEnabled(status);
-        } else if (view instanceof ViewGroup group) {
-            for (int i = 0; i < group.getChildCount(); i++) {
-                updateAllMaterialButtons(group.getChildAt(i), status);
             }
         }
     }
@@ -224,6 +212,19 @@ public class HomeFragment extends DialogFragment {
                 NyaApplication.shizukuUtil.shizukuProcess(new String[]{"reboot", "-p"});
                 break;
         }
+    }
+
+    private boolean isDarkTheme(Context context) {
+        return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    public static double computeSigmoid(double x) {
+        double shift = 0.31;
+        double k = 10.0;
+        double a = 0.75;
+        double b = 0.19;
+        return a + b / (1 + Math.exp(-k * (x - shift)));
     }
 
     @Override
