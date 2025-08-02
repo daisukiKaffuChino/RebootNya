@@ -23,6 +23,8 @@
     <string name="shizuku_not_run">Shizuku 未啟動</string>
     <string name="shizuku_service_err">Shizuku 服務連線錯誤</string>
     <string name="not_support">不支援</string>
-    <string name="ksu_tip">若您是 KernelSU 使用者，請前往管理器手動授權</string>
+    <string name="ksu_tip">若你是 KernelSU 使用者，請前往管理器手動授權</string>
     <string name="shizuku_permission_insufficient">Shizuku(ADB) 的許可權可能不足</string>
+    <string name="exec_custom_shell">執行自定義 Shell</string>
+    <string name="no_permission">你沒有獲得許可權</string>
 </resources>

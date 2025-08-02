@@ -25,4 +25,6 @@
     <string name="not_support">Not supported</string>
     <string name="ksu_tip">If you are using KernelSU, please grant permission manually in the manager</string>
     <string name="shizuku_permission_insufficient">The permissions of Shizuku(ADB) may be insufficient</string>
+    <string name="exec_custom_shell">Execute Custom Shell</string>
+    <string name="no_permission">You haven\'t obtained the permissions</string>
 </resources>

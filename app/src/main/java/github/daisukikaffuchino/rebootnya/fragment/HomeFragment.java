@@ -3,7 +3,6 @@ package github.daisukikaffuchino.rebootnya.fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -35,8 +34,6 @@ public class HomeFragment extends DialogFragment {
         final String[] items = {getString(R.string.lock_screen), getString(R.string.reboot), getString(R.string.soft_reboot), getString(R.string.system_ui),
                 "Recovery", "Bootloader", getString(R.string.safe_mode), getString(R.string.power_off)};
 
-        SharedPreferences sp = context.getSharedPreferences("Nya", Context.MODE_PRIVATE);
-
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle(R.string.app_name);
         builder.setSingleChoiceItems(items, checkedItem, (dialog, which) -> checkedItem = which);
@@ -50,7 +47,7 @@ public class HomeFragment extends DialogFragment {
             Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
             // 不调用dismiss()对话框就不会关闭
             positiveButton.setOnClickListener(v -> {
-                if (sp.getString("work_mode", "Root").equals("Root"))
+                if (NyaApplication.sp.getString("work_mode", "Root").equals("Root"))
                     funcRoot();
                 else {
                     try {
@@ -107,10 +104,6 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void funcShizuku() throws IOException {
-        if (!Shizuku.pingBinder()) {
-            Toast.makeText(context, R.string.shizuku_not_run, Toast.LENGTH_SHORT).show();
-            return;
-        }
         if (!NyaApplication.shizukuUtil.checkShizukuPermission()) {
             Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
             return;

@@ -15,7 +15,11 @@ import rikka.shizuku.SystemServiceHelper
 class ShizukuUtil {
 
     fun checkShizukuPermission(): Boolean {
-        if (!Shizuku.pingBinder()) return false
+        if (!Shizuku.pingBinder()) {
+            Toast.makeText(NyaApplication.context, R.string.shizuku_not_run, Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
 
         if (Shizuku.isPreV11()) {
             Toast.makeText(NyaApplication.context, R.string.shizuku_too_old, Toast.LENGTH_SHORT)
@@ -46,7 +50,7 @@ class ShizukuUtil {
         }
     }
 
-     fun shizukuProcess(cmd: Array<String?>?): Int {
+    fun shizukuProcess(cmd: Array<String?>?): Int {
         try {
             val privateField = Shizuku::class.java.getDeclaredField("service")
             privateField.isAccessible = true
@@ -57,7 +61,8 @@ class ShizukuUtil {
                 return process.waitFor()
             } catch (e: RemoteException) {
                 e.fillInStackTrace()
-                Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG)
+                    .show()
             }
         } catch (e: Exception) {
             e.fillInStackTrace()

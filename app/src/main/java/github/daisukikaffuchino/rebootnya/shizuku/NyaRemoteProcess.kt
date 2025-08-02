@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.ParcelFileDescriptor
 import android.os.Parcelable
-import android.os.Parcelable.Creator
 import android.os.RemoteException
 import android.util.ArraySet
 import android.util.Log
@@ -13,7 +12,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.Collections
 
-
+@SuppressLint("ParcelCreator")
 class NyaRemoteProcess : Process, Parcelable {
     private var remote: IRemoteProcess?
     private var os: OutputStream? = null
@@ -38,7 +37,7 @@ class NyaRemoteProcess : Process, Parcelable {
     override fun getOutputStream(): OutputStream {
         if (os == null) {
             try {
-                os = ParcelFileDescriptor.AutoCloseOutputStream(remote!!.getOutputStream())
+                os = ParcelFileDescriptor.AutoCloseOutputStream(remote!!.outputStream)
             } catch (e: RemoteException) {
                 throw RuntimeException(e)
             }
@@ -49,7 +48,7 @@ class NyaRemoteProcess : Process, Parcelable {
     override fun getInputStream(): InputStream {
         if (`is` == null) {
             try {
-                `is` = ParcelFileDescriptor.AutoCloseInputStream(remote!!.getInputStream())
+                `is` = ParcelFileDescriptor.AutoCloseInputStream(remote!!.inputStream)
             } catch (e: RemoteException) {
                 throw RuntimeException(e)
             }
@@ -59,7 +58,7 @@ class NyaRemoteProcess : Process, Parcelable {
 
     override fun getErrorStream(): InputStream {
         try {
-            return ParcelFileDescriptor.AutoCloseInputStream(remote!!.getErrorStream())
+            return ParcelFileDescriptor.AutoCloseInputStream(remote!!.errorStream)
         } catch (e: RemoteException) {
             throw RuntimeException(e)
         }
@@ -90,10 +89,6 @@ class NyaRemoteProcess : Process, Parcelable {
         }
     }
 
-    constructor(`in`: Parcel) {
-        remote = IRemoteProcess.Stub.asInterface(`in`.readStrongBinder())
-    }
-
     override fun describeContents(): Int {
         return 0
     }
@@ -110,15 +105,5 @@ class NyaRemoteProcess : Process, Parcelable {
 
         private const val TAG = "NyaRemoteProcess"
 
-        @SuppressLint("ParcelCreator")
-        val CREATOR: Creator<NyaRemoteProcess?> = object : Creator<NyaRemoteProcess?> {
-            override fun createFromParcel(`in`: Parcel): NyaRemoteProcess {
-                return NyaRemoteProcess(`in`)
-            }
-
-            override fun newArray(size: Int): Array<NyaRemoteProcess?> {
-                return arrayOfNulls(size)
-            }
-        }
     }
 }

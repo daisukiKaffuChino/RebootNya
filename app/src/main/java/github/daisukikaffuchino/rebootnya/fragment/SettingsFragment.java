@@ -34,7 +34,7 @@ public class SettingsFragment extends DialogFragment {
     private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
     private FragmentSettingsBinding binding;
     Context context;
-    SharedPreferences sp;
+    SharedPreferences sp = NyaApplication.sp;
 
     @NonNull
     @Override
@@ -52,7 +52,6 @@ public class SettingsFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        sp = context.getSharedPreferences("Nya", Context.MODE_PRIVATE);
         Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
         String workingMode = sp.getString("work_mode", "Root");
         binding.textWorkMode.setText(workingMode);
@@ -97,6 +96,24 @@ public class SettingsFragment extends DialogFragment {
                 compoundButton.setChecked(!b);
                 Toast.makeText(context, R.string.require_a12, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        binding.itemCmdTextInputLayout.setEndIconOnClickListener(view -> {
+            String edtText = Objects.requireNonNull(binding.itemCmdTextInputEdit.getText()).toString();
+            if (edtText.isBlank()) return;
+            if (workingMode.equals("Root") && !Boolean.FALSE.equals(Shell.isAppGrantedRoot())) {
+                if (NyaApplication.rootUtil.runRootCommandWithResult(edtText)) {
+                    Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+                    binding.itemCmdTextInputEdit.setText(null);
+                } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
+            } else if (workingMode.equals("Shizuku") && NyaApplication.shizukuUtil.checkShizukuPermission()) {
+                int exitCode = NyaApplication.shizukuUtil.shizukuProcess(edtText.split("\\s+"));
+                if (exitCode == 0) {
+                    Toast.makeText(context, "Success!\nExit code: " + exitCode, Toast.LENGTH_SHORT).show();
+                    binding.itemCmdTextInputEdit.setText(null);
+                } else
+                    Toast.makeText(context, getString(R.string.exec_fail) + "\nExit code: " + exitCode, Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(context, R.string.no_permission, Toast.LENGTH_SHORT).show();
         });
 
         String info = "<b>RebootNya Open-Source Project</b><br>" +

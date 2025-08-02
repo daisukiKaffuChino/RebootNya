@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         val window = getWindow()
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 
-        val sp = getSharedPreferences("Nya", MODE_PRIVATE)
-        if (sp.getBoolean("monet", false)) DynamicColors.applyToActivityIfAvailable(this)
+        if (NyaApplication.sp.getBoolean("monet", false))
+            DynamicColors.applyToActivityIfAvailable(this)
 
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.getRoot())
