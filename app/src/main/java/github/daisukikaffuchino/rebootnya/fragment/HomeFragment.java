@@ -152,6 +152,12 @@ public class HomeFragment extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
+        /*
+        为什么使用 System.exit(0) ?
+        因为 KernelSU 授权后需要杀死并重启进程使权限生效。
+        通常 activity.finish() 仅限于关闭活动，进程由系统决定回收。
+        对于像本项目这样的单线程应用，这种做法是安全的。
+         */
         if (!requireActivity().isChangingConfigurations())
             System.exit(0);
     }
