@@ -152,7 +152,8 @@ public class HomeFragment extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        System.exit(0);
+        if (!requireActivity().isChangingConfigurations())
+            System.exit(0);
     }
 
 }
