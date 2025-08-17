@@ -39,12 +39,22 @@ class ShizukuUtil {
     }
 
     fun shizukuReboot(reason: String?) {
+        val powerManager = IPowerManager.Stub.asInterface(
+            ShizukuBinderWrapper(SystemServiceHelper.getSystemService("power"))
+        )
         try {
-            val powerManager = IPowerManager.Stub.asInterface(
-                ShizukuBinderWrapper(SystemServiceHelper.getSystemService("power"))
-            )
             powerManager.reboot(false, reason, false)
         } catch (e: Exception) {
+            if (e.message.equals("lock must not be null") && reason == null) {
+                try {
+                    powerManager.reboot(false, "nya", false)
+                } catch (e: Exception) {
+                    e.fillInStackTrace()
+                    Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG)
+                        .show()
+                }
+                return
+            }
             e.fillInStackTrace()
             Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
         }
