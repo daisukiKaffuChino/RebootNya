@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -20,7 +21,10 @@ import java.io.IOException;
 
 import github.daisukikaffuchino.rebootnya.NyaApplication;
 import github.daisukikaffuchino.rebootnya.R;
+import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager;
+import github.daisukikaffuchino.rebootnya.shizuku.ShellResult;
 import rikka.shizuku.Shizuku;
+
 
 public class HomeFragment extends DialogFragment {
     private Context context;
@@ -30,6 +34,8 @@ public class HomeFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         context = requireActivity();
+
+        NyaShellManager.INSTANCE.bind(context);
 
         final String[] items = {getString(R.string.lock_screen), getString(R.string.reboot), getString(R.string.soft_reboot), getString(R.string.system_ui),
                 "Recovery", "Bootloader", getString(R.string.safe_mode), getString(R.string.power_off)};
@@ -73,6 +79,22 @@ public class HomeFragment extends DialogFragment {
             Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
     }
 
+    private void runShizukuCommand(String cmd) {
+        new Thread(() -> {
+            ShellResult result = NyaShellManager.INSTANCE.exec(cmd);
+            //Log.d("xxx",result.getOutput());
+            requireActivity().runOnUiThread(() -> {
+                Toast.makeText(
+                        context,
+                        "Exit: " + (result != null ? result.getExitCode() : -1) +
+                                "\nOutput: " + (result != null ? result.getOutput() : "null"),
+                        Toast.LENGTH_LONG
+                ).show();
+            });
+        }).start();
+
+    }
+
     private void funcRoot() {
         switch (checkedItem) {
             case 0:
@@ -110,9 +132,10 @@ public class HomeFragment extends DialogFragment {
         }
         switch (checkedItem) {
             case 0:
-                int exitCode = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"input", "keyevent", "KEYCODE_POWER"});
-                if (exitCode == 0) dismiss();
-                else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
+                //int exitCode = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"input", "keyevent", "KEYCODE_POWER"});
+                //if (exitCode == 0) dismiss();
+                //else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
+                runShizukuCommand("input keyevent 26");
                 break;
             case 1:
                 NyaApplication.shizukuUtil.shizukuReboot(null);

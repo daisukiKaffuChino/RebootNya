@@ -45,7 +45,7 @@ class ShizukuUtil {
         try {
             powerManager.reboot(false, reason, false)
         } catch (e: Exception) {
-            if (e.message.equals("lock must not be null") && reason == null) {
+            if (e.message?.contains("lock must not be null") == true && reason == null) {
                 try {
                     powerManager.reboot(false, "nya", false)
                 } catch (e: Exception) {
