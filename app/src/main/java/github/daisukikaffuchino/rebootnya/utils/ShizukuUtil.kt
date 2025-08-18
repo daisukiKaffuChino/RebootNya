@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.IPowerManager
 import android.os.Looper
 import android.os.RemoteException
+import android.util.Log
 import android.widget.Toast
 import github.daisukikaffuchino.rebootnya.NyaApplication
 import github.daisukikaffuchino.rebootnya.R
@@ -50,17 +51,7 @@ fun shizukuReboot(reason: String?) {
     try {
         powerManager.reboot(false, reason, false)
     } catch (e: Exception) {
-        if (e.message?.contains("lock must not be null") == true && reason == null) {
-            try {
-                powerManager.reboot(false, "nya", false)
-            } catch (e: Exception) {
-                e.fillInStackTrace()
-                Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG)
-                    .show()
-            }
-            return
-        }
-        e.fillInStackTrace()
+        Log.e("reboot",e.message.toString())
         Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
     }
 }
@@ -124,7 +115,7 @@ fun runShizukuCommand(cmd: Array<String?>, checkUid: Boolean): Int {
             if (exitCode != 0) Toast.makeText(NyaApplication.context, message, Toast.LENGTH_SHORT)
                 .show()
         })
-        //Log.d("exit", exitCode2.get().toString()+" kt\n"+cmdString)
+        Log.d("exit", exitCode2.get().toString()+" kt\n"+cmdString)
         return exitCode2.get()
     }
 }

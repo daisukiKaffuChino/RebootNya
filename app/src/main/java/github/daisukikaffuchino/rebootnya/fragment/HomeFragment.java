@@ -85,10 +85,10 @@ public class HomeFragment extends DialogFragment {
                 runRootCommand("svc power reboot");
                 break;
             case 2:
-                runRootCommand("busybox killall system_server");
+                runRootCommand("setprop ctl.restart zygote");
                 break;
             case 3:
-                runRootCommand("busybox killall com.android.systemui");
+                runRootCommand("pkill -f com.android.systemui");
                 break;
             case 4:
                 runRootCommand("svc power reboot recovery");
@@ -120,13 +120,13 @@ public class HomeFragment extends DialogFragment {
                 ShizukuUtilKt.shizukuReboot(null);
                 break;
             case 2:
-                ShizukuUtilKt.shizukuReboot("userspace");
+                ShizukuUtilKt.runShizukuCommand(new String[]{"setprop", "ctl.restart", "zygote"}, true);
                 break;
             case 3:
                 ShizukuUtilKt.runShizukuCommand(new String[]{"pkill", "-f", "com.android.systemui"}, true);
                 break;
             case 4:
-                ShizukuUtilKt.shizukuReboot("recovery");
+                ShizukuUtilKt.runShizukuCommand(new String[]{"reboot", "recovery"}, false);
                 break;
             case 5:
                 ShizukuUtilKt.shizukuReboot("bootloader");

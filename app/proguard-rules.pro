@@ -22,9 +22,12 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 
+-keep class * extends android.os.IInterface { *; }
+-keep interface * extends android.os.IInterface { *; }
+
 # 保持 ShizukuUtil 类及其方法不被混淆
--keep class github.daisukikaffuchino.rebootnya.utils.ShizukuUtil {
-    public int shizukuProcess(java.lang.String[]);
+-keep class github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt {
+    private int shizukuProcess(java.lang.String[]);
 }
 
 # 保持 Shizuku 类的 service 字段不被混淆
