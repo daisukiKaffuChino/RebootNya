@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -87,6 +88,8 @@ public class SettingsFragment extends DialogFragment {
             setWorkingStatus(workingMode);
         }
 
+        if (workingMode.equals("Root")) binding.itemSwitchShizukuExecMode.setVisibility(View.GONE);
+
         final String[] shizukuShellExecMode = {sp.getString("shizuku_shell_exec_mode", "Process")};
         binding.textShizukuExecMode.setText(shizukuShellExecMode[0]);
         binding.itemSwitchShizukuExecMode.setOnClickListener(v -> {
@@ -118,7 +121,7 @@ public class SettingsFragment extends DialogFragment {
                     binding.itemCmdTextInputEdit.setText(null);
                 } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
             } else if (workingMode.equals("Shizuku") && NyaApplication.shizukuUtil.checkShizukuPermission()) {
-                int exitCode = NyaApplication.shizukuUtil.runShizukuCommand(edtText.split("\\s+"),false);
+                int exitCode = NyaApplication.shizukuUtil.runShizukuCommand(edtText.split("\\s+"), false);
                 if (exitCode == 0) {
                     Toast.makeText(context, "Success!\nExit code: 0", Toast.LENGTH_SHORT).show();
                     binding.itemCmdTextInputEdit.setText(null);
