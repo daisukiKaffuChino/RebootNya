@@ -8,27 +8,25 @@ import java.lang.Boolean
 import kotlin.Exception
 import kotlin.String
 
-class RootUtil {
 
-    fun runRootCommandWithResult(cmd: String): kotlin.Boolean {
-        if (Boolean.FALSE == Shell.isAppGrantedRoot()) {
-            Toast.makeText(NyaApplication.context, R.string.no_root, Toast.LENGTH_SHORT).show()
-            return false
-        } else {
-            val result = Shell.cmd(cmd).exec()
-            return result.isSuccess
-        }
+fun runRootCommandWithResult(cmd: String): kotlin.Boolean {
+    if (Boolean.FALSE == Shell.isAppGrantedRoot()) {
+        Toast.makeText(NyaApplication.context, R.string.no_root, Toast.LENGTH_SHORT).show()
+        return false
+    } else {
+        val result = Shell.cmd(cmd).exec()
+        return result.isSuccess
     }
+}
 
-    fun requestRoot() {
-        Toast.makeText(NyaApplication.context, R.string.ksu_tip, Toast.LENGTH_SHORT).show()
-        var process: Process? = null
-        try {
-            process = Runtime.getRuntime().exec("su")
-        } catch (e: Exception) {
-            e.fillInStackTrace()
-        } finally {
-            process?.destroy()
-        }
+fun requestRoot() {
+    Toast.makeText(NyaApplication.context, R.string.ksu_tip, Toast.LENGTH_SHORT).show()
+    var process: Process? = null
+    try {
+        process = Runtime.getRuntime().exec("su")
+    } catch (e: Exception) {
+        e.fillInStackTrace()
+    } finally {
+        process?.destroy()
     }
 }

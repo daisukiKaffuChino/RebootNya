@@ -28,6 +28,8 @@ import java.util.Objects;
 import github.daisukikaffuchino.rebootnya.NyaApplication;
 import github.daisukikaffuchino.rebootnya.R;
 import github.daisukikaffuchino.rebootnya.databinding.FragmentSettingsBinding;
+import github.daisukikaffuchino.rebootnya.utils.RootUtilKt;
+import github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt;
 import rikka.shizuku.Shizuku;
 
 public class SettingsFragment extends DialogFragment {
@@ -61,7 +63,7 @@ public class SettingsFragment extends DialogFragment {
         binding.taffy.setImageResource(R.drawable.taffy_no);
         binding.cardStatus.setOnClickListener(v -> {
             if (workingMode.equals("Root"))
-                NyaApplication.rootUtil.requestRoot();
+                RootUtilKt.requestRoot();
             else {
                 if (!Shizuku.pingBinder()) {
                     Toast.makeText(context, R.string.shizuku_not_run, Toast.LENGTH_SHORT).show();
@@ -84,7 +86,7 @@ public class SettingsFragment extends DialogFragment {
 
         if (workingMode.equals("Root") && !Boolean.FALSE.equals(Shell.isAppGrantedRoot())) {
             setWorkingStatus(workingMode);
-        } else if (workingMode.equals("Shizuku") && NyaApplication.shizukuUtil.checkShizukuPermission()) {
+        } else if (workingMode.equals("Shizuku") && ShizukuUtilKt.checkShizukuPermission()) {
             setWorkingStatus(workingMode);
         }
 
@@ -116,12 +118,12 @@ public class SettingsFragment extends DialogFragment {
             String edtText = Objects.requireNonNull(binding.itemCmdTextInputEdit.getText()).toString();
             if (edtText.isBlank()) return;
             if (workingMode.equals("Root") && !Boolean.FALSE.equals(Shell.isAppGrantedRoot())) {
-                if (NyaApplication.rootUtil.runRootCommandWithResult(edtText)) {
+                if (RootUtilKt.runRootCommandWithResult(edtText)) {
                     Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
                     binding.itemCmdTextInputEdit.setText(null);
                 } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
-            } else if (workingMode.equals("Shizuku") && NyaApplication.shizukuUtil.checkShizukuPermission()) {
-                int exitCode = NyaApplication.shizukuUtil.runShizukuCommand(edtText.split("\\s+"), false);
+            } else if (workingMode.equals("Shizuku") && ShizukuUtilKt.checkShizukuPermission()) {
+                int exitCode = ShizukuUtilKt.runShizukuCommand(edtText.split("\\s+"), false);
                 if (exitCode == 0) {
                     Toast.makeText(context, "Success!\nExit code: 0", Toast.LENGTH_SHORT).show();
                     binding.itemCmdTextInputEdit.setText(null);

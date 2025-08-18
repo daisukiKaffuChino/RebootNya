@@ -21,6 +21,8 @@ import java.io.IOException;
 import github.daisukikaffuchino.rebootnya.NyaApplication;
 import github.daisukikaffuchino.rebootnya.R;
 import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager;
+import github.daisukikaffuchino.rebootnya.utils.RootUtilKt;
+import github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt;
 
 public class HomeFragment extends DialogFragment {
     private Context context;
@@ -68,7 +70,7 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void runRootCommand(String cmd) {
-        if (NyaApplication.rootUtil.runRootCommandWithResult(cmd))
+        if (RootUtilKt.runRootCommandWithResult(cmd))
             dismiss();
         else
             Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
@@ -95,7 +97,7 @@ public class HomeFragment extends DialogFragment {
                 runRootCommand("svc power reboot bootloader");
                 break;
             case 6:
-                if (NyaApplication.rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1"))
+                if (RootUtilKt.runRootCommandWithResult("setprop persist.sys.safemode 1"))
                     runRootCommand("svc power reboot");
                 break;
             case 7:
@@ -105,39 +107,39 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void funcShizuku() throws IOException {
-        if (!NyaApplication.shizukuUtil.checkShizukuPermission()) {
+        if (!ShizukuUtilKt.checkShizukuPermission()) {
             Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
             userServiceStatus = -1;
             return;
         }
         switch (checkedItem) {
             case 0:
-                NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
+                ShizukuUtilKt.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
                 break;
             case 1:
-                NyaApplication.shizukuUtil.shizukuReboot(null);
+                ShizukuUtilKt.shizukuReboot(null);
                 break;
             case 2:
-                NyaApplication.shizukuUtil.shizukuReboot("userspace");
+                ShizukuUtilKt.shizukuReboot("userspace");
                 break;
             case 3:
-                NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"pkill", "-f", "com.android.systemui"}, true);
+                ShizukuUtilKt.runShizukuCommand(new String[]{"pkill", "-f", "com.android.systemui"}, true);
                 break;
             case 4:
-                NyaApplication.shizukuUtil.shizukuReboot("recovery");
+                ShizukuUtilKt.shizukuReboot("recovery");
                 break;
             case 5:
-                NyaApplication.shizukuUtil.shizukuReboot("bootloader");
+                ShizukuUtilKt.shizukuReboot("bootloader");
                 break;
             case 6:
-                int exitCode = NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"setprop", "persist.sys.safemode", "1"}, true);
+                int exitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"setprop", "persist.sys.safemode", "1"}, true);
                 if (exitCode == 0) {
-                    NyaApplication.shizukuUtil.shizukuReboot(null);
+                    ShizukuUtilKt.shizukuReboot(null);
                     dismiss();
                 } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 7:
-                NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"reboot", "-p"}, false);
+                ShizukuUtilKt.runShizukuCommand(new String[]{"reboot", "-p"}, false);
                 break;
         }
     }
