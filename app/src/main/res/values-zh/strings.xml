@@ -27,4 +27,5 @@
     <string name="shizuku_permission_insufficient">Shizuku(ADB) 的权限可能不足</string>
     <string name="exec_custom_shell">执行自定义 Shell</string>
     <string name="no_permission">你没有获得权限</string>
+    <string name="shizuku_exec_mode">Shizuku 指令执行模式</string>
 </resources>

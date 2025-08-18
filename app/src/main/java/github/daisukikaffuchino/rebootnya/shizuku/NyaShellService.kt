@@ -1,31 +1,30 @@
 package github.daisukikaffuchino.rebootnya.shizuku
 
+import android.content.Context
 import android.os.RemoteException
+import android.util.Log
+import androidx.annotation.Keep
 import github.daisukikaffuchino.rebootnya.IShellService
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
-class NyaShellService : IShellService.Stub() {
-    override fun exec(cmd: String): ShellResult {
-        return try {
-            val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", cmd))
 
-            val output = StringBuilder()
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val errorReader = BufferedReader(InputStreamReader(process.errorStream))
+class NyaShellService : IShellService.Stub {
+    constructor() {
+        Log.i("UserService", "constructor")
+    }
 
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                output.append(line).append("\n")
-            }
-            while (errorReader.readLine().also { line = it } != null) {
-                output.append(line).append("\n")
-            }
+    @Keep
+    constructor(context: Context) {
+        Log.i("UserService", "constructor with Context: context=$context")
+    }
 
-            val exitCode = process.waitFor()
-            ShellResult(exitCode, output.toString())
+    @Throws(RemoteException::class)
+    override fun exec(cmd: String): Int {
+        try {
+            val process = Runtime.getRuntime().exec(cmd)
+            return process.waitFor()
         } catch (e: Exception) {
-            throw RemoteException("Exec failed: ${e.message}")
+            e.fillInStackTrace()
+            return -1
         }
     }
 }

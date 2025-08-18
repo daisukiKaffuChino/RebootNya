@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -22,20 +21,16 @@ import java.io.IOException;
 import github.daisukikaffuchino.rebootnya.NyaApplication;
 import github.daisukikaffuchino.rebootnya.R;
 import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager;
-import github.daisukikaffuchino.rebootnya.shizuku.ShellResult;
-import rikka.shizuku.Shizuku;
-
 
 public class HomeFragment extends DialogFragment {
     private Context context;
     private int checkedItem = 0;
+    public static int userServiceStatus = -1;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         context = requireActivity();
-
-        NyaShellManager.INSTANCE.bind(context);
 
         final String[] items = {getString(R.string.lock_screen), getString(R.string.reboot), getString(R.string.soft_reboot), getString(R.string.system_ui),
                 "Recovery", "Bootloader", getString(R.string.safe_mode), getString(R.string.power_off)};
@@ -79,22 +74,6 @@ public class HomeFragment extends DialogFragment {
             Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
     }
 
-    private void runShizukuCommand(String cmd) {
-        new Thread(() -> {
-            ShellResult result = NyaShellManager.INSTANCE.exec(cmd);
-            //Log.d("xxx",result.getOutput());
-            requireActivity().runOnUiThread(() -> {
-                Toast.makeText(
-                        context,
-                        "Exit: " + (result != null ? result.getExitCode() : -1) +
-                                "\nOutput: " + (result != null ? result.getOutput() : "null"),
-                        Toast.LENGTH_LONG
-                ).show();
-            });
-        }).start();
-
-    }
-
     private void funcRoot() {
         switch (checkedItem) {
             case 0:
@@ -128,14 +107,12 @@ public class HomeFragment extends DialogFragment {
     private void funcShizuku() throws IOException {
         if (!NyaApplication.shizukuUtil.checkShizukuPermission()) {
             Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
+            userServiceStatus = -1;
             return;
         }
         switch (checkedItem) {
             case 0:
-                //int exitCode = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"input", "keyevent", "KEYCODE_POWER"});
-                //if (exitCode == 0) dismiss();
-                //else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
-                runShizukuCommand("input keyevent 26");
+                NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
                 break;
             case 1:
                 NyaApplication.shizukuUtil.shizukuReboot(null);
@@ -144,11 +121,7 @@ public class HomeFragment extends DialogFragment {
                 NyaApplication.shizukuUtil.shizukuReboot("userspace");
                 break;
             case 3:
-                if (Shizuku.getUid() == 2000)
-                    Toast.makeText(context, R.string.shizuku_permission_insufficient, Toast.LENGTH_SHORT).show();
-                int exitCode2 = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"pkill", "-f", "com.android.systemui"});
-                if (exitCode2 != 0)
-                    Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
+                NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"pkill", "-f", "com.android.systemui"}, true);
                 break;
             case 4:
                 NyaApplication.shizukuUtil.shizukuReboot("recovery");
@@ -157,17 +130,14 @@ public class HomeFragment extends DialogFragment {
                 NyaApplication.shizukuUtil.shizukuReboot("bootloader");
                 break;
             case 6:
-                if (Shizuku.getUid() == 2000)
-                    Toast.makeText(context, R.string.shizuku_permission_insufficient, Toast.LENGTH_SHORT).show();
-                int exitCode3 = NyaApplication.shizukuUtil.shizukuProcess(new String[]{"setprop", "persist.sys.safemode", "1"});
-                //Log.d("xxx", String.valueOf(exitCode3));
-                if (exitCode3 == 0) {
+                int exitCode = NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"setprop", "persist.sys.safemode", "1"}, true);
+                if (exitCode == 0) {
                     NyaApplication.shizukuUtil.shizukuReboot(null);
                     dismiss();
                 } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 7:
-                NyaApplication.shizukuUtil.shizukuProcess(new String[]{"reboot", "-p"});
+                NyaApplication.shizukuUtil.runShizukuCommand(new String[]{"reboot", "-p"}, false);
                 break;
         }
     }
@@ -181,6 +151,7 @@ public class HomeFragment extends DialogFragment {
         通常 activity.finish() 仅限于关闭活动，进程由系统决定回收。
         对于像本项目这样的单线程应用，这种做法是安全的。
          */
+        NyaShellManager.INSTANCE.unbindService();
         if (!requireActivity().isChangingConfigurations())
             System.exit(0);
     }

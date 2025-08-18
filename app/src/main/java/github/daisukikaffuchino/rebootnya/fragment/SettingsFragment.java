@@ -87,6 +87,17 @@ public class SettingsFragment extends DialogFragment {
             setWorkingStatus(workingMode);
         }
 
+        final String[] shizukuShellExecMode = {sp.getString("shizuku_shell_exec_mode", "Process")};
+        binding.textShizukuExecMode.setText(shizukuShellExecMode[0]);
+        binding.itemSwitchShizukuExecMode.setOnClickListener(v -> {
+            if (shizukuShellExecMode[0].equals("Process"))
+                shizukuShellExecMode[0] = "UserService";
+            else
+                shizukuShellExecMode[0] = "Process";
+            binding.textShizukuExecMode.setText(shizukuShellExecMode[0]);
+            sp.edit().putString("shizuku_shell_exec_mode", shizukuShellExecMode[0]).apply();
+        });
+
         binding.switchTheme.setChecked(sp.getBoolean("monet", false));
         binding.switchTheme.setOnCheckedChangeListener((compoundButton, b) -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -107,9 +118,9 @@ public class SettingsFragment extends DialogFragment {
                     binding.itemCmdTextInputEdit.setText(null);
                 } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
             } else if (workingMode.equals("Shizuku") && NyaApplication.shizukuUtil.checkShizukuPermission()) {
-                int exitCode = NyaApplication.shizukuUtil.shizukuProcess(edtText.split("\\s+"));
+                int exitCode = NyaApplication.shizukuUtil.runShizukuCommand(edtText.split("\\s+"),false);
                 if (exitCode == 0) {
-                    Toast.makeText(context, "Success!\nExit code: " + exitCode, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Success!\nExit code: 0", Toast.LENGTH_SHORT).show();
                     binding.itemCmdTextInputEdit.setText(null);
                 } else
                     Toast.makeText(context, getString(R.string.exec_fail) + "\nExit code: " + exitCode, Toast.LENGTH_SHORT).show();

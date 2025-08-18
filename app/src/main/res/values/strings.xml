@@ -27,4 +27,5 @@
     <string name="shizuku_permission_insufficient">The permissions of Shizuku(ADB) may be insufficient</string>
     <string name="exec_custom_shell">Execute Custom Shell</string>
     <string name="no_permission">You haven\'t obtained the permissions</string>
+    <string name="shizuku_exec_mode">Shizuku command execution</string>
 </resources>
