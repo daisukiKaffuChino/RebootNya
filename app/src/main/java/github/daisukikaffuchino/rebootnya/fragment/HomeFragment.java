@@ -124,8 +124,7 @@ public class HomeFragment extends DialogFragment {
         switch (checkedItem) {
             case 0:
                 int lockExitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
-                Log.d("xxxxx",lockExitCode+" home");
-                //if (lockExitCode == 0) dismiss();
+                if (lockExitCode == 0) dismiss();
                 break;
             case 1:
                 ShizukuUtilKt.shizukuReboot(null);
