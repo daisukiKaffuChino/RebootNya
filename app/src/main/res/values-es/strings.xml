@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">RebootNya</string>
+    <string name="confirm">Confirmar</string>
+    <string name="close">Cerrar</string>
+    <string name="setting">Ajustes</string>
+    <string name="lock_screen">Bloquear pantalla</string>
+    <string name="reboot">Reiniciar</string>
+    <string name="soft_reboot">Reinicio suave</string>
+    <string name="safe_mode">Modo seguro</string>
+    <string name="system_ui">IU del sistema</string>
+    <string name="power_off">Apagar</string>
+    <string name="no_root">No hay acceso root</string>
+    <string name="exec_fail">Error al ejecutar comando</string>
+    <string name="working">Funcionando -</string>
+    <string name="not_working">No está funcionando -</string>
+    <string name="click_request_pm">Toca para solicitar permiso</string>
+    <string name="work_mode">Modo de trabajo</string>
+    <string name="dynamic_color">Colores dinámicos</string>
+    <string name="require_a12">Necesitas android 12 o superior</string>
+    <string name="restart_app_effect">Reinicia la app para aplicar el tema</string>
+    <string name="shizuku_denied">Permiso de Shizuku denegado</string>
+    <string name="shizuku_too_old">Tu versión de Shizuku es muy vieja</string>
+    <string name="shizuku_not_run">Shizuku no está en ejecución</string>
+    <string name="shizuku_service_err">Error de conexión al servicio Shizuku</string>
+    <string name="not_support">No soportado</string>
+    <string name="ksu_tip">Si usas KernelSU, concede el permiso manualmente en el gestor</string>
+    <string name="shizuku_permission_insufficient">Los permisos de Shizuku (ADB) podrían ser insuficientes</string>
+    <string name="exec_custom_shell">Ejecutar shell personalizado</string>
+    <string name="no_permission">No tienes los permisos necesarios</string>
+    <string name="shizuku_exec_mode">Ejecución de comandos con Shizuku</string>
+    <string name="user_service_not_initialized">UserService no está inicializado</string>
+</resources>
