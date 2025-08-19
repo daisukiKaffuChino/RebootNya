@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.RemoteException
-import android.util.Log
 import github.daisukikaffuchino.rebootnya.IShellService
 import rikka.shizuku.Shizuku
 import rikka.shizuku.Shizuku.UserServiceArgs
@@ -43,11 +42,9 @@ object NyaShellManager {
                 else
                     res.append("invalid binder for ").append(componentName).append(" received")
 
-                Log.i("xxx", res.toString().trim { it <= ' ' })
             }
 
             override fun onServiceDisconnected(componentName: ComponentName) {
-                Log.i("xxx2", "onServiceDisconnected: " + '\n' + componentName.className)
             }
         }
         Shizuku.bindUserService(userServiceArgs, userServiceConnection)

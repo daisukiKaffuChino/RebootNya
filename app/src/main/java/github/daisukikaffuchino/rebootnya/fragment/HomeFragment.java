@@ -114,7 +114,8 @@ public class HomeFragment extends DialogFragment {
         }
         switch (checkedItem) {
             case 0:
-                ShizukuUtilKt.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
+                int lockExitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
+                if (lockExitCode == 0) dismiss();
                 break;
             case 1:
                 ShizukuUtilKt.shizukuReboot(null);
@@ -133,10 +134,8 @@ public class HomeFragment extends DialogFragment {
                 break;
             case 6:
                 int exitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"setprop", "persist.sys.safemode", "1"}, true);
-                if (exitCode == 0) {
-                    ShizukuUtilKt.shizukuReboot(null);
-                    dismiss();
-                } else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
+                if (exitCode == 0) ShizukuUtilKt.shizukuReboot(null);
+                else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case 7:
                 ShizukuUtilKt.runShizukuCommand(new String[]{"reboot", "-p"}, false);
