@@ -16,7 +16,7 @@
     <string name="click_request_pm">Toca para solicitar permiso</string>
     <string name="work_mode">Modo de trabajo</string>
     <string name="dynamic_color">Colores dinámicos</string>
-    <string name="require_a12">Necesitas android 12 o superior</string>
+    <string name="require_a12">Necesitas Android 12 o superior</string>
     <string name="restart_app_effect">Reinicia la app para aplicar el tema</string>
     <string name="shizuku_denied">Permiso de Shizuku denegado</string>
     <string name="shizuku_too_old">Tu versión de Shizuku es muy vieja</string>
