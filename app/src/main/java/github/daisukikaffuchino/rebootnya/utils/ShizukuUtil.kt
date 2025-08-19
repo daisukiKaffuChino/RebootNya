@@ -1,31 +1,24 @@
 package github.daisukikaffuchino.rebootnya.utils
 
 import android.content.pm.PackageManager
-import android.os.Handler
 import android.os.IPowerManager
-import android.os.Looper
 import android.os.RemoteException
 import android.util.Log
 import android.widget.Toast
 import github.daisukikaffuchino.rebootnya.NyaApplication
 import github.daisukikaffuchino.rebootnya.R
-import github.daisukikaffuchino.rebootnya.fragment.HomeFragment.userServiceStatus
 import github.daisukikaffuchino.rebootnya.shizuku.NyaRemoteProcess
-import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager.bindService
-import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager.executeCommand
+import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager
 import moe.shizuku.server.IShizukuService
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.SystemServiceHelper
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
 
 fun checkShizukuPermission(): Boolean {
-    if (!Shizuku.pingBinder()) {
-        Toast.makeText(NyaApplication.context, R.string.shizuku_not_run, Toast.LENGTH_SHORT)
-            .show()
-        return false
-    }
+    if (!Shizuku.pingBinder()) return false
 
     if (Shizuku.isPreV11()) {
         Toast.makeText(NyaApplication.context, R.string.shizuku_too_old, Toast.LENGTH_SHORT)
@@ -51,7 +44,7 @@ fun shizukuReboot(reason: String?) {
     try {
         powerManager.reboot(false, reason, false)
     } catch (e: Exception) {
-        Log.e("reboot",e.message.toString())
+        Log.e("reboot", e.message.toString())
         Toast.makeText(NyaApplication.context, "Error:" + e.message, Toast.LENGTH_LONG).show()
     }
 }
@@ -94,28 +87,43 @@ fun runShizukuCommand(cmd: Array<String?>, checkUid: Boolean): Int {
             .show()
         return exitCode
     } else {
-        val exitCode2 = AtomicInteger()
-        if (userServiceStatus != 0) bindService({ exitCode: Int, message: String? ->
-            userServiceStatus = exitCode
-            val handler = Handler(Looper.getMainLooper())
-            handler.postDelayed({
-                executeCommand(cmdString, { exitCode1: Int, message1: String? ->
-                    exitCode2.set(exitCode1)
-                    if (exitCode != 0) Toast.makeText(
-                        NyaApplication.context,
-                        message1,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                })
-            }, 100)
-        })
-        else executeCommand(cmdString, { exitCode: Int, message: String? ->
-            exitCode2.set(exitCode)
-            if (exitCode != 0) Toast.makeText(NyaApplication.context, message, Toast.LENGTH_SHORT)
-                .show()
-        })
-        Log.d("exit", exitCode2.get().toString()+" kt\n"+cmdString)
-        return exitCode2.get()
+        if (NyaShellManager.mService == null) {
+            Toast.makeText(
+                NyaApplication.context,
+                R.string.user_service_not_initialized,
+                Toast.LENGTH_SHORT
+            ).show()
+            return -2
+        }
+        return executeCommandSync(cmdString)
     }
 }
+
+private fun executeCommandSync(cmdString: String): Int {
+    val latch = CountDownLatch(1)
+    val result = AtomicInteger(-1)
+
+    NyaShellManager.executeCommand(cmdString) { exitCode, message ->
+        if (exitCode != 0) Toast.makeText(
+            NyaApplication.context,
+            "Message: $message",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+        result.set(exitCode)
+        latch.countDown() //完成
+    }
+
+    try {
+        latch.await() //阻塞
+        return result.get()
+    } catch (e: InterruptedException) {
+        Thread.currentThread().interrupt()
+        Log.e("interruptExec", e.message.toString())
+        return -2
+    }
+}
+
+
+
+

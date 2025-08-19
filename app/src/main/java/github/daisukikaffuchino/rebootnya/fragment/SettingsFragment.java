@@ -177,6 +177,9 @@ public class SettingsFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Bundle result = new Bundle();
+        result.putBoolean("isShizukuActive", ShizukuUtilKt.checkShizukuPermission());
+        getParentFragmentManager().setFragmentResult("requestKey", result);
         Shizuku.removeRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
         binding = null;
     }

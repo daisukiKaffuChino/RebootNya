@@ -28,4 +28,5 @@
     <string name="exec_custom_shell">執行自定義 Shell</string>
     <string name="no_permission">你沒有獲得許可權</string>
     <string name="shizuku_exec_mode">Shizuku 指令執行模式</string>
+    <string name="user_service_not_initialized">UserService 尚未初始化</string>
 </resources>

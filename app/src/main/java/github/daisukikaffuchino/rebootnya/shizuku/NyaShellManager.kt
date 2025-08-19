@@ -5,12 +5,13 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.RemoteException
 import github.daisukikaffuchino.rebootnya.IShellService
+import github.daisukikaffuchino.rebootnya.utils.checkShizukuPermission
 import rikka.shizuku.Shizuku
 import rikka.shizuku.Shizuku.UserServiceArgs
 
 
 object NyaShellManager {
-    private var mService: IShellService? = null
+    var mService: IShellService? = null
     private lateinit var userServiceConnection: ServiceConnection
 
     fun interface ControlCallback {
@@ -30,6 +31,7 @@ object NyaShellManager {
 
 
     fun bindService(callback: ControlCallback) {
+        if (!checkShizukuPermission() || mService != null) return
         userServiceConnection = object : ServiceConnection {
             override fun onServiceConnected(componentName: ComponentName, binder: IBinder?) {
                 callback.onResult(0, null)

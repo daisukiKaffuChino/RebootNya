@@ -2,7 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="ic_launcher_background">#FBEFFB</color>
+    <color name="ic_launcher_background">#FCE4EC</color>
+    <color name="ic_launcher_foreground">#ED789F</color>
     <color name="md_theme_primary">#8C4A60</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_primaryContainer">#FFD9E2</color>

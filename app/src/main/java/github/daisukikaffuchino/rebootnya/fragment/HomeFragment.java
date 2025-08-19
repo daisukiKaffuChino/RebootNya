@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -27,7 +28,6 @@ import github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt;
 public class HomeFragment extends DialogFragment {
     private Context context;
     private int checkedItem = 0;
-    public static int userServiceStatus = -1;
 
     @NonNull
     @Override
@@ -67,6 +67,16 @@ public class HomeFragment extends DialogFragment {
             });
         });
         return dialog;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        NyaShellManager.INSTANCE.bindService((exitCode, message) -> Log.d("main", "bind "+exitCode));
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, result) -> {
+            boolean isShizukuActive = result.getBoolean("isShizukuActive");
+            if (isShizukuActive) NyaShellManager.INSTANCE.bindService((exitCode, message) -> Log.d("main", "bind "+exitCode));
+        });
     }
 
     private void runRootCommand(String cmd) {
@@ -109,13 +119,13 @@ public class HomeFragment extends DialogFragment {
     private void funcShizuku() throws IOException {
         if (!ShizukuUtilKt.checkShizukuPermission()) {
             Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
-            userServiceStatus = -1;
             return;
         }
         switch (checkedItem) {
             case 0:
                 int lockExitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
-                if (lockExitCode == 0) dismiss();
+                Log.d("xxxxx",lockExitCode+" home");
+                //if (lockExitCode == 0) dismiss();
                 break;
             case 1:
                 ShizukuUtilKt.shizukuReboot(null);

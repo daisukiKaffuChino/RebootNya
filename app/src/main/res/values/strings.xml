@@ -28,4 +28,5 @@
     <string name="exec_custom_shell">Execute Custom Shell</string>
     <string name="no_permission">You haven\'t obtained the permissions</string>
     <string name="shizuku_exec_mode">Shizuku command execution</string>
+    <string name="user_service_not_initialized">UserService is not initialized</string>
 </resources>
