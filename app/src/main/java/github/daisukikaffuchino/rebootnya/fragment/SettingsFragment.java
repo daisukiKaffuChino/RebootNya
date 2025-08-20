@@ -31,6 +31,7 @@ import github.daisukikaffuchino.rebootnya.databinding.FragmentSettingsBinding;
 import github.daisukikaffuchino.rebootnya.utils.RootUtilKt;
 import github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt;
 import rikka.shizuku.Shizuku;
+import rikka.sui.Sui;
 
 public class SettingsFragment extends DialogFragment {
     private static final int SHIZUKU_REQUEST_CODE = 1000;
@@ -166,7 +167,10 @@ public class SettingsFragment extends DialogFragment {
     @SuppressLint("SetTextI18n")
     private void setWorkingStatus(String workingMode) {
         String ver = getString(R.string.working) + " " + workingMode;
-        if (workingMode.equals("Shizuku")) ver = ver + " " + Shizuku.getVersion();
+        if (workingMode.equals("Shizuku"))
+            if (Sui.init(context.getPackageName()))
+                ver = getString(R.string.working) + " Sui " + Shizuku.getVersion();
+            else ver = ver + " " + Shizuku.getVersion();
         binding.textWorkStatus.setText(ver);
         binding.textVerInfo.setText("RebootNya " + getAppVer());
         binding.taffy.setImageResource(R.drawable.taffy_ok);
