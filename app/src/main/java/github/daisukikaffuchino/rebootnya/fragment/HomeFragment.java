@@ -45,7 +45,6 @@ public class HomeFragment extends DialogFragment {
         LinkedHashMap<String, ListItemEnum> listMap = createListItemMap();
         List<String> _itemList = new ArrayList<>(listMap.keySet());
         String[] items = _itemList.toArray(new String[0]);
-        //Log.d("xxx3",ListItemEnum.Companion.fromDisplayName("system_ui").getLocalizedDisplayName());
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle(R.string.app_name);

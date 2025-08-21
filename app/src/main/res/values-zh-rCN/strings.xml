@@ -17,7 +17,6 @@
     <string name="work_mode">工作模式</string>
     <string name="dynamic_color">动态取色</string>
     <string name="require_a12">至少需要 Android12</string>
-    <string name="restart_app_effect">手动重启 App 以使主题生效</string>
     <string name="shizuku_denied">Shizuku 权限被拒绝</string>
     <string name="shizuku_too_old">Shizuku 版本过低</string>
     <string name="shizuku_not_run">Shizuku 未运行</string>

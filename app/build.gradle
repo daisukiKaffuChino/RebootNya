@@ -50,7 +50,6 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.navigation.fragment.ktx
-    implementation libs.preference
 
     implementation libs.core
     implementation libs.provider
