@@ -108,7 +108,8 @@ public class SettingsFragment extends DialogFragment {
         binding.switchTheme.setOnCheckedChangeListener((compoundButton, b) -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 sp.edit().putBoolean("monet", b).apply();
-                Toast.makeText(context, R.string.restart_app_effect, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, R.string.restart_app_effect, Toast.LENGTH_SHORT).show();
+                requireActivity().recreate();
             } else {
                 compoundButton.setChecked(!b);
                 Toast.makeText(context, R.string.require_a12, Toast.LENGTH_SHORT).show();

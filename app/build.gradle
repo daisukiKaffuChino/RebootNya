@@ -11,8 +11,8 @@ android {
         applicationId "github.daisukikaffuchino.rebootnya"
         minSdk 28
         targetSdk 36
-        versionCode 250820
-        versionName "1.3.2"
+        versionCode 250821
+        versionName "1.4.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,6 +50,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.navigation.fragment.ktx
+    implementation libs.preference
 
     implementation libs.core
     implementation libs.provider

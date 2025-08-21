@@ -51,13 +51,15 @@ object NyaShellManager {
             }
 
             override fun onServiceDisconnected(componentName: ComponentName) {
-                Log.i(TAG,"onServiceDisconnected: \n" + componentName.className)
+                Log.i(TAG, "onServiceDisconnected: \n" + componentName.className)
             }
         }
         Shizuku.bindUserService(userServiceArgs, userServiceConnection)
     }
 
     fun executeCommand(cmd: String?, callback: ControlCallback) {
+//        val serviceVersion = Shizuku.peekUserService(userServiceArgs, userServiceConnection)
+//        Log.i(TAG, "V$serviceVersion")
         mService?.let { service ->
             try {
                 val exitCode = service.exec(cmd)

@@ -13,6 +13,7 @@ constraintlayout = "2.1.4"
 navigationUi = "2.9.2"
 kotlin = "2.2.0"
 coreKtx = "1.16.0"
+preference = "1.2.1"
 xor = "5.0.0"
 
 [libraries]
@@ -29,6 +30,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationUi" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+preference = { module = "androidx.preference:preference", version.ref = "preference" }
 provider = { module = "dev.rikka.shizuku:provider", version.ref = "api" }
 xor = { module = "com.github.megatronking.stringfog:xor", version.ref = "xor" }
 
