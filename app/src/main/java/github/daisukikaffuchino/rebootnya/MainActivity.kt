@@ -3,23 +3,32 @@ package github.daisukikaffuchino.rebootnya
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toDrawable
-import com.google.android.material.color.DynamicColors
 import github.daisukikaffuchino.rebootnya.databinding.ActivityMainBinding
+import github.daisukikaffuchino.rebootnya.utils.NyaSettings
+import rikka.shizuku.Shizuku
+import kotlin.properties.Delegates
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
+    companion object {
+        var listFilterStatus by Delegates.notNull<Boolean>()
+        fun checkListFilterStatus(): Boolean {
+            return Shizuku.pingBinder()
+                    && Shizuku.getUid() == 2000
+                    && NyaSettings.getWorkMode() == NyaSettings.STORE.SHIZUKU
+                    && NyaSettings.getIsHideUnavailableOptions()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        listFilterStatus = checkListFilterStatus()
 
         val window = getWindow()
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-
-        if (NyaApplication.sp.getBoolean("monet", false))
-            DynamicColors.applyToActivityIfAvailable(this)
 
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.getRoot())
@@ -56,8 +65,16 @@ class MainActivity : AppCompatActivity() {
             .setIcon(IconCompat.createWithResource(this, iconRes))
             .setIntent(Intent(this, MainActivity::class.java).apply {
                 action = Intent.ACTION_RUN
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 putExtra("extra", id)
             })
             .build()
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (listFilterStatus != checkListFilterStatus())
+            recreate()
+    }
+
 }

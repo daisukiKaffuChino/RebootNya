@@ -1,6 +1,6 @@
 package github.daisukikaffuchino.rebootnya.utils
 
-import github.daisukikaffuchino.rebootnya.NyaApplication
+import android.content.Context
 import github.daisukikaffuchino.rebootnya.R
 
 enum class ListItemEnum(val displayName: String) {
@@ -13,8 +13,7 @@ enum class ListItemEnum(val displayName: String) {
     SAFE_MODE("safe_mode"),
     POWER_OFF("power_off");
 
-    fun getLocalizedDisplayName(): String {
-        val context = NyaApplication.context
+    fun getLocalizedDisplayName(context: Context): String {
         return when (this) {
             LOCK_SCREEN -> context.getString(R.string.lock_screen)
             REBOOT -> context.getString(R.string.reboot)
@@ -27,8 +26,8 @@ enum class ListItemEnum(val displayName: String) {
     }
 
     companion object {
-        fun fromLocalizedDisplayName(displayName: String): ListItemEnum {
-            return entries.find { it.getLocalizedDisplayName() == displayName } ?: LOCK_SCREEN//默认锁屏
+        fun fromLocalizedDisplayName(context: Context,displayName: String): ListItemEnum {
+            return entries.find { it.getLocalizedDisplayName(context) == displayName } ?: LOCK_SCREEN//默认锁屏
         }
 
         fun fromDisplayName(displayName: String): ListItemEnum {

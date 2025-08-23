@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/launch">
+        <github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
+            app:defaultValue="1"
+            app:entries="@array/work_mode"
+            app:entryValues="@array/work_mode_value"
+            app:key="work_mode"
+            app:summary="%s"
+            app:title="@string/work_mode" />
+        <github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
+            app:defaultValue="1"
+            app:entries="@array/shell_mode"
+            app:entryValues="@array/shell_mode_value"
+            app:key="shizuku_shell_mode"
+            app:summary="%s"
+            app:title="@string/shizuku_exec_mode" />
+        <Preference
+            app:key="user_service_mode_info"
+            app:title="@string/about_user_service" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="true"
+            app:key="hide_unavailable_options"
+            app:summary="@string/hide_unavailable_summary"
+            app:title="@string/hide_unavailable" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/advanced">
+        <github.daisukikaffuchino.rebootnya.preference.EditTextPreference
+            app:key="edit_text"
+            app:selectable="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/interface_appearance">
+        <github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
+            app:entries="@array/night_mode"
+            app:entryValues="@array/night_mode_value"
+            app:key="night_mode"
+            app:summary="%s"
+            app:title="@string/dark_theme" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="false"
+            app:key="dynamic_color"
+            app:summary="@string/require_a12"
+            app:title="@string/dynamic_color" />
+        <rikka.preference.SimpleMenuPreference
+            app:defaultValue="SYSTEM"
+            app:key="language"
+            app:summary="%s"
+            app:title="@string/language" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/about">
+        <Preference
+            app:key="developer"
+            app:summary="Github@daisukiKaffuChino"
+            app:title="@string/developer" />
+        <Preference
+            app:key="repo"
+            app:summary="@string/license"
+            app:title="RebootNya Open-Source Project" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

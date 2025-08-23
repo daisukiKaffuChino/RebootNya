@@ -16,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -26,25 +24,36 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import github.daisukikaffuchino.rebootnya.NyaApplication;
+import github.daisukikaffuchino.rebootnya.MainActivity;
 import github.daisukikaffuchino.rebootnya.R;
+import github.daisukikaffuchino.rebootnya.SettingsActivity;
 import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager;
 import github.daisukikaffuchino.rebootnya.utils.ListItemEnum;
-import github.daisukikaffuchino.rebootnya.utils.RootUtilKt;
-import github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt;
+import github.daisukikaffuchino.rebootnya.utils.NyaSettings;
+import github.daisukikaffuchino.rebootnya.utils.NyaUtilKt;
+import github.daisukikaffuchino.rebootnya.utils.RootUtil;
+import github.daisukikaffuchino.rebootnya.utils.ShizukuUtil;
 
 public class HomeFragment extends DialogFragment {
     private Context context;
     private int checkedItem = 0;
+    private RootUtil rootUtil;
+    private ShizukuUtil shizukuUtil;
 
     @SuppressLint("InflateParams")
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        context = requireActivity();
         LinkedHashMap<String, ListItemEnum> listMap = createListItemMap();
-        List<String> _itemList = new ArrayList<>(listMap.keySet());
-        String[] items = _itemList.toArray(new String[0]);
+        List<String> _itemList;
+        _itemList = new ArrayList<>(listMap.keySet());
+
+        if (MainActivity.Companion.getListFilterStatus()) {
+            _itemList = NyaUtilKt.exclude(_itemList, ListItemEnum.SAFE_MODE.getLocalizedDisplayName(context),
+                    ListItemEnum.SOFT_REBOOT.getLocalizedDisplayName(context));
+        }
+
+        final String[] items = _itemList.toArray(new String[0]);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle(R.string.app_name);
@@ -59,17 +68,19 @@ public class HomeFragment extends DialogFragment {
             Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
             // 不调用dismiss()对话框就不会关闭
             positiveButton.setOnClickListener(v ->
-                    doAction(ListItemEnum.Companion.fromLocalizedDisplayName(items[checkedItem])));
+                    doAction(ListItemEnum.Companion.fromLocalizedDisplayName(context, items[checkedItem])));
             neutralButton.setOnClickListener(v -> {
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.nav_settings);
+//                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+//                navController.navigate(R.id.nav_settings);
+                Intent intent = new Intent(context, SettingsActivity.class);
+                context.startActivity(intent);
             });
         });
 
         MaterialAlertDialogBuilder loadingDialog = new MaterialAlertDialogBuilder(context);
         loadingDialog.setTitle(R.string.app_name)
                 .setView(getLayoutInflater()
-                        .inflate(R.layout.dialog_material_progress, null))
+                        .inflate(R.layout.dialog_progress, null))
                 .setCancelable(false);
 
         Intent intent = requireActivity().getIntent();
@@ -87,30 +98,28 @@ public class HomeFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NyaShellManager.INSTANCE.bindService((exitCode, message) -> Log.d("main", "bind " + exitCode));
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, result) -> {
-            boolean isShizukuActive = result.getBoolean("isShizukuActive");
-            if (isShizukuActive)
-                NyaShellManager.INSTANCE.bindService((exitCode, message) -> Log.d("main", "bind " + exitCode));
-        });
+        context = requireActivity();
+        rootUtil = new RootUtil(context);
+        shizukuUtil = new ShizukuUtil(context);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
+    public void onResume() {
+        super.onResume();
+        if (NyaSettings.getShizukuShellMode() == NyaSettings.STORE.USER_SERVICE)
+            NyaShellManager.INSTANCE.bindService(shizukuUtil, (exitCode, message) -> Log.d("main", "bind " + exitCode));
     }
 
     private LinkedHashMap<String, ListItemEnum> createListItemMap() {
         LinkedHashMap<String, ListItemEnum> map = new LinkedHashMap<>();
         for (ListItemEnum item : ListItemEnum.getEntries()) {
-            map.put(item.getLocalizedDisplayName(), item);
+            map.put(item.getLocalizedDisplayName(context), item);
         }
         return map;
     }
 
     private void doAction(ListItemEnum listItemEnum) {
-        if (NyaApplication.sp.getString("work_mode", "Root").equals("Root"))
+        if (NyaSettings.getWorkMode() == NyaSettings.STORE.ROOT)
             funcRoot(listItemEnum);
         else {
             try {
@@ -123,7 +132,7 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void runRootCommand(String cmd) {
-        if (RootUtilKt.runRootCommandWithResult(cmd))
+        if (rootUtil.runRootCommandWithResult(cmd))
             dismiss();
         else
             Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
@@ -150,7 +159,7 @@ public class HomeFragment extends DialogFragment {
                 runRootCommand("svc power reboot bootloader");
                 break;
             case SAFE_MODE:
-                if (RootUtilKt.runRootCommandWithResult("setprop persist.sys.safemode 1"))
+                if (rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1"))
                     runRootCommand("svc power reboot");
                 break;
             case POWER_OFF:
@@ -160,37 +169,41 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void funcShizuku(ListItemEnum listItemEnum) throws IOException {
-        if (!ShizukuUtilKt.checkShizukuPermission()) {
+        if (!shizukuUtil.checkShizukuPermission()) {
             Toast.makeText(context, R.string.shizuku_denied, Toast.LENGTH_SHORT).show();
             return;
         }
         switch (listItemEnum) {
             case LOCK_SCREEN:
-                int lockExitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
+                int lockExitCode = shizukuUtil.runShizukuCommand(new String[]{"input", "keyevent", "KEYCODE_POWER"}, false);
                 if (lockExitCode == 0) dismiss();
                 break;
             case REBOOT:
-                ShizukuUtilKt.shizukuReboot(null);
+                shizukuUtil.shizukuReboot(null);
                 break;
             case SOFT_REBOOT:
-                ShizukuUtilKt.runShizukuCommand(new String[]{"setprop", "ctl.restart", "zygote"}, true);
+                shizukuUtil.runShizukuCommand(new String[]{"setprop", "ctl.restart", "zygote"}, true);
                 break;
             case SYSTEM_UI:
-                ShizukuUtilKt.runShizukuCommand(new String[]{"pkill", "-f", "com.android.systemui"}, true);
+                int stopUiCode = shizukuUtil.runShizukuCommand(new String[]{"am", "force-stop", "com.android.systemui"}, false);
+                if (stopUiCode == 0) {
+                    Toast.makeText(context, R.string.stop_system_ui_tip, Toast.LENGTH_LONG).show();
+                    dismiss();
+                }
                 break;
             case RECOVERY:
-                ShizukuUtilKt.runShizukuCommand(new String[]{"reboot", "recovery"}, false);
+                shizukuUtil.runShizukuCommand(new String[]{"reboot", "recovery"}, false);
                 break;
             case BOOTLOADER:
-                ShizukuUtilKt.shizukuReboot("bootloader");
+                shizukuUtil.shizukuReboot("bootloader");
                 break;
             case SAFE_MODE:
-                int exitCode = ShizukuUtilKt.runShizukuCommand(new String[]{"setprop", "persist.sys.safemode", "1"}, true);
-                if (exitCode == 0) ShizukuUtilKt.shizukuReboot(null);
+                int exitCode = shizukuUtil.runShizukuCommand(new String[]{"setprop", "persist.sys.safemode", "1"}, true);
+                if (exitCode == 0) shizukuUtil.shizukuReboot(null);
                 else Toast.makeText(context, R.string.exec_fail, Toast.LENGTH_SHORT).show();
                 break;
             case POWER_OFF:
-                ShizukuUtilKt.runShizukuCommand(new String[]{"reboot", "-p"}, false);
+                shizukuUtil.runShizukuCommand(new String[]{"reboot", "-p"}, false);
                 break;
         }
     }

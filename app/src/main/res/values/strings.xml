@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RebootNya</string>
+    <string name="app_name" translatable="false">RebootNya</string>
     <string name="confirm">Confirm</string>
     <string name="close">Close</string>
     <string name="setting">Settings</string>
@@ -11,13 +11,12 @@
     <string name="power_off">Power Off</string>
     <string name="no_root">No root access</string>
     <string name="exec_fail">Command execution failed</string>
-    <string name="working">Working -</string>
-    <string name="not_working">Not working -</string>
+    <string name="working">Working</string>
+    <string name="not_working">Not working</string>
     <string name="click_request_pm">Tap to request permission</string>
     <string name="work_mode">Work Mode</string>
     <string name="dynamic_color">Dynamic Color</string>
     <string name="require_a12">Requires at least Android 12</string>
-    <string name="restart_app_effect">Restart the app manually to apply the theme</string>
     <string name="shizuku_denied">Shizuku permission denied</string>
     <string name="shizuku_too_old">Shizuku version is too old</string>
     <string name="shizuku_not_run">Shizuku is not running</string>
@@ -29,4 +28,25 @@
     <string name="no_permission">You haven\'t obtained the permissions</string>
     <string name="shizuku_exec_mode">Shizuku command execution</string>
     <string name="user_service_not_initialized">UserService is not initialized</string>
+    <string name="launch">Launch</string>
+    <string name="about_user_service">About UserService mode</string>
+    <string name="advanced">Advanced</string>
+    <string name="about">About</string>
+    <string name="interface_appearance">Interface Appearance</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="language">Language</string>
+    <string name="license">Apache-2.0 Licensed</string>
+    <string name="developer">Developer</string>
+    <string name="about_user_service_content">"The Process mode has been deprecated, and the related function is scheduled to be removed from Shizuku API 14. UserService, which is similar to Bound Services, is the officially recommended way to implement features.\n\nHowever, there have been reports that on some ROM (such as MIUI), UserService may fail to start correctly. Therefore, RebootNya still uses the old mode by default.\n\nYou can manually try enabling the UserService and test whether the features work properly. If everything runs good, it will provide better performance and stability. "</string>
+    <string name="follow_system">Follow system</string>
+    <string name="always_on">Always on</string>
+    <string name="always_off">Always off</string>
+    <string name="hide_unavailable">Hide unavailable options</string>
+    <string name="hide_unavailable_summary">Due to insufficient permissions of ADB commands, some options may not be available. When enabled, Root mode and Shizuku mode activated with Root permissions will not be affected.</string>
+    <string name="contact_me">Contact Me</string>
+    <string name="coolapk">Coolapk</string>
+    <string name="email">Email</string>
+    <string name="no_app_found_open_link">No app found to open the link</string>
+    <string name="bilibili">Bilibili</string>
+    <string name="stop_system_ui_tip">On some ROM, SystemUI will be automatically restarted by system services, so it will relaunch shortly after being terminated.</string>
 </resources>

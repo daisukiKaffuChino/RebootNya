@@ -6,7 +6,7 @@ import android.os.IBinder
 import android.os.RemoteException
 import android.util.Log
 import github.daisukikaffuchino.rebootnya.IShellService
-import github.daisukikaffuchino.rebootnya.utils.checkShizukuPermission
+import github.daisukikaffuchino.rebootnya.utils.ShizukuUtil
 import rikka.shizuku.Shizuku
 import rikka.shizuku.Shizuku.UserServiceArgs
 
@@ -32,8 +32,8 @@ object NyaShellManager {
         .version(1)
 
 
-    fun bindService(callback: ControlCallback) {
-        if (!checkShizukuPermission() || mService != null) return
+    fun bindService(shizukuUtil: ShizukuUtil, callback: ControlCallback) {
+        if (!shizukuUtil.checkShizukuPermission() || mService != null) return
         userServiceConnection = object : ServiceConnection {
             override fun onServiceConnected(componentName: ComponentName, binder: IBinder?) {
                 callback.onResult(0, null)
@@ -73,7 +73,7 @@ object NyaShellManager {
     }
 
     fun unbindService() {
-        if (::userServiceConnection.isInitialized && mService != null) {
+        if (Shizuku.pingBinder() && ::userServiceConnection.isInitialized && mService != null) {
             Shizuku.unbindUserService(userServiceArgs, userServiceConnection, true)
             mService = null
         }

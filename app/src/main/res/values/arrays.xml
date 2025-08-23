@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="work_mode">
+        <item>Shizuku</item>
+        <item>Root</item>
+    </string-array>
+
+    <integer-array name="work_mode_value">
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <string-array name="shell_mode">
+        <item>Process</item>
+        <item>UserService</item>
+    </string-array>
+
+    <integer-array name="shell_mode_value">
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <string-array name="night_mode">
+        <item>@string/always_off</item>
+        <item>@string/always_on</item>
+        <item>@string/follow_system</item>
+    </string-array>
+
+    <integer-array name="night_mode_value">
+        <item>1</item>
+        <item>2</item>
+        <item>-1</item>
+    </integer-array>
+</resources>

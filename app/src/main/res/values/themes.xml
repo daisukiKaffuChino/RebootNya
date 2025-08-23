@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.RebootNya" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
@@ -47,7 +47,9 @@
         <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
         <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+    </style>
 
+    <style name="Theme.RebootNya.Translucent" parent="Base.Theme.RebootNya">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -56,5 +58,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.RebootNya" parent="Base.Theme.RebootNya" />
+    <style name="Theme.RebootNya.Preference" parent="Base.Theme.RebootNya">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Rikka.Material3</item>
+    </style>
 </resources>

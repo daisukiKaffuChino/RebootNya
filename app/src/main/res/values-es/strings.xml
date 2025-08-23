@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">RebootNya</string>
     <string name="confirm">Confirmar</string>
     <string name="close">Cerrar</string>
     <string name="setting">Ajustes</string>
@@ -11,8 +10,8 @@
     <string name="power_off">Apagar</string>
     <string name="no_root">No hay acceso root</string>
     <string name="exec_fail">Error al ejecutar comando</string>
-    <string name="working">Funcionando -</string>
-    <string name="not_working">No está funcionando -</string>
+    <string name="working">Funcionando</string>
+    <string name="not_working">No está funcionando</string>
     <string name="click_request_pm">Toca para solicitar permiso</string>
     <string name="work_mode">Modo de trabajo</string>
     <string name="dynamic_color">Colores dinámicos</string>
@@ -28,4 +27,6 @@
     <string name="no_permission">No tienes los permisos necesarios</string>
     <string name="shizuku_exec_mode">Ejecución de comandos con Shizuku</string>
     <string name="user_service_not_initialized">UserService no está inicializado</string>
+    <string name="coolapk">Coolapk</string>
+    <string name="bilibili">Bilibili</string>
 </resources>

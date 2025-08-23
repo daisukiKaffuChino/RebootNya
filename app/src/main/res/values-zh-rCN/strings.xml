@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">RebootNya</string>
     <string name="confirm">确认</string>
     <string name="close">关闭</string>
     <string name="setting">设置</string>
@@ -11,8 +10,8 @@
     <string name="power_off">关机</string>
     <string name="no_root">没有 root 权限</string>
     <string name="exec_fail">命令执行失败</string>
-    <string name="working">工作中 -</string>
-    <string name="not_working">未工作 -</string>
+    <string name="working">工作中</string>
+    <string name="not_working">未工作</string>
     <string name="click_request_pm">点击进行授权</string>
     <string name="work_mode">工作模式</string>
     <string name="dynamic_color">动态取色</string>
@@ -28,4 +27,25 @@
     <string name="no_permission">你没有获得权限</string>
     <string name="shizuku_exec_mode">Shizuku 指令执行模式</string>
     <string name="user_service_not_initialized">UserService 尚未初始化</string>
+    <string name="launch">启动</string>
+    <string name="about_user_service">关于 UserService 模式</string>
+    <string name="advanced">高级</string>
+    <string name="about">关于</string>
+    <string name="interface_appearance">界面外观</string>
+    <string name="dark_theme">深色主题</string>
+    <string name="language">语言</string>
+    <string name="license">以 Apache-2.0 许可证授权</string>
+    <string name="developer">开发者</string>
+    <string name="about_user_service_content">Process 模式已弃用，使用的函数计划从 Shizuku API 14 中删除。UserService 类似于绑定服务，是官方推荐的实现功能的最佳方式。\n\n但是，有报告称部分系统（比如MIUI）下可能无法正确启动 UserService，因此 RebootNya 仍默认使用旧模式。\n\n您可以主动尝试启用 UserService 并测试功能是否可用，如果一切正常的话，它将带来更好的性能和稳定性。</string>
+    <string name="follow_system">跟随系统</string>
+    <string name="always_on">总是开启</string>
+    <string name="always_off">总是关闭</string>
+    <string name="hide_unavailable">隐藏可能无法使用的选项</string>
+    <string name="hide_unavailable_summary">由于 ADB 命令的权限不足，部分选项可能无法使用。开启后，Root 模式和使用 Root 权限激活的 Shizuku 模式不受影响。</string>
+    <string name="contact_me">和我联系</string>
+    <string name="coolapk">酷安</string>
+    <string name="email">电子邮件</string>
+    <string name="no_app_found_open_link">未找到可打开链接的应用</string>
+    <string name="bilibili">哔哩哔哩</string>
+    <string name="stop_system_ui_tip">在部分系统上，SystemUI 会被系统服务自动拉起，所以结束后很快会重启。</string>
 </resources>
