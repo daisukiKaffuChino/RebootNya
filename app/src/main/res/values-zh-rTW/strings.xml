@@ -48,4 +48,8 @@
     <string name="no_app_found_open_link">找不到可開啟連結的應用程式</string>
     <string name="bilibili">嗶哩嗶哩</string>
     <string name="stop_system_ui_tip">"在部分 ROM 上，SystemUI 會被系統服務自動啟動，所以結束後很快就會重新啟動。 "</string>
+    <string name="main_interface_style">主介面風格</string>
+    <string name="style_classic_list">經典列表</string>
+    <string name="style_modern_buttons">現代按鈕</string>
+    <string name="style_change_toast">介面外觀變更將於下次啟動時套用</string>
 </resources>

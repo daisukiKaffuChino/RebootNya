@@ -48,4 +48,8 @@
     <string name="no_app_found_open_link">未找到可打开链接的应用</string>
     <string name="bilibili">哔哩哔哩</string>
     <string name="stop_system_ui_tip">在部分系统上，SystemUI 会被系统服务自动拉起，所以结束后很快会重启。</string>
+    <string name="main_interface_style">主界面样式</string>
+    <string name="style_classic_list">经典列表</string>
+    <string name="style_modern_buttons">现代按钮</string>
+    <string name="style_change_toast">界面外观更改将在下次启动时应用</string>
 </resources>
