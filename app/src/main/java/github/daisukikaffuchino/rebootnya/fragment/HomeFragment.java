@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ import java.util.List;
 import github.daisukikaffuchino.rebootnya.MainActivity;
 import github.daisukikaffuchino.rebootnya.R;
 import github.daisukikaffuchino.rebootnya.SettingsActivity;
+import github.daisukikaffuchino.rebootnya.adapter.HomeListAdapter;
 import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager;
 import github.daisukikaffuchino.rebootnya.utils.ListItemEnum;
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings;
@@ -39,61 +42,119 @@ public class HomeFragment extends DialogFragment {
     private int checkedItem = 0;
     private RootUtil rootUtil;
     private ShizukuUtil shizukuUtil;
+    private LinkedHashMap<String, ListItemEnum> listMap;
 
-    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        LinkedHashMap<String, ListItemEnum> listMap = createListItemMap();
-        List<String> _itemList;
-        _itemList = new ArrayList<>(listMap.keySet());
-
-        if (MainActivity.Companion.getListFilterStatus()) {
-            _itemList = NyaUtilKt.exclude(_itemList, ListItemEnum.SAFE_MODE.getLocalizedDisplayName(context),
-                    ListItemEnum.SOFT_REBOOT.getLocalizedDisplayName(context));
+        Intent intent = requireActivity().getIntent();
+        if (intent != null && Intent.ACTION_RUN.equals(intent.getAction())) {
+            return createLoadingDialog(intent);
         }
 
-        final String[] items = _itemList.toArray(new String[0]);
+        int style = NyaSettings.getMainInterfaceStyle();
+        if (style == NyaSettings.STYLE.MODERN_BUTTONS) {
+            return createModernButtonsDialog();
+        } else {
+            return createClassicListDialog();
+        }
+    }
 
+    private Dialog createClassicListDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        final String[] items = getDisplayItems();
+
         builder.setTitle(R.string.app_name);
         builder.setSingleChoiceItems(items, checkedItem, (dialog, which) -> checkedItem = which);
-        builder.setPositiveButton(R.string.confirm, null);
-        builder.setNegativeButton(R.string.close, null);
-        builder.setNeutralButton(R.string.setting, null);
 
-        AlertDialog dialog = builder.create();
+        return setupDialogButtons(builder.create(), () -> {
+            doAction(ListItemEnum.Companion.fromLocalizedDisplayName(context, items[checkedItem]));
+        });
+    }
+
+    private Dialog createModernButtonsDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        @SuppressLint("InflateParams")
+        android.view.View dialogView = inflater.inflate(R.layout.fragment_home, null);
+        ListView listView = dialogView.findViewById(R.id.home_list_view);
+
+        final String[] items = getDisplayItems();
+        HomeListAdapter adapter = new HomeListAdapter(context, List.of(items), pos -> {
+            doAction(ListItemEnum.Companion.fromLocalizedDisplayName(context, items[pos]));
+        });
+
+        listView.setDivider(null);
+        listView.setAdapter(adapter);
+
+        builder.setTitle(R.string.app_name);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.setNegativeButton(R.string.close, null)
+                .setNeutralButton(R.string.setting, null)
+                .create();
+
         dialog.setOnShowListener(dialogInterface -> {
-            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
             // 不调用dismiss()对话框就不会关闭
-            positiveButton.setOnClickListener(v ->
-                    doAction(ListItemEnum.Companion.fromLocalizedDisplayName(context, items[checkedItem])));
             neutralButton.setOnClickListener(v -> {
 //                NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
 //                navController.navigate(R.id.nav_settings);
+                Intent settingsIntent = new Intent(context, SettingsActivity.class);
+                context.startActivity(settingsIntent);
+            });
+            android.widget.TextView titleView = dialog.findViewById(androidx.appcompat.R.id.alertTitle);
+            if (titleView != null) {
+                int colorPrimary = com.google.android.material.color.MaterialColors.getColor(context, com.google.android.material.R.attr.colorPrimary, android.graphics.Color.BLACK);
+                titleView.setTextColor(colorPrimary);
+                titleView.setGravity(android.view.Gravity.CENTER);
+            }
+        });
+        return dialog;
+    }
+
+    private Dialog createLoadingDialog(Intent intent) {
+        MaterialAlertDialogBuilder loadingDialog = new MaterialAlertDialogBuilder(context);
+        loadingDialog.setTitle(R.string.app_name)
+                .setView(getLayoutInflater().inflate(R.layout.dialog_progress, null))
+                .setCancelable(false);
+
+        String data = intent.getStringExtra("extra");
+        if (data != null) {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                doAction(ListItemEnum.Companion.fromDisplayName(data));
+                dismiss();
+            }, 500);
+        }
+        return loadingDialog.create();
+    }
+
+    private AlertDialog setupDialogButtons(AlertDialog dialog, Runnable positiveAction) {
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm), (dialogInterface, i) -> {});
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close), (dialogInterface, i) -> {});
+        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.setting), (dialogInterface, i) -> {});
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+            positiveButton.setOnClickListener(v -> positiveAction.run());
+            neutralButton.setOnClickListener(v -> {
                 Intent intent = new Intent(context, SettingsActivity.class);
                 context.startActivity(intent);
             });
         });
-
-        MaterialAlertDialogBuilder loadingDialog = new MaterialAlertDialogBuilder(context);
-        loadingDialog.setTitle(R.string.app_name)
-                .setView(getLayoutInflater()
-                        .inflate(R.layout.dialog_progress, null))
-                .setCancelable(false);
-
-        Intent intent = requireActivity().getIntent();
-        if (intent != null && Intent.ACTION_RUN.equals(intent.getAction())) {
-            String data = intent.getStringExtra("extra");
-            if (data != null)
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    doAction(ListItemEnum.Companion.fromDisplayName(data));
-                    dismiss();
-                }, 1000);
-            return loadingDialog.create();
-        } else return dialog;
+        return dialog;
     }
+
+    private String[] getDisplayItems() {
+        List<String> itemList = new ArrayList<>(listMap.keySet());
+        if (MainActivity.Companion.getListFilterStatus()) {
+            itemList = NyaUtilKt.exclude(itemList, ListItemEnum.SAFE_MODE.getLocalizedDisplayName(context),
+                    ListItemEnum.SOFT_REBOOT.getLocalizedDisplayName(context));
+        }
+        return itemList.toArray(new String[0]);
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +162,7 @@ public class HomeFragment extends DialogFragment {
         context = requireActivity();
         rootUtil = new RootUtil(context);
         shizukuUtil = new ShizukuUtil(context);
+        listMap = createListItemMap();
     }
 
     @Override
