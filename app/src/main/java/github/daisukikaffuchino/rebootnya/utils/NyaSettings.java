@@ -68,9 +68,25 @@ public class NyaSettings {
         int USER_SERVICE = 2;
     }
 
+    @SuppressLint("UniqueConstants")
+    @IntDef({
+            STYLE.CLASSIC_LIST,
+            STYLE.MODERN_BUTTONS
+    })
+    @Retention(SOURCE)
+    public @interface STYLE {
+        int CLASSIC_LIST = 1;
+        int MODERN_BUTTONS = 2;
+    }
+
     @STORE
     public static int getWorkMode() {
         return getPreferences().getInt("work_mode", STORE.SHIZUKU);
+    }
+
+    @STYLE
+    public static int getMainInterfaceStyle() {
+        return getPreferences().getInt("main_interface_style", STYLE.CLASSIC_LIST);
     }
 
     @STORE
@@ -90,7 +106,6 @@ public class NyaSettings {
 
     public static Locale getLocale() {
         String tag = getPreferences().getString("language", null);
-        //Log.d("xxx",tag);
         if (TextUtils.isEmpty(tag) || "SYSTEM".equals(tag)) {
             return Locale.getDefault();
         }

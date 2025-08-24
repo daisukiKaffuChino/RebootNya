@@ -33,6 +33,13 @@
 
     <PreferenceCategory app:title="@string/interface_appearance">
         <github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
+            app:defaultValue="1"
+            app:entries="@array/main_interface_style"
+            app:entryValues="@array/main_interface_style_value"
+            app:key="main_interface_style"
+            app:summary="%s"
+            app:title="@string/main_interface_style" />
+        <github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
             app:entries="@array/night_mode"
             app:entryValues="@array/night_mode_value"
             app:key="night_mode"

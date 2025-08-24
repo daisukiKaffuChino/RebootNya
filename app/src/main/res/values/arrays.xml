@@ -31,4 +31,14 @@
         <item>2</item>
         <item>-1</item>
     </integer-array>
+
+    <string-array name="main_interface_style">
+        <item>@string/style_classic_list</item>
+        <item>@string/style_modern_buttons</item>
+    </string-array>
+
+    <integer-array name="main_interface_style_value">
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 </resources>
