@@ -80,6 +80,11 @@ class EditTextPreference(private val context: Context, attrs: AttributeSet?) : P
             }
         }
 
+        inputLayout.setEndIconOnLongClickListener {
+            editText?.setText(null)
+            true
+        }
+
         editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
                 savedText = editText?.text.toString()

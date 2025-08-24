@@ -2,7 +2,6 @@ package github.daisukikaffuchino.rebootnya.adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,36 +12,26 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
 import github.daisukikaffuchino.rebootnya.R
-import kotlin.math.exp
 
 
 class HomeListAdapter(
     private val context: Context,
     private val items: List<String>,
-    private val clickListenerInterface: OnItemClickListener
+    clickListenerInterface: OnItemClickListener
 ) : BaseAdapter() {
     val translucentColor: Int
-    val translucentTextColor: Int
     val clickListener: OnItemClickListener = clickListenerInterface
 
     init {
         val button = MaterialButton(context)
         val baseColor =
-            MaterialColors.getColor(button, com.google.android.material.R.attr.colorPrimaryFixedDim)
-        val textColor = MaterialColors.getColor(
-            button,
-            com.google.android.material.R.attr.colorOnPrimaryContainer
-        )
-        val baseLuminance = ColorUtils.calculateLuminance(baseColor)
-        val textLuminance = ColorUtils.calculateLuminance(textColor)
+            MaterialColors.getColor(button, com.google.android.material.R.attr.colorSecondaryContainer)
+
         translucentColor = ColorUtils.setAlphaComponent(
             baseColor,
-            ((if (isDarkTheme(context)) 0.08 else (0.2 + (baseLuminance - 0.5) * 0.2)) * 255).toInt()
+            150
         )
-        translucentTextColor = ColorUtils.setAlphaComponent(
-            textColor,
-            ((if (isDarkTheme(context)) 0.94 else computeSigmoid(textLuminance)) * 255).toInt()
-        )
+
     }
 
     private class ViewHolder(view: View) {
@@ -72,7 +61,7 @@ class HomeListAdapter(
         val title = getItem(position)
         holder.btn.text = title
         holder.btn.backgroundTintList = ColorStateList.valueOf(translucentColor)
-        holder.btn.setTextColor(translucentTextColor)
+        //holder.btn.setTextColor(translucentTextColor)
         holder.btn.setOnClickListener { view -> clickListener.onClick(position) }
 
         when (position) {
@@ -103,20 +92,6 @@ class HomeListAdapter(
         }
 
         return view
-    }
-
-    private fun isDarkTheme(context: Context): Boolean {
-        return ((context.resources
-            .configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK)
-                == Configuration.UI_MODE_NIGHT_YES)
-    }
-
-    private fun computeSigmoid(x: Double): Double {
-        val shift = 0.31
-        val k = 10.0
-        val a = 0.75
-        val b = 0.19
-        return a + b / (1 + exp(-k * (x - shift)))
     }
 
     interface OnItemClickListener {

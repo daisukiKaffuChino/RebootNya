@@ -15,7 +15,7 @@
         android:insetTop="1.2dp"
         android:insetBottom="1.2dp"
         android:textSize="15sp"
-        app:cornerRadius="4dp"
+        android:textColor="?attr/colorOnSecondaryContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
