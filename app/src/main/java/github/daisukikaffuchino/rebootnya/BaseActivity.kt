@@ -17,7 +17,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         localeDelegate.onCreate(this)
-        if (NyaSettings.getPreferences().getBoolean("dynamic_color", false))
+        if (NyaSettings.preferences.getBoolean("dynamic_color", false))
             DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
         themeChanged = computeThemeChanged()
