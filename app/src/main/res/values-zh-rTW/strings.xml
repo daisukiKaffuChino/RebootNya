@@ -43,7 +43,6 @@
     <string name="hide_unavailable">隱藏可能無法使用的選項</string>
     <string name="hide_unavailable_summary">由於 ADB 指令權限不足，部分選項可能無法使用。啟用後，Root 模式以及以 Root 權限啟動的 Shizuku 模式將不受影響。</string>
     <string name="contact_me">聯絡我</string>
-    <string name="coolapk">酷安</string>
     <string name="email">電子郵件</string>
     <string name="no_app_found_open_link">找不到可開啟連結的應用程式</string>
     <string name="bilibili">嗶哩嗶哩</string>
@@ -51,4 +50,9 @@
     <string name="main_interface_style">主介面風格</string>
     <string name="style_classic_list">經典列表</string>
     <string name="style_md_buttons">Material Design 按鈕</string>
+    <string name="request_pin_shortcuts">請求將捷徑固定到主畫面</string>
+    <string name="others">雜項</string>
+    <string name="clear_created_shortcuts">清除已建立的捷徑</string>
+    <string name="create_next_launch">下次啟動時會重新建立</string>
+    <string name="cleared">已清除</string>
 </resources>

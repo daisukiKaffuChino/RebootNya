@@ -24,7 +24,7 @@
     <string name="not_support">Not supported</string>
     <string name="ksu_tip">If you are using KernelSU, please grant permission manually in the manager</string>
     <string name="shizuku_permission_insufficient">The permissions of Shizuku(ADB) may be insufficient</string>
-    <string name="exec_custom_shell">Execute Custom Shell</string>
+    <string name="exec_custom_shell">Execute custom shell</string>
     <string name="no_permission">You haven\'t obtained the permissions</string>
     <string name="shizuku_exec_mode">Shizuku command execution</string>
     <string name="user_service_not_initialized">UserService is not initialized</string>
@@ -44,12 +44,16 @@
     <string name="hide_unavailable">Hide unavailable options</string>
     <string name="hide_unavailable_summary">Due to insufficient permissions of ADB commands, some options may not be available. When enabled, Root mode and Shizuku mode activated with Root permissions will not be affected.</string>
     <string name="contact_me">Contact Me</string>
-    <string name="coolapk">Coolapk</string>
     <string name="email">Email</string>
     <string name="no_app_found_open_link">No app found to open the link</string>
     <string name="bilibili">Bilibili</string>
     <string name="stop_system_ui_tip">On some ROM, SystemUI will be automatically restarted by system services, so it will relaunch shortly after being terminated.</string>
     <string name="main_interface_style">Main interface style</string>
     <string name="style_classic_list">Classic list</string>
-    <string name="style_md_buttons">Material design buttons</string>
+    <string name="style_md_buttons">Material Design buttons</string>
+    <string name="request_pin_shortcuts">Request to pin Shortcuts to launcher</string>
+    <string name="others">Others</string>
+    <string name="clear_created_shortcuts">Clear created shortcuts</string>
+    <string name="create_next_launch">Will be recreated at next launch</string>
+    <string name="cleared">Cleared</string>
 </resources>

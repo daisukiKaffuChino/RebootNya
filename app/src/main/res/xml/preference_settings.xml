@@ -57,6 +57,16 @@
             app:title="@string/language" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/others">
+        <Preference
+            app:key="pin_shortcuts"
+            app:title="@string/request_pin_shortcuts" />
+        <Preference
+            app:key="clear_shortcuts"
+            app:title="@string/clear_created_shortcuts"
+            app:summary="@string/create_next_launch"/>
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/about">
         <Preference
             app:key="developer"

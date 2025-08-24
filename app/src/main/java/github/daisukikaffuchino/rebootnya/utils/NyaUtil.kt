@@ -66,15 +66,6 @@ fun sendEmail(context: Context) {
     }
 }
 
-fun openCoolapkUserExplicit(context: Context) {
-    val uri = "coolmarket://u/2492447".toUri()
-    val intent = Intent(Intent.ACTION_VIEW, uri)
-    if (intent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(intent)
-    } else {
-        Toast.makeText(context, R.string.no_app_found_open_link, Toast.LENGTH_SHORT).show()
-    }
-}
 
 
 

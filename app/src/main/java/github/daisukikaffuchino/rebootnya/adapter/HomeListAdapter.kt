@@ -29,7 +29,7 @@ class HomeListAdapter(
 
         translucentColor = ColorUtils.setAlphaComponent(
             baseColor,
-            150
+            170
         )
 
     }

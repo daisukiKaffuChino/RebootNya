@@ -9,10 +9,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:drawableEnd="@drawable/ic_cat_fish_bones"
         android:drawableTint="?attr/colorOnSurface"
+        android:maxLines="1"
         android:text="@string/app_name"
         android:textColor="?attr/colorOnSurface"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="24sp" />
 </LinearLayout>

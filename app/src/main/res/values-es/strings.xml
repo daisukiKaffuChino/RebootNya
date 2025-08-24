@@ -27,6 +27,5 @@
     <string name="no_permission">No tienes los permisos necesarios</string>
     <string name="shizuku_exec_mode">Ejecución de comandos con Shizuku</string>
     <string name="user_service_not_initialized">UserService no está inicializado</string>
-    <string name="coolapk">Coolapk</string>
     <string name="bilibili">Bilibili</string>
 </resources>

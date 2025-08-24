@@ -8,6 +8,8 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -18,7 +20,7 @@ import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
 import github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
 import github.daisukikaffuchino.rebootnya.utils.AppLocales
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
-import github.daisukikaffuchino.rebootnya.utils.openCoolapkUserExplicit
+import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
 import github.daisukikaffuchino.rebootnya.utils.openUrlLink
 import github.daisukikaffuchino.rebootnya.utils.sendEmail
 import github.daisukikaffuchino.rebootnya.utils.toHtml
@@ -36,6 +38,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var nightModePreference: IntegerSimpleMenuPreference
     private lateinit var languagePreference: ListPreference
     private lateinit var editTextPreference: EditTextPreference
+    private lateinit var pinShortcutsPreference: Preference
+    private lateinit var clearShortcutsPreference: Preference
     private lateinit var developerPreference: Preference
     private lateinit var projectInfoPreference: Preference
 
@@ -54,6 +58,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         nightModePreference = findPreference("night_mode")!!
         languagePreference = findPreference("language")!!
         editTextPreference = findPreference("edit_text")!!
+        pinShortcutsPreference = findPreference("pin_shortcuts")!!
+        clearShortcutsPreference = findPreference("clear_shortcuts")!!
         developerPreference = findPreference("developer")!!
         projectInfoPreference = findPreference("repo")!!
 
@@ -116,23 +122,44 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         setupLocalePreference()
 
+        pinShortcutsPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.request_pin_shortcuts)
+                .setItems(
+                    arrayOf(
+                        getString(R.string.lock_screen),
+                        getString(R.string.power_off),
+                        getString(R.string.reboot)
+                    )
+                ) { dialogInterface, i ->
+                    val shortcutHelper = ShortcutHelper(context)
+                    shortcutHelper.requestPinShortcut(shortcutHelper.items[i])
+                }
+                .show()
+            true
+        }
+
+        clearShortcutsPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+            NyaSettings.preferences.edit { putBoolean("isShortcutCreated", false) }
+            Toast.makeText(context, R.string.cleared, Toast.LENGTH_SHORT).show()
+            true
+        }
+
         developerPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.contact_me)
                 .setItems(
                     arrayOf(
                         getString(R.string.email),
-                        getString(R.string.coolapk),
                         getString(R.string.bilibili)
                     )
                 ) { dialogInterface, i ->
                     when (i) {
                         0 -> sendEmail(context)
-                        1 -> openCoolapkUserExplicit(context)
-                        2 -> openUrlLink(context, "https://space.bilibili.com/178423358")
+                        1 -> openUrlLink(context, "https://space.bilibili.com/178423358")
                     }
                 }
-                .setNegativeButton(R.string.close, null)
                 .show()
             true
         }

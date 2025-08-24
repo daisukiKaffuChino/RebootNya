@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -79,7 +81,10 @@ public class HomeFragment extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         final String[] items = getDisplayItems();
 
-        builder.setTitle(R.string.app_name);
+        @SuppressLint("InflateParams") View titleView= getLayoutInflater().inflate(R.layout.dialog_custom_title, null);
+        ((LinearLayout) titleView.getRootView()).setGravity(Gravity.START);
+
+        builder.setCustomTitle(titleView);
         builder.setSingleChoiceItems(items, checkedItem, (dialog, which) -> checkedItem = which);
 
         builder.setPositiveButton(R.string.confirm, null);
@@ -101,9 +106,10 @@ public class HomeFragment extends DialogFragment {
         return dialog;
     }
 
+    @SuppressLint("InflateParams")
     private Dialog createModernButtonsDialog() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-        @SuppressLint("InflateParams")
+
         View dialogView = getLayoutInflater().inflate(R.layout.fragment_home, null);
         ListView listView = dialogView.findViewById(R.id.home_list_view);
 
@@ -114,13 +120,11 @@ public class HomeFragment extends DialogFragment {
         listView.setDivider(null);
         listView.setAdapter(adapter);
 
-        builder.setTitle(R.string.app_name);
+        builder.setCustomTitle(getLayoutInflater().inflate(R.layout.dialog_custom_title, null));
         builder.setView(dialogView);
 
-        @SuppressLint("InflateParams")
         AlertDialog dialog = builder.setPositiveButton(R.string.close, null)
                 .setNegativeButton(R.string.setting, null)
-                .setCustomTitle(getLayoutInflater().inflate(R.layout.dialog_custom_title, null))
                 .create();
 
         dialog.setOnShowListener(dialogInterface -> {
