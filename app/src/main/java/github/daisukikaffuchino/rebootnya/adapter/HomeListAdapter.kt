@@ -75,24 +75,31 @@ class HomeListAdapter(
         holder.btn.setTextColor(translucentTextColor)
         holder.btn.setOnClickListener { view -> clickListener.onClick(position) }
 
-        if (position == 0) {
-            holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 48f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 48f)
-                .setBottomLeftCorner(CornerFamily.ROUNDED, 12f)
-                .setBottomRightCorner(CornerFamily.ROUNDED, 12f)
-                .build()
-        }
-
-        if (position == items.size - 1) {
-            holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
-                .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 12f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 12f)
-                .setBottomLeftCorner(CornerFamily.ROUNDED, 48f)
-                .setBottomRightCorner(CornerFamily.ROUNDED, 48f)
-                .build()
+        when (position) {
+            0 -> {
+                holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 48f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 48f)
+                    .setBottomLeftCorner(CornerFamily.ROUNDED, 12f)
+                    .setBottomRightCorner(CornerFamily.ROUNDED, 12f)
+                    .build()
+            }
+            items.size - 1 -> {
+                holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
+                    .toBuilder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, 12f)
+                    .setTopRightCorner(CornerFamily.ROUNDED, 12f)
+                    .setBottomLeftCorner(CornerFamily.ROUNDED, 48f)
+                    .setBottomRightCorner(CornerFamily.ROUNDED, 48f)
+                    .build()
+            }
+            else -> {
+                holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
+                    .toBuilder()
+                    .setAllCorners(CornerFamily.ROUNDED, 12f)
+                    .build()
+            }
         }
 
         return view
