@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="48dp"
-    android:paddingEnd="48dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
     tools:viewBindingIgnore="true">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/item_home_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:insetTop="1dp"
-        android:insetBottom="1dp"
+        android:insetTop="1.2dp"
+        android:insetBottom="1.2dp"
         android:textSize="15sp"
-        app:cornerRadius="3dp"
+        app:cornerRadius="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

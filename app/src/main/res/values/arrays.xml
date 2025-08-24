@@ -34,7 +34,7 @@
 
     <string-array name="main_interface_style">
         <item>@string/style_classic_list</item>
-        <item>@string/style_modern_buttons</item>
+        <item>@string/style_md_buttons</item>
     </string-array>
 
     <integer-array name="main_interface_style_value">

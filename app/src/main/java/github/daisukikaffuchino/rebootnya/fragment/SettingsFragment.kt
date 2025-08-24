@@ -34,7 +34,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var hideUnavailableOptionsPreference: TwoStatePreference
     private lateinit var dynamicColorPreference: TwoStatePreference
     private lateinit var nightModePreference: IntegerSimpleMenuPreference
-    private lateinit var mainInterfaceStylePreference: IntegerSimpleMenuPreference
     private lateinit var languagePreference: ListPreference
     private lateinit var editTextPreference: EditTextPreference
     private lateinit var developerPreference: Preference
@@ -53,7 +52,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         hideUnavailableOptionsPreference = findPreference("hide_unavailable_options")!!
         dynamicColorPreference = findPreference("dynamic_color")!!
         nightModePreference = findPreference("night_mode")!!
-        mainInterfaceStylePreference = findPreference("main_interface_style")!!
         languagePreference = findPreference("language")!!
         editTextPreference = findPreference("edit_text")!!
         developerPreference = findPreference("developer")!!
@@ -64,15 +62,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
                 if (value is Int && work != value)
                     activity?.recreate()
-                true
-            }
-
-        mainInterfaceStylePreference.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _, newValue ->
-                val oldValue = NyaSettings.getMainInterfaceStyle()
-                if (newValue is Int && oldValue != newValue) {
-                    Toast.makeText(requireContext(), R.string.style_change_toast, Toast.LENGTH_SHORT).show()
-                }
                 true
             }
 

@@ -23,9 +23,12 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    var uiStyleChanged by Delegates.notNull<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listFilterStatus = checkListFilterStatus()
+        uiStyleChanged = NyaSettings.getMainInterfaceStyle()
 
         val window = getWindow()
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
@@ -73,7 +76,9 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (listFilterStatus != checkListFilterStatus())
+        if (listFilterStatus != checkListFilterStatus() ||
+            uiStyleChanged != NyaSettings.getMainInterfaceStyle()
+        )
             recreate()
     }
 

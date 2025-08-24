@@ -68,7 +68,6 @@ public class NyaSettings {
         int USER_SERVICE = 2;
     }
 
-    @SuppressLint("UniqueConstants")
     @IntDef({
             STYLE.CLASSIC_LIST,
             STYLE.MODERN_BUTTONS

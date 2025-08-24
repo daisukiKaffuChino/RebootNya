@@ -61,7 +61,7 @@ class HomeListAdapter(
 
         //复用
         if (convertView == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.list_home, parent, false)
+            view = LayoutInflater.from(context).inflate(R.layout.item_home_list, parent, false)
             holder = ViewHolder(view)
             view.tag = holder
         } else {
@@ -73,25 +73,25 @@ class HomeListAdapter(
         holder.btn.text = title
         holder.btn.backgroundTintList = ColorStateList.valueOf(translucentColor)
         holder.btn.setTextColor(translucentTextColor)
-        holder.btn.setOnClickListener { view -> clickListener!!.onClick(position) }
+        holder.btn.setOnClickListener { view -> clickListener.onClick(position) }
 
         if (position == 0) {
             holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
                 .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 32f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 32f)
-                .setBottomLeftCorner(CornerFamily.ROUNDED, 6f)
-                .setBottomRightCorner(CornerFamily.ROUNDED, 6f)
+                .setTopLeftCorner(CornerFamily.ROUNDED, 48f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 48f)
+                .setBottomLeftCorner(CornerFamily.ROUNDED, 12f)
+                .setBottomRightCorner(CornerFamily.ROUNDED, 12f)
                 .build()
         }
 
         if (position == items.size - 1) {
             holder.btn.shapeAppearanceModel = ShapeAppearanceModel()
                 .toBuilder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 6f)
-                .setTopRightCorner(CornerFamily.ROUNDED, 6f)
-                .setBottomLeftCorner(CornerFamily.ROUNDED, 32f)
-                .setBottomRightCorner(CornerFamily.ROUNDED, 32f)
+                .setTopLeftCorner(CornerFamily.ROUNDED, 12f)
+                .setTopRightCorner(CornerFamily.ROUNDED, 12f)
+                .setBottomLeftCorner(CornerFamily.ROUNDED, 48f)
+                .setBottomRightCorner(CornerFamily.ROUNDED, 48f)
                 .build()
         }
 

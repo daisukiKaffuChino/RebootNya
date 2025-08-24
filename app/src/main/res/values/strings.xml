@@ -51,6 +51,5 @@
     <string name="stop_system_ui_tip">On some ROM, SystemUI will be automatically restarted by system services, so it will relaunch shortly after being terminated.</string>
     <string name="main_interface_style">Main interface style</string>
     <string name="style_classic_list">Classic list</string>
-    <string name="style_modern_buttons">Modern buttons</string>
-    <string name="style_change_toast">Interface changes will take effect at the next launch</string>
+    <string name="style_md_buttons">Material design buttons</string>
 </resources>
