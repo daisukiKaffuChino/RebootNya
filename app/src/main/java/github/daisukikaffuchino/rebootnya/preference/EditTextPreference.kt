@@ -1,6 +1,10 @@
 package github.daisukikaffuchino.rebootnya.preference
 
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.widget.Toast
 import androidx.preference.Preference
@@ -20,6 +24,7 @@ class EditTextPreference(private val context: Context, attrs: AttributeSet?) : P
         layoutResource = R.layout.preference_edittext
     }
 
+    private var savedText: String? = null
     private var editText: TextInputEditText? = null
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
@@ -75,6 +80,54 @@ class EditTextPreference(private val context: Context, attrs: AttributeSet?) : P
             }
         }
 
+        editText?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+                savedText = editText?.text.toString()
+            }
+
+            override fun beforeTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence?, i: Int, i1: Int, i2: Int) {}
+        })
+
+        if (savedText != null)
+            editText?.setText(savedText)
+
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superState = super.onSaveInstanceState()
+        val myState = SavedState(superState)
+        myState.customValue = savedText
+        return myState
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state !is SavedState) {
+            super.onRestoreInstanceState(state)
+            return
+        }
+        super.onRestoreInstanceState(state.superState)
+        savedText = state.customValue
+    }
+
+    private class SavedState : BaseSavedState {
+        var customValue: String? = null
+
+        constructor(superState: Parcelable?) : super(superState)
+
+        private constructor(source: Parcel) : super(source) {
+            customValue = source.readString()
+        }
+
+        override fun writeToParcel(dest: Parcel, flags: Int) {
+            super.writeToParcel(dest, flags)
+            dest.writeString(customValue)
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
+            override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
+        }
     }
 
     fun getTextInputEditText(): TextInputEditText? {
