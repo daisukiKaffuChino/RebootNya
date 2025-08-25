@@ -6,7 +6,7 @@
 
 RebootNya 是一款简单的高级重启应用，同时支持 **Root** 和 **[Shizuku](https://shizuku.rikka.app/)** 工作方式！
 
-RebootNya is a simple yet advanced reboot application that supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)** modes!
+RebootNya is a simple yet advanced reboot application that supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**!
 
 ## 开发背景/Development Background
 
@@ -26,4 +26,5 @@ The transparent background may not display properly on the default launcher of C
 - **[Android Jetpack](https://github.com/androidx/androidx)**: Apache-2.0 license
 - **[Material Components for Android](https://github.com/material-components/material-components-android)**: Apache-2.0 license
 - **[libsu](https://github.com/topjohnwu/libsu)**: Apache-2.0 license
+- **[RikkaX](https://github.com/RikkaApps/RikkaX)**: MIT license
 - **[Shizuku-API](https://github.com/RikkaApps/Shizuku-API)**: Apache-2.0 license
