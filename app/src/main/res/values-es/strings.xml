@@ -41,7 +41,6 @@
     <string name="always_on">Siempre encendida</string>
     <string name="always_off">Siempre apagada</string>
     <string name="hide_unavailable">Ocultar opciones no disponibles</string>
-    <string name="hide_unavailable">Ocultar opciones no disponibles</string>
     <string name="hide_unavailable_summary">Algunos comandos ADB no tienen permisos suficientes, por lo que ciertas opciones podrían no estar disponibles. Si se activa esta opción, el modo Root y el modo Shizuku con permisos de superusuario no se verán afectados.</string>
     <string name="contact_me">Contáctame</string>
     <string name="email">Correo electrónico</string>
