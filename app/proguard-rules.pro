@@ -26,7 +26,7 @@
 -keep interface * extends android.os.IInterface { *; }
 
 # 保持 ShizukuUtil 类及其方法不被混淆
--keep class github.daisukikaffuchino.rebootnya.utils.ShizukuUtilKt {
+-keep class github.daisukikaffuchino.rebootnya.utils.ShizukuUtil {
     private int shizukuProcess(java.lang.String[]);
 }
 
