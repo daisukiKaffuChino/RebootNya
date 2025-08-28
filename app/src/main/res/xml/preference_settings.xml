@@ -50,11 +50,6 @@
             app:key="main_interface_style"
             app:summary="%s"
             app:title="@string/main_interface_style" />
-        <rikka.preference.SimpleMenuPreference
-            app:defaultValue="SYSTEM"
-            app:key="language"
-            app:summary="%s"
-            app:title="@string/language" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/others">
@@ -63,8 +58,19 @@
             app:title="@string/request_pin_shortcuts" />
         <Preference
             app:key="clear_shortcuts"
-            app:title="@string/clear_created_shortcuts"
-            app:summary="@string/create_next_launch"/>
+            app:summary="@string/create_next_launch"
+            app:title="@string/clear_created_shortcuts" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/language">
+        <rikka.preference.SimpleMenuPreference
+            app:defaultValue="SYSTEM"
+            app:key="language"
+            app:summary="%s"
+            app:title="@string/language" />
+        <Preference
+            app:key="translation"
+            app:title="@string/participate_translation" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/about">
@@ -77,4 +83,8 @@
             app:summary="@string/license"
             app:title="RebootNya Open-Source Project" />
     </PreferenceCategory>
+
+    <github.daisukikaffuchino.rebootnya.preference.NekoPreference
+        app:key="neko"
+        app:selectable="false" />
 </androidx.preference.PreferenceScreen>

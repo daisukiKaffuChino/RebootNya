@@ -2,7 +2,6 @@ package github.daisukikaffuchino.rebootnya
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
@@ -31,7 +30,6 @@ class SettingsActivity : BaseActivity() {
         }
 
     lateinit var context: Context
-    //val sp: SharedPreferences = NyaSettings.getPreferences()
 
     companion object {
         const val SHIZUKU_REQUEST_CODE: Int = 1000
@@ -63,11 +61,10 @@ class SettingsActivity : BaseActivity() {
         super.onStart()
         Shizuku.addRequestPermissionResultListener(requestPermissionResultListener)
 
-        //val workingMode: String = sp.getString("work_mode", "Root")!!
         val workingMode = NyaSettings.getWorkMode()
         val isPermitted = when (workingMode) {
-            NyaSettings.STORE.ROOT -> Shell.isAppGrantedRoot() != false
-            NyaSettings.STORE.SHIZUKU -> ShizukuUtil(context).checkShizukuPermission()
+            NyaSettings.MODE.ROOT -> Shell.isAppGrantedRoot() != false
+            NyaSettings.MODE.SHIZUKU -> ShizukuUtil(context).checkShizukuPermission()
             else -> false
         }
         if (isPermitted)
@@ -81,8 +78,8 @@ class SettingsActivity : BaseActivity() {
 
                 cardStatus.setOnClickListener {
                     when (workingMode) {
-                        NyaSettings.STORE.ROOT -> RootUtil(context).requestRoot()
-                        NyaSettings.STORE.SHIZUKU -> {
+                        NyaSettings.MODE.ROOT -> RootUtil(context).requestRoot()
+                        NyaSettings.MODE.SHIZUKU -> {
                             if (!Shizuku.pingBinder()) {
                                 Toast.makeText(
                                     context,
@@ -110,10 +107,10 @@ class SettingsActivity : BaseActivity() {
 
     private fun onRequestPermissionsResult(requestCode: Int, grantResult: Int) {
         val granted = grantResult == PackageManager.PERMISSION_GRANTED
-        if (granted && NyaSettings.getWorkMode()== NyaSettings.STORE.SHIZUKU
+        if (granted && NyaSettings.getWorkMode()== NyaSettings.MODE.SHIZUKU
             && requestCode == SHIZUKU_REQUEST_CODE
         ) {
-            setWorkingStatus(NyaSettings.STORE.SHIZUKU)
+            setWorkingStatus(NyaSettings.MODE.SHIZUKU)
         }
     }
 
@@ -121,7 +118,7 @@ class SettingsActivity : BaseActivity() {
     private fun setWorkingStatus(workingMode: Int) {
 
         val statusText = when (workingMode) {
-            NyaSettings.STORE.SHIZUKU -> {
+            NyaSettings.MODE.SHIZUKU -> {
                 val shizukuVersion = Shizuku.getVersion()
                 if (Sui.init(context.packageName)) {
                     "${getString(R.string.working)} <Sui - $shizukuVersion>"

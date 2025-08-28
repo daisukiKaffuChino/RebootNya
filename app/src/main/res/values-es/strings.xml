@@ -45,7 +45,6 @@
     <string name="contact_me">Contáctame</string>
     <string name="email">Correo electrónico</string>
     <string name="no_app_found_open_link">No se ha encontrado una aplicación para abrir el link</string>
-    <string name="bilibili">Bilibili</string>
     <string name="stop_system_ui_tip">En algunas ROM, el SystemUI será reiniciado automáticamente por los servicios del sistema, por lo que se volverá a iniciar poco después de ser finalizado.</string>
     <string name="main_interface_style">Estilo de la interfaz principal</string>
     <string name="style_classic_list">Lista clásica</string>
@@ -55,4 +54,7 @@
     <string name="clear_created_shortcuts">Borrar accesos directos creados</string>
     <string name="create_next_launch">Se volverán a crear en el próximo inicio</string>
     <string name="cleared">Borrado</string>
+    <string name="participate_translation">Participar en la traducción</string>
+    <string name="translation_summary">Ayúdanos a traducir %s a tu idioma</string>
+    <string name="executing">Ejecutando…</string>
 </resources>

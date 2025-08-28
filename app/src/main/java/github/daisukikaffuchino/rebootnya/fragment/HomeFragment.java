@@ -73,7 +73,7 @@ public class HomeFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (NyaSettings.getShizukuShellMode() == NyaSettings.STORE.USER_SERVICE)
+        if (NyaSettings.getShizukuShellMode() == NyaSettings.MODE.USER_SERVICE)
             NyaShellManager.INSTANCE.bindService(shizukuUtil, (exitCode, message) -> Log.d("main", "bind " + exitCode));
     }
 
@@ -172,7 +172,7 @@ public class HomeFragment extends DialogFragment {
     }
 
     private void doAction(ListItemEnum listItemEnum) {
-        if (NyaSettings.getWorkMode() == NyaSettings.STORE.ROOT)
+        if (NyaSettings.getWorkMode() == NyaSettings.MODE.ROOT)
             funcRoot(listItemEnum);
         else {
             try {

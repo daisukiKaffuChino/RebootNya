@@ -45,7 +45,6 @@
     <string name="contact_me">和我联系</string>
     <string name="email">电子邮件</string>
     <string name="no_app_found_open_link">未找到可打开链接的应用</string>
-    <string name="bilibili">哔哩哔哩</string>
     <string name="stop_system_ui_tip">在部分系统上，SystemUI 会被系统服务自动拉起，所以结束后很快会重启。</string>
     <string name="main_interface_style">主界面样式</string>
     <string name="style_classic_list">经典列表</string>
@@ -55,4 +54,7 @@
     <string name="clear_created_shortcuts">清除已创建 Shortcuts</string>
     <string name="create_next_launch">下次启动时会重新创建</string>
     <string name="cleared">已清除</string>
+    <string name="participate_translation">参与翻译</string>
+    <string name="translation_summary">帮助我们将 %s 翻译至您的语言</string>
+    <string name="executing">执行中…</string>
 </resources>

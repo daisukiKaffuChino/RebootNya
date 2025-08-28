@@ -16,7 +16,7 @@ class MainActivity : BaseActivity() {
         fun checkListFilterStatus(): Boolean {
             return Shizuku.pingBinder()
                     && Shizuku.getUid() == 2000
-                    && NyaSettings.getWorkMode() == NyaSettings.STORE.SHIZUKU
+                    && NyaSettings.getWorkMode() == NyaSettings.MODE.SHIZUKU
                     && NyaSettings.getIsHideUnavailableOptions()
         }
     }

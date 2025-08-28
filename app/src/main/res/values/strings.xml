@@ -37,7 +37,7 @@
     <string name="language">Language</string>
     <string name="license">Apache-2.0 Licensed</string>
     <string name="developer">Developer</string>
-    <string name="about_user_service_content">"The Process mode has been deprecated, and the related function is scheduled to be removed from Shizuku API 14. UserService, which is similar to Bound Services, is the officially recommended way to implement features.\n\nHowever, there have been reports that on some ROM (such as MIUI), UserService may fail to start correctly. Therefore, RebootNya still uses the old mode by default.\n\nYou can manually try enabling the UserService and test whether the features work properly. If everything runs good, it will provide better performance and stability. "</string>
+    <string name="about_user_service_content">"The Process mode has been deprecated, and the related function is scheduled to be removed from Shizuku API 14. UserService, which is similar to Bound Services, is the officially recommended way to implement features.\n\nHowever, there have been reports that on some ROM (such as MIUI), UserService may fail to start correctly. Therefore, RebootNya still uses the old mode by default.\n\nYou can manually try enabling the UserService and test whether the features work properly. If everything runs good, it will provide better performance and stability."</string>
     <string name="follow_system">Follow system</string>
     <string name="always_on">Always on</string>
     <string name="always_off">Always off</string>
@@ -46,7 +46,7 @@
     <string name="contact_me">Contact Me</string>
     <string name="email">Email</string>
     <string name="no_app_found_open_link">No app found to open the link</string>
-    <string name="bilibili">Bilibili</string>
+    <string name="bilibili" translatable="false">Bilibili</string>
     <string name="stop_system_ui_tip">On some ROM, SystemUI will be automatically restarted by system services, so it will relaunch shortly after being terminated.</string>
     <string name="main_interface_style">Main interface style</string>
     <string name="style_classic_list">Classic list</string>
@@ -56,4 +56,7 @@
     <string name="clear_created_shortcuts">Clear created shortcuts</string>
     <string name="create_next_launch">Will be recreated at next launch</string>
     <string name="cleared">Cleared</string>
+    <string name="participate_translation">Participate in translation</string>
+    <string name="translation_summary">Help us translate %s into your language</string>
+    <string name="executing">Executing…</string>
 </resources>

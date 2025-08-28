@@ -23,7 +23,6 @@ class NyaShellService : IShellService.Stub {
 
     @Throws(RemoteException::class)
     override fun exec(cmd: String): Int {
-        //var process: Process? = null
         return executeCommandWithTimeout(cmd, 3000)
     }
 
@@ -36,11 +35,11 @@ class NyaShellService : IShellService.Stub {
         return try {
             future.get(timeoutMs, TimeUnit.MILLISECONDS)
         } catch (e: TimeoutException) {
-            Log.d("ShellService", "Timeout:\n" + e.message.toString())
+            Log.d("ShellService", "Timeout",e)
             future.cancel(true)
             -2 //超时
         } catch (e: Exception) {
-            Log.d("ShellService", "Error:\n" + e.message.toString())
+            Log.d("ShellService", "Error",e)
             -1
         } finally {
             executor.shutdown()

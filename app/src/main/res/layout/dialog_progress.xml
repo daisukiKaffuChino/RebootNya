@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="24dp">
+    android:padding="24dp"
+    tools:viewBindingIgnore="true">
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:layout_width="48dp"
@@ -21,9 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_weight="1"
-        android:text="Executing..."
+        android:text="@string/executing"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textColor="?attr/colorOnSurface"
-        tools:ignore="HardcodedText" />
+        android:textColor="?attr/colorOnSurface" />
 
 </LinearLayout>

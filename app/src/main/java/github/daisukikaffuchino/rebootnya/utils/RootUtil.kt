@@ -8,7 +8,7 @@ import java.lang.Boolean
 import kotlin.Exception
 import kotlin.String
 
-class RootUtil(val context: Context){
+class RootUtil(private val context: Context){
     fun runRootCommandWithResult(cmd: String): kotlin.Boolean {
         if (Boolean.FALSE == Shell.isAppGrantedRoot()) {
             Toast.makeText(context, R.string.no_root, Toast.LENGTH_SHORT).show()

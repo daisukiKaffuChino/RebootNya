@@ -16,7 +16,7 @@ import rikka.shizuku.SystemServiceHelper
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
-class ShizukuUtil(val context: Context) {
+class ShizukuUtil(private val context: Context) {
     fun checkShizukuPermission(): Boolean {
         if (!Shizuku.pingBinder()) return false
 
@@ -44,7 +44,7 @@ class ShizukuUtil(val context: Context) {
         try {
             powerManager.reboot(false, reason, false)
         } catch (e: Exception) {
-            Log.e("reboot", e.message.toString())
+            Log.e("ShizukuUtil","reboot", e)
             Toast.makeText(context, "Error:" + e.message, Toast.LENGTH_LONG).show()
         }
     }
@@ -80,7 +80,7 @@ class ShizukuUtil(val context: Context) {
 
         val mode = NyaSettings.getShizukuShellMode()
         when (mode) {
-            NyaSettings.STORE.PROCESS -> {
+            NyaSettings.MODE.PROCESS -> {
                 val exitCode = shizukuProcess(cmd)
                 if (exitCode != 0) Toast.makeText(
                     context,
@@ -126,7 +126,7 @@ class ShizukuUtil(val context: Context) {
             return result.get()
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
-            Log.e("interruptExec", e.message.toString())
+            Log.e("ShizukuUtil","interruptExec", e)
             return -2
         }
     }

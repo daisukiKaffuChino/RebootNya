@@ -52,13 +52,13 @@ object NyaSettings {
 
     @SuppressLint("UniqueConstants")
     @IntDef(
-        STORE.SHIZUKU,
-        STORE.ROOT,
-        STORE.PROCESS,
-        STORE.USER_SERVICE
+        MODE.SHIZUKU,
+        MODE.ROOT,
+        MODE.PROCESS,
+        MODE.USER_SERVICE
     )
     @Retention(AnnotationRetention.SOURCE)
-    annotation class STORE {
+    annotation class MODE {
         companion object {
             const val SHIZUKU = 1
             const val ROOT = 2
@@ -80,9 +80,9 @@ object NyaSettings {
     }
 
     @JvmStatic
-    @STORE
+    @MODE
     fun getWorkMode(): Int {
-        return preferences.getInt("work_mode", STORE.SHIZUKU)
+        return preferences.getInt("work_mode", MODE.SHIZUKU)
     }
 
     @JvmStatic
@@ -92,9 +92,9 @@ object NyaSettings {
     }
 
     @JvmStatic
-    @STORE
+    @MODE
     fun getShizukuShellMode(): Int {
-        return preferences.getInt("shizuku_shell_mode", STORE.PROCESS)
+        return preferences.getInt("shizuku_shell_mode", MODE.PROCESS)
     }
 
     @JvmStatic

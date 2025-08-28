@@ -5,7 +5,10 @@ import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
@@ -14,6 +17,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
@@ -25,6 +29,9 @@ import github.daisukikaffuchino.rebootnya.utils.openUrlLink
 import github.daisukikaffuchino.rebootnya.utils.sendEmail
 import github.daisukikaffuchino.rebootnya.utils.toHtml
 import rikka.material.app.LocaleDelegate
+import rikka.recyclerview.addEdgeSpacing
+import rikka.recyclerview.fixEdgeEffect
+import rikka.widget.borderview.BorderRecyclerView
 import java.util.Locale
 
 
@@ -40,6 +47,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var editTextPreference: EditTextPreference
     private lateinit var pinShortcutsPreference: Preference
     private lateinit var clearShortcutsPreference: Preference
+    private lateinit var translationPreference: Preference
     private lateinit var developerPreference: Preference
     private lateinit var projectInfoPreference: Preference
 
@@ -60,6 +68,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         editTextPreference = findPreference("edit_text")!!
         pinShortcutsPreference = findPreference("pin_shortcuts")!!
         clearShortcutsPreference = findPreference("clear_shortcuts")!!
+        translationPreference = findPreference("translation")!!
         developerPreference = findPreference("developer")!!
         projectInfoPreference = findPreference("repo")!!
 
@@ -71,7 +80,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
 
-        if (work == NyaSettings.STORE.ROOT) {
+        if (work == NyaSettings.MODE.ROOT) {
             shellModePreference.isVisible = false
             userServiceInfoPreference.isVisible = false
             hideUnavailableOptionsPreference.isVisible = false
@@ -146,6 +155,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+        translationPreference.summary =
+            context.getString(
+                R.string.translation_summary, context.getString(R.string.app_name)
+            )
+        translationPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            openUrlLink(context, "https://crowdin.com/project/rebootnya")
+            true
+        }
+
         developerPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.contact_me)
@@ -181,6 +199,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
             if (keypadHeight < screenHeight * 0.15)
                 editTextPreference.getTextInputEditText()?.clearFocus()
         }
+    }
+
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): RecyclerView {
+        val recyclerView =
+            super.onCreateRecyclerView(inflater, parent, savedInstanceState) as BorderRecyclerView
+        recyclerView.fixEdgeEffect()
+        recyclerView.addEdgeSpacing(bottom = 8f, unit = TypedValue.COMPLEX_UNIT_DIP)
+
+        return recyclerView
     }
 
     private fun setupLocalePreference() {

@@ -45,8 +45,7 @@
     <string name="contact_me">聯絡我</string>
     <string name="email">電子郵件</string>
     <string name="no_app_found_open_link">找不到可開啟連結的應用程式</string>
-    <string name="bilibili">嗶哩嗶哩</string>
-    <string name="stop_system_ui_tip">"在部分 ROM 上，SystemUI 會被系統服務自動啟動，所以結束後很快就會重新啟動。 "</string>
+    <string name="stop_system_ui_tip">"在部分 ROM 上，SystemUI 會被系統服務自動啟動，所以結束後很快就會重新啟動。"</string>
     <string name="main_interface_style">主介面風格</string>
     <string name="style_classic_list">經典列表</string>
     <string name="style_md_buttons">Material Design 按鈕</string>
@@ -55,4 +54,7 @@
     <string name="clear_created_shortcuts">清除已建立的捷徑</string>
     <string name="create_next_launch">下次啟動時會重新建立</string>
     <string name="cleared">已清除</string>
+    <string name="participate_translation">參與翻譯</string>
+    <string name="translation_summary">協助我們將 %s 翻譯至您的語言</string>
+    <string name="executing">执行中…</string>
 </resources>

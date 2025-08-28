@@ -21,7 +21,7 @@ class EditTextPreference(private val context: Context, attrs: AttributeSet?) : P
     context, attrs
 ) {
     init {
-        layoutResource = R.layout.preference_edittext
+        layoutResource = R.layout.preference_edit_text
     }
 
     private var savedText: String? = null
@@ -45,7 +45,7 @@ class EditTextPreference(private val context: Context, attrs: AttributeSet?) : P
             val workingMode = NyaSettings.getWorkMode()
 
             when (workingMode) {
-                NyaSettings.STORE.ROOT -> {
+                NyaSettings.MODE.ROOT -> {
                     if (Shell.isAppGrantedRoot() != false) {
                         if (rootUtil.runRootCommandWithResult(command)) {
                             Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show()
@@ -58,7 +58,7 @@ class EditTextPreference(private val context: Context, attrs: AttributeSet?) : P
                     }
                 }
 
-                NyaSettings.STORE.SHIZUKU -> {
+                NyaSettings.MODE.SHIZUKU -> {
                     if (shizukuUtil.checkShizukuPermission()) {
                         val exitCode = shizukuUtil.runShizukuCommand(
                             command.split("\\s+".toRegex()).toTypedArray(), false

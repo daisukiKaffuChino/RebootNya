@@ -61,6 +61,8 @@ dependencies {
     implementation libs.provider
     implementation libs.api
     implementation libs.material.preference
+    implementation libs.borderview
+    implementation libs.recyclerview.ktx
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
