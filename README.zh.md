@@ -1,4 +1,4 @@
-English | [简体中文](README.zh.md)
+[English](README.md) | 简体中文
 
 <img src="./image/banner.png" alt="Banner"/>
 
@@ -13,25 +13,25 @@ English | [简体中文](README.zh.md)
 [![Crowdin](https://badges.crowdin.net/rebootnya/localized.svg)](https://crowdin.com/project/rebootnya)
 [![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/master/LICENSE)
 
-RebootNya is a simple yet advanced reboot app that supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**!
+RebootNya 是一款简单的高级重启应用，同时支持 **Root** 和 **[Shizuku](https://shizuku.rikka.app/)** 工作方式！
 
-Tested on some devices and works well on Android 8.1 to 15.
+已在一些设备上进行测试，在 Android 8.1 ~ 15 上运行良好。
 
-> On some ROMs’ default launcher, the transparent background may not display correctly (e.g., ColorOS 15). The solution is to switch to another launcher, such as Lawnchair.
+> 在一些 ROM 的默认启动器上可能无法正确显示透明背景，例如 ColorOS 15。解决方案是更换启动器，比如 Lawnchair 等。
 
-## Development Background
+## 开发背景
 
-One of my old phones has both the power and volume buttons broken, so I urgently needed an advanced reboot app that is aesthetically pleasing, lightweight, and easy to use.
+我的一台旧手机电源键与音量键都损坏了，因此迫切需要一个兼顾美观、轻量和易用的高级重启应用。
 
-## Contributors
+## 贡献者
 
-Feel free to dive in! [Open an issue](https://github.com/daisukiKaffuChino/RebootNya/issues/new/choose) or submit pull requests (PRs).
+欢迎参与贡献！你可以 [提出 Issue](https://github.com/daisukiKaffuChino/RebootNya/issues/new/choose) 或为我们提交拉取请求 (PR)。
 
-This project exists thanks to all the people who contribute.
+本项目的存在需要感谢所有的贡献者。
 
 ![Contributors](https://contrib.rocks/image?repo=daisukiKaffuChino/RebootNya)
 
-## Licenses
+## 开源许可
 
 - **[RebootNya](https://github.com/daisukiKaffuChino/RebootNya)**: Apache-2.0 license
 - **[Android Jetpack](https://github.com/androidx/androidx)**: Apache-2.0 license
