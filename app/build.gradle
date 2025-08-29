@@ -11,8 +11,8 @@ android {
         applicationId "github.daisukikaffuchino.rebootnya"
         minSdk 28
         targetSdk 36
-        versionCode 250826
-        versionName "1.6.0"
+        versionCode 250829
+        versionName "1.6.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
