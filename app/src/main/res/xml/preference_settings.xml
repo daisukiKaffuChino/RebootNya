@@ -84,7 +84,4 @@
             app:title="RebootNya Open-Source Project" />
     </PreferenceCategory>
 
-    <github.daisukikaffuchino.rebootnya.preference.NekoPreference
-        app:key="neko"
-        app:selectable="false" />
 </androidx.preference.PreferenceScreen>
