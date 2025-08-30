@@ -97,7 +97,7 @@ class HomeFragment : DialogFragment() {
         val adapter = HomeListAdapter(
             mContext,
             items.toList(),
-            object : HomeListAdapter.OnItemClickListener { // Explicitly implement the interface
+            object : HomeListAdapter.OnItemClickListener {
                 override fun onClick(pos: Int) {
                     doAction(ListItemEnum.fromLocalizedDisplayName(mContext, items[pos]))
                 }
@@ -134,7 +134,7 @@ class HomeFragment : DialogFragment() {
         val data = intent.getStringExtra("extra")
         if (data != null)
             Handler(Looper.getMainLooper()).postDelayed({
-                doAction(ListItemEnum.fromDisplayName(data)) // Safe call for fromDisplayName
+                doAction(ListItemEnum.fromDisplayName(data))
                 dismiss()
             }, 1000)
         return loadingDialog.create()
@@ -147,20 +147,20 @@ class HomeFragment : DialogFragment() {
                 itemList,
                 ListItemEnum.SAFE_MODE.getLocalizedDisplayName(mContext),
                 ListItemEnum.SOFT_REBOOT.getLocalizedDisplayName(mContext)
-            ) as ArrayList<String> // Cast needed if NyaUtilKt.exclude returns List
+            ) as ArrayList<String>
         }
         return itemList.toTypedArray()
     }
 
     private fun createListItemMap(): LinkedHashMap<String, ListItemEnum> {
         val map = LinkedHashMap<String, ListItemEnum>()
-        for (item in ListItemEnum.entries) { // Use .entries for enums in Kotlin
+        for (item in ListItemEnum.entries) {
             map[item.getLocalizedDisplayName(mContext)] = item
         }
         return map
     }
 
-    private fun doAction(listItemEnum: ListItemEnum?) { // Made listItemEnum nullable
+    private fun doAction(listItemEnum: ListItemEnum?) {
         if (listItemEnum == null) {
             Log.e("HomeFragment", "doAction called with null ListItemEnum")
             Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()

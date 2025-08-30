@@ -28,10 +28,13 @@ fun CharSequence.toHtml(flags: Int = 0): Spanned {
 }
 
 fun openUrlLink(context: Context, url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-    if (intent.resolveActivity(context.packageManager) != null) {
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
+        addCategory(Intent.CATEGORY_BROWSABLE)
+    }
+
+    try {
         context.startActivity(intent)
-    } else {
+    } catch (_: Exception) {
         Toast.makeText(context, R.string.no_app_found_open_link, Toast.LENGTH_SHORT).show()
     }
 }
