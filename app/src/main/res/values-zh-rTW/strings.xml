@@ -24,12 +24,12 @@
     <string name="ksu_tip">若你是 KernelSU 使用者，請前往管理器手動授權</string>
     <string name="shizuku_permission_insufficient">Shizuku(ADB) 的許可權可能不足</string>
     <string name="exec_custom_shell">執行自定義 Shell</string>
-    <string name="no_permission">你沒有獲得許可權</string>
+    <string name="no_permission">你沒有取得許可權</string>
     <string name="shizuku_exec_mode">Shizuku 指令執行模式</string>
     <string name="user_service_not_initialized">UserService 尚未初始化</string>
     <string name="launch">啟動</string>
     <string name="about_user_service">關於 UserService 模式</string>
-    <string name="advanced">高級</string>
+    <string name="advanced">高階</string>
     <string name="about">關於</string>
     <string name="interface_appearance">介面外觀</string>
     <string name="dark_theme">深色主題</string>
@@ -41,7 +41,7 @@
     <string name="always_on">總是開啟</string>
     <string name="always_off">總是關閉</string>
     <string name="hide_unavailable">隱藏可能無法使用的選項</string>
-    <string name="hide_unavailable_summary">由於 ADB 指令權限不足，部分選項可能無法使用。啟用後，Root 模式以及以 Root 權限啟動的 Shizuku 模式將不受影響。</string>
+    <string name="hide_unavailable_summary">由於 ADB 指令權限不足，部分選項可能無法使用。啟用後，Root 模式以及以 Root 啟動的 Shizuku 模式將不受影響。</string>
     <string name="contact_me">聯絡我</string>
     <string name="email">電子郵件</string>
     <string name="no_app_found_open_link">找不到可開啟連結的應用程式</string>

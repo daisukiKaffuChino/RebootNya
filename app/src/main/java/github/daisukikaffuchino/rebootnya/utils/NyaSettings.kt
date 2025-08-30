@@ -69,13 +69,13 @@ object NyaSettings {
 
     @IntDef(
         STYLE.CLASSIC_LIST,
-        STYLE.MODERN_BUTTONS
+        STYLE.MATERIAL_BUTTON
     )
     @Retention(AnnotationRetention.SOURCE)
     annotation class STYLE {
         companion object {
             const val CLASSIC_LIST = 1
-            const val MODERN_BUTTONS = 2
+            const val MATERIAL_BUTTON = 2
         }
     }
 

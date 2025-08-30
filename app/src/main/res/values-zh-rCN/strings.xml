@@ -41,7 +41,7 @@
     <string name="always_on">总是开启</string>
     <string name="always_off">总是关闭</string>
     <string name="hide_unavailable">隐藏可能无法使用的选项</string>
-    <string name="hide_unavailable_summary">由于 ADB 命令的权限不足，部分选项可能无法使用。开启后，Root 模式和使用 Root 权限激活的 Shizuku 模式不受影响。</string>
+    <string name="hide_unavailable_summary">由于 ADB 命令的权限不足，部分选项可能无法使用。开启后，Root 模式和使用 Root 激活的 Shizuku 模式不受影响。</string>
     <string name="contact_me">和我联系</string>
     <string name="email">电子邮件</string>
     <string name="no_app_found_open_link">未找到可打开链接的应用</string>
