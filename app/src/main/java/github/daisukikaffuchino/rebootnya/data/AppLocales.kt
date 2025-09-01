@@ -1,4 +1,4 @@
-package github.daisukikaffuchino.rebootnya.utils
+package github.daisukikaffuchino.rebootnya.data
 
 object AppLocales {
     val LOCALES: Array<String?> = arrayOf(

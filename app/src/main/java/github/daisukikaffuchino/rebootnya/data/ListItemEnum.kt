@@ -1,4 +1,4 @@
-package github.daisukikaffuchino.rebootnya.utils
+package github.daisukikaffuchino.rebootnya.data
 
 import android.content.Context
 import github.daisukikaffuchino.rebootnya.R
@@ -26,7 +26,7 @@ enum class ListItemEnum(val displayName: String) {
     }
 
     companion object {
-        fun fromLocalizedDisplayName(context: Context,displayName: String): ListItemEnum {
+        fun fromLocalizedDisplayName(context: Context, displayName: String): ListItemEnum {
             return entries.find { it.getLocalizedDisplayName(context) == displayName } ?: LOCK_SCREEN//默认锁屏
         }
 

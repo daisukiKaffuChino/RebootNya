@@ -22,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
 import github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
-import github.daisukikaffuchino.rebootnya.utils.AppLocales
+import github.daisukikaffuchino.rebootnya.data.AppLocales
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
 import github.daisukikaffuchino.rebootnya.utils.openUrlLink

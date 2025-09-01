@@ -9,23 +9,27 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.ListView
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import github.daisukikaffuchino.rebootnya.MainActivity
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.SettingsActivity
-import github.daisukikaffuchino.rebootnya.adapter.HomeListAdapter
+import github.daisukikaffuchino.rebootnya.adapter.HomeRecyclerAdapter
+import github.daisukikaffuchino.rebootnya.data.HomeListItemData
+import github.daisukikaffuchino.rebootnya.data.ListItemEnum
 import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager
-import github.daisukikaffuchino.rebootnya.utils.ListItemEnum
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.RootUtil
 import github.daisukikaffuchino.rebootnya.utils.ShizukuUtil
 import github.daisukikaffuchino.rebootnya.utils.exclude
 import java.io.IOException
 import kotlin.system.exitProcess
+
 
 class HomeFragment : DialogFragment() {
     private lateinit var mContext: Context
@@ -42,7 +46,7 @@ class HomeFragment : DialogFragment() {
 
         return if (NyaSettings.getMainInterfaceStyle() == NyaSettings.STYLE.MATERIAL_BUTTON)
             createMaterialButtonsDialog()
-         else
+        else
             createClassicListDialog()
     }
 
@@ -74,54 +78,43 @@ class HomeFragment : DialogFragment() {
         builder.setNeutralButton(R.string.setting, null)
 
         val dialog = builder.create()
-        dialog.setOnShowListener {
-            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
-            positiveButton.setOnClickListener {
-                doAction(ListItemEnum.fromLocalizedDisplayName(mContext, items[checkedItem]))
-            }
-            neutralButton.setOnClickListener {
-                val intent = Intent(mContext, SettingsActivity::class.java)
-                mContext.startActivity(intent)
-            }
-        }
-        return dialog
+        return setupDialogButtons(dialog, items)
     }
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "StringFormatInvalid")
     private fun createMaterialButtonsDialog(): Dialog {
         val builder = MaterialAlertDialogBuilder(mContext)
-        val dialogView = layoutInflater.inflate(R.layout.fragment_home, null)
-        val listView = dialogView.findViewById<ListView>(R.id.home_list_view)
-        val items = getDisplayItems()
-        val adapter = HomeListAdapter(
-            mContext,
-            items.toList(),
-            object : HomeListAdapter.OnItemClickListener {
-                override fun onClick(pos: Int) {
-                    doAction(ListItemEnum.fromLocalizedDisplayName(mContext, items[pos]))
-                }
-            }
-        )
-
-        listView.divider = null
-        listView.adapter = adapter
-
         builder.setCustomTitle(layoutInflater.inflate(R.layout.dialog_custom_title, null))
-        builder.setView(dialogView)
 
-        val dialog = builder.setPositiveButton(R.string.close, null)
-            .setNegativeButton(R.string.setting, null)
-            .create()
+        val recyclerView =
+            layoutInflater.inflate(
+                R.layout.fragment_home_recycler_view,
+                null,
+                false
+            ) as RecyclerView
+        recyclerView.setLayoutManager(LinearLayoutManager(mContext))
 
-        dialog.setOnShowListener {
-            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            negativeButton.setOnClickListener {
-                val settingsIntent = Intent(mContext, SettingsActivity::class.java)
-                mContext.startActivity(settingsIntent)
-            }
+        val data: MutableList<HomeListItemData> = ArrayList()
+        val items = getDisplayItems()
+        for (i in 0..items.size - 1) {
+            data.add(
+                HomeListItemData(
+                    items[i],
+                    i,
+                    items.size
+                )
+            )
         }
-        return dialog
+
+        val adapter = HomeRecyclerAdapter(data) { position, item ->
+            checkedItem = item.indexInSection
+        }
+        recyclerView.setAdapter(adapter)
+        builder.setView(recyclerView)
+        recyclerView.addItemDecoration(HomeRecyclerAdapter.MarginItemDecoration(mContext))
+
+        val dialog = builder.create()
+        return setupDialogButtons(dialog, items)
     }
 
     @SuppressLint("InflateParams")
@@ -138,6 +131,33 @@ class HomeFragment : DialogFragment() {
                 dismiss()
             }, 1000)
         return loadingDialog.create()
+    }
+
+    private fun setupDialogButtons(dialog: AlertDialog, items: Array<String>): AlertDialog {
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm))
+        { dialogInterface, i -> }
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close))
+        { dialogInterface, i -> }
+        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.setting))
+        { dialogInterface, i -> }
+
+        dialog.setOnShowListener { dialogInterface ->
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+            positiveButton.setOnClickListener { v: View? ->
+                doAction(
+                    ListItemEnum.fromLocalizedDisplayName(
+                        mContext,
+                        items[checkedItem]
+                    )
+                )
+            }
+            neutralButton.setOnClickListener { v: View? ->
+                val intent = Intent(mContext, SettingsActivity::class.java)
+                mContext.startActivity(intent)
+            }
+        }
+        return dialog
     }
 
     private fun getDisplayItems(): Array<String> {
@@ -181,7 +201,7 @@ class HomeFragment : DialogFragment() {
     private fun runRootCommand(cmd: String) {
         if (rootUtil.runRootCommandWithResult(cmd))
             dismiss()
-         else
+        else
             Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
     }
 
@@ -197,6 +217,7 @@ class HomeFragment : DialogFragment() {
                 if (rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1"))
                     runRootCommand("svc power reboot")
             }
+
             ListItemEnum.POWER_OFF -> runRootCommand("reboot -p")
         }
     }
@@ -252,7 +273,7 @@ class HomeFragment : DialogFragment() {
                 )
                 if (exitCode == 0)
                     shizukuUtil.shizukuReboot(null)
-                 else
+                else
                     Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
             }
 
