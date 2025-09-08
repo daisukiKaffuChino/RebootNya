@@ -111,7 +111,7 @@ class HomeFragment : DialogFragment() {
         }
         recyclerView.setAdapter(adapter)
         builder.setView(recyclerView)
-        recyclerView.addItemDecoration(HomeRecyclerAdapter.MarginItemDecoration(mContext))
+        recyclerView.addItemDecoration(HomeRecyclerAdapter.MarginItemDecoration())
 
         val dialog = builder.create()
         return setupDialogButtons(dialog, items)

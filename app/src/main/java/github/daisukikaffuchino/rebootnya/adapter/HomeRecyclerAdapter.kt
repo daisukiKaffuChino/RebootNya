@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.listitem.ListItemViewHolder
+import github.daisukikaffuchino.rebootnya.NyaApplication
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.data.HomeListItemData
 
@@ -89,11 +90,11 @@ class HomeRecyclerAdapter(
         }
     }
 
-    class MarginItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
+    class MarginItemDecoration() : RecyclerView.ItemDecoration() {
         private val itemMargin: Int = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             2f,
-            context.resources.displayMetrics
+            NyaApplication.context.resources.displayMetrics
         ).toInt()
 
         override fun getItemOffsets(
