@@ -10,8 +10,10 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.ButtonBarLayout
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -73,10 +75,6 @@ class HomeFragment : DialogFragment() {
         builder.setTitle(R.string.app_name)
         builder.setSingleChoiceItems(items, checkedItem) { _, which -> checkedItem = which }
 
-        builder.setPositiveButton(R.string.confirm, null)
-        builder.setNegativeButton(R.string.close, null)
-        builder.setNeutralButton(R.string.setting, null)
-
         val dialog = builder.create()
         return setupDialogButtons(dialog, items)
     }
@@ -133,6 +131,7 @@ class HomeFragment : DialogFragment() {
         return loadingDialog.create()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun setupDialogButtons(dialog: AlertDialog, items: Array<String>): AlertDialog {
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm))
         { dialogInterface, i -> }
@@ -156,8 +155,23 @@ class HomeFragment : DialogFragment() {
                 val intent = Intent(mContext, SettingsActivity::class.java)
                 mContext.startActivity(intent)
             }
+            val decor = dialog.window?.decorView
+            val buttonBar = findButtonBarLayout(decor)
+            buttonBar?.setAllowStacking(false)
         }
         return dialog
+    }
+
+    @SuppressLint("RestrictedApi")
+    fun findButtonBarLayout(root: View?): ButtonBarLayout? {
+        if (root == null) return null
+        if (root is ButtonBarLayout) return root
+        if (root is ViewGroup) {
+            for (i in 0 until root.childCount) {
+                findButtonBarLayout(root.getChildAt(i))?.let { return it }
+            }
+        }
+        return null
     }
 
     private fun getDisplayItems(): Array<String> {
