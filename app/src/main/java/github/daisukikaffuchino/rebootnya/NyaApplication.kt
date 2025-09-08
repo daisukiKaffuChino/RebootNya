@@ -6,6 +6,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import rikka.material.app.LocaleDelegate
+import kotlin.system.exitProcess
 
 class NyaApplication : Application() {
     companion object {
@@ -19,5 +20,14 @@ class NyaApplication : Application() {
         NyaSettings.initialize(applicationContext)
         LocaleDelegate.defaultLocale = NyaSettings.getLocale()
         AppCompatDelegate.setDefaultNightMode(NyaSettings.getNightMode(this))
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        if (level == TRIM_MEMORY_UI_HIDDEN) {
+            // 所有 UI 不可见后杀死进程
+            android.os.Process.killProcess(android.os.Process.myPid())
+            exitProcess(0)
+        }
     }
 }
