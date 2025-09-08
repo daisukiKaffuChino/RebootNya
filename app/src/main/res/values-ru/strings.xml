@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="confirm">Подтвердить1111111aaaaaaa</string>
+    <string name="confirm">Подтвердить</string>
     <string name="close">Закрыть</string>
     <string name="setting">Настройки</string>
     <string name="lock_screen">Экран блокировки</string>
