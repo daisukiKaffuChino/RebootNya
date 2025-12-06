@@ -120,9 +120,9 @@ class HomeFragment : DialogFragment() {
             val itemData = HomeListItemData(
                 items[i],
                 i,
-                items.size
+                items.size,
+                i == checkedItem
             )
-            itemData.checked = (i == checkedItem)
             data.add(itemData)
         }
 

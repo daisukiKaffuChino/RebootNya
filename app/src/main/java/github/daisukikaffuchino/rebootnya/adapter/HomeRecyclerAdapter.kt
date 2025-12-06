@@ -1,6 +1,5 @@
 package github.daisukikaffuchino.rebootnya.adapter
 
-import android.content.Context
 import android.graphics.Rect
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -22,11 +21,11 @@ class HomeRecyclerAdapter(
     private var selectedPosition = 0
     private var recyclerView: RecyclerView? = null
 
-    init {
-        items.forEachIndexed { index, item ->
-            item.checked = (index == selectedPosition)
-        }
-    }
+//    init {
+//        items.forEachIndexed { index, item ->
+//            item.checked = (index == selectedPosition)
+//        }
+//    }
 
     override fun onAttachedToRecyclerView(rv: RecyclerView) {
         super.onAttachedToRecyclerView(rv)
@@ -58,6 +57,7 @@ class HomeRecyclerAdapter(
             super.bind(data.indexInSection, data.sectionCount)
             textView.text = data.text
 
+            //Log.i("xxx",data.text+" "+data.checked)
             cardView.isChecked = data.checked
 
             cardView.setOnClickListener {
