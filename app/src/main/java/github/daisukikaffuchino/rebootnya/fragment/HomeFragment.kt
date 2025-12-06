@@ -81,9 +81,15 @@ class HomeFragment : DialogFragment() {
             }
             if (index != -1) {
                 checkedItem = index
+            } else {
+                // Saved option not found in current list, reset to first item
+                checkedItem = 0
+                val firstItemEnum = ListItemEnum.fromLocalizedDisplayName(mContext, items[0])
+                NyaSettings.setLastSelectedOption(firstItemEnum.name)
             }
         }
         builder.setSingleChoiceItems(items, checkedItem) { _, which -> checkedItem = which }
+
 
         val dialog = builder.create()
         return setupDialogButtons(dialog, items)
@@ -113,6 +119,11 @@ class HomeFragment : DialogFragment() {
             }
             if (index != -1) {
                 checkedItem = index
+            } else {
+                // Saved option not found in current list, reset to first item
+                checkedItem = 0
+                val firstItemEnum = ListItemEnum.fromLocalizedDisplayName(mContext, items[0])
+                NyaSettings.setLastSelectedOption(firstItemEnum.name)
             }
         }
 
@@ -165,6 +176,14 @@ class HomeFragment : DialogFragment() {
         dialog.setOnShowListener { dialogInterface ->
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+
+            // Fix: Force selection update for Classic List style to override View State Restoration
+            if (NyaSettings.getMainInterfaceStyle() == NyaSettings.STYLE.CLASSIC_LIST) {
+                val listView = dialog.listView
+                listView.setItemChecked(checkedItem, true)
+                listView.setSelection(checkedItem)
+            }
+
             positiveButton.setOnClickListener { v: View? ->
                 val itemEnum = ListItemEnum.fromLocalizedDisplayName(
                     mContext,
