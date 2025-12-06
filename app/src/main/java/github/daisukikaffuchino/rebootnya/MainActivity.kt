@@ -18,6 +18,7 @@ class MainActivity : BaseActivity() {
     companion object {
         const val ACTION_LAUNCH = "github.daisukikaffuchino.rebootnya.action.LAUNCH"
         const val ACTION_CLOSE = "github.daisukikaffuchino.rebootnya.action.CLOSE"
+        const val ACTION_TOGGLE = "github.daisukikaffuchino.rebootnya.action.TOGGLE"
 
         var listFilterStatus by Delegates.notNull<Boolean>()
         fun checkListFilterStatus(): Boolean {
@@ -28,6 +29,7 @@ class MainActivity : BaseActivity() {
 
     var uiStyleChanged by Delegates.notNull<Int>()
     var workModeChanged by Delegates.notNull<Int>()
+    var isActivityVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,16 +69,27 @@ class MainActivity : BaseActivity() {
             ACTION_CLOSE -> {
                 finish()
             }
+            ACTION_TOGGLE -> {
+                if (isActivityVisible) {
+                    finish()
+                }
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        isActivityVisible = true
         if (listFilterStatus != checkListFilterStatus() ||
             uiStyleChanged != NyaSettings.getMainInterfaceStyle() ||
             workModeChanged != NyaSettings.getWorkMode()
         )
             recreate()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isActivityVisible = false
     }
 
 }
