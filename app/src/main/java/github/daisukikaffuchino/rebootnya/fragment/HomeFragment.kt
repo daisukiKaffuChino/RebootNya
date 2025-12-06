@@ -73,6 +73,16 @@ class HomeFragment : DialogFragment() {
         val items = getDisplayItems()
 
         builder.setTitle(R.string.app_name)
+        // Restore last selected item
+        val lastSelected = NyaSettings.getLastSelectedOption()
+        if (lastSelected != null) {
+            val index = items.indexOfFirst {
+                ListItemEnum.fromLocalizedDisplayName(mContext, it).name == lastSelected
+            }
+            if (index != -1) {
+                checkedItem = index
+            }
+        }
         builder.setSingleChoiceItems(items, checkedItem) { _, which -> checkedItem = which }
 
         val dialog = builder.create()
@@ -94,14 +104,26 @@ class HomeFragment : DialogFragment() {
 
         val data: MutableList<HomeListItemData> = ArrayList()
         val items = getDisplayItems()
+
+        // Restore last selected item
+        val lastSelected = NyaSettings.getLastSelectedOption()
+        if (lastSelected != null) {
+            val index = items.indexOfFirst {
+                ListItemEnum.fromLocalizedDisplayName(mContext, it).name == lastSelected
+            }
+            if (index != -1) {
+                checkedItem = index
+            }
+        }
+
         for (i in 0..items.size - 1) {
-            data.add(
-                HomeListItemData(
-                    items[i],
-                    i,
-                    items.size
-                )
+            val itemData = HomeListItemData(
+                items[i],
+                i,
+                items.size
             )
+            itemData.checked = (i == checkedItem)
+            data.add(itemData)
         }
 
         val adapter = HomeRecyclerAdapter(data) { position, item ->
@@ -144,12 +166,12 @@ class HomeFragment : DialogFragment() {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
             positiveButton.setOnClickListener { v: View? ->
-                doAction(
-                    ListItemEnum.fromLocalizedDisplayName(
-                        mContext,
-                        items[checkedItem]
-                    )
+                val itemEnum = ListItemEnum.fromLocalizedDisplayName(
+                    mContext,
+                    items[checkedItem]
                 )
+                NyaSettings.setLastSelectedOption(itemEnum.name)
+                doAction(itemEnum)
             }
             neutralButton.setOnClickListener { v: View? ->
                 val intent = Intent(mContext, SettingsActivity::class.java)

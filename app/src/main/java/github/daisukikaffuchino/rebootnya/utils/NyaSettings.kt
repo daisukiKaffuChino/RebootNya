@@ -130,6 +130,16 @@ object NyaSettings {
                 preferences.getBoolean("dynamic_color", false)
     }
 
+    @JvmStatic
+    fun getLastSelectedOption(): String? {
+        return preferences.getString("last_selected_option", null)
+    }
+
+    @JvmStatic
+    fun setLastSelectedOption(option: String) {
+        preferences.edit().putString("last_selected_option", option).commit()
+    }
+
     private class EmptySharedPreferencesImpl : SharedPreferences {
         override fun getAll(): MutableMap<String?, *> {
             return HashMap<String?, Any?>()
