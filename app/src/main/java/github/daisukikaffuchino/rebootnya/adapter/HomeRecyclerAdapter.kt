@@ -21,11 +21,13 @@ class HomeRecyclerAdapter(
     private var selectedPosition = 0
     private var recyclerView: RecyclerView? = null
 
-//    init {
-//        items.forEachIndexed { index, item ->
-//            item.checked = (index == selectedPosition)
-//        }
-//    }
+    init {
+        items.forEachIndexed { index, item ->
+            //item.checked = (index == selectedPosition)
+            if (item.checked)
+                selectedPosition = index
+        }
+    }
 
     override fun onAttachedToRecyclerView(rv: RecyclerView) {
         super.onAttachedToRecyclerView(rv)
