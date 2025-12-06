@@ -22,6 +22,8 @@
             android:theme="@style/Theme.RebootNya.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="github.daisukikaffuchino.rebootnya.action.LAUNCH" />
+                <action android:name="github.daisukikaffuchino.rebootnya.action.CLOSE" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

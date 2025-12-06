@@ -10,8 +10,13 @@ import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
 import rikka.shizuku.Shizuku
 import kotlin.properties.Delegates
 
+import android.content.Intent
+
 class MainActivity : BaseActivity() {
     companion object {
+        const val ACTION_LAUNCH = "github.daisukikaffuchino.rebootnya.action.LAUNCH"
+        const val ACTION_CLOSE = "github.daisukikaffuchino.rebootnya.action.CLOSE"
+
         var listFilterStatus by Delegates.notNull<Boolean>()
         fun checkListFilterStatus(): Boolean {
             return Shizuku.pingBinder()
@@ -40,6 +45,24 @@ class MainActivity : BaseActivity() {
             NyaSettings.preferences.edit { putBoolean("isShortcutCreated", true) }
         }
 
+        handleIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent == null) return
+        when (intent.action) {
+            ACTION_LAUNCH -> {
+                // Already launched, nothing specific needed as activity is brought to front
+            }
+            ACTION_CLOSE -> {
+                finish()
+            }
+        }
     }
 
     override fun onResume() {
