@@ -2,28 +2,26 @@
 <com.google.android.material.listitem.ListItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="?attr/listItemLayoutSegmentedStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="24dp"
     tools:viewBindingIgnore="true">
 
-    <com.google.android.material.card.MaterialCardView
+    <com.google.android.material.listitem.ListItemCardView
         android:id="@+id/home_list_item_card"
+        style="?attr/listItemCardViewSegmentedStyle"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="@color/home_item_card_background">
+        app:cardBackgroundColor="@color/home_item_card_background"
+        app:swipeToPrimaryActionEnabled="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:clickable="false"
-            android:focusable="false"
-            android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -35,5 +33,5 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.listitem.ListItemCardView>
 </com.google.android.material.listitem.ListItemLayout>
