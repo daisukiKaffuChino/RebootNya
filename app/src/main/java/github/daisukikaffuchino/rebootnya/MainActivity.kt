@@ -12,6 +12,8 @@ import kotlin.properties.Delegates
 
 import android.content.Intent
 
+import androidx.core.view.WindowCompat
+
 class MainActivity : BaseActivity() {
     companion object {
         const val ACTION_LAUNCH = "github.daisukikaffuchino.rebootnya.action.LAUNCH"
@@ -35,6 +37,9 @@ class MainActivity : BaseActivity() {
 
         val window = getWindow()
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+        if (window != null) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
 
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.getRoot())
