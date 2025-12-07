@@ -23,7 +23,6 @@ class HomeRecyclerAdapter(
 
     init {
         items.forEachIndexed { index, item ->
-            //item.checked = (index == selectedPosition)
             if (item.checked)
                 selectedPosition = index
         }

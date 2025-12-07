@@ -135,6 +135,7 @@ object NyaSettings {
         return preferences.getString("last_selected_option", null)
     }
 
+    @SuppressLint("ApplySharedPref")
     @JvmStatic
     fun setLastSelectedOption(option: String) {
         preferences.edit().putString("last_selected_option", option).commit()

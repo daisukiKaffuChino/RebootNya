@@ -22,7 +22,9 @@ class MainActivity : BaseActivity() {
 
         var listFilterStatus by Delegates.notNull<Boolean>()
         fun checkListFilterStatus(): Boolean {
-            return NyaSettings.getWorkMode() == NyaSettings.MODE.SHIZUKU
+            return Shizuku.pingBinder()
+                    && Shizuku.getUid() == 2000
+                    && NyaSettings.getWorkMode() == NyaSettings.MODE.SHIZUKU
                     && NyaSettings.getIsHideUnavailableOptions()
         }
     }
