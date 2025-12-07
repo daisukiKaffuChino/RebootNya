@@ -24,6 +24,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="github.daisukikaffuchino.rebootnya.action.LAUNCH" />
                 <action android:name="github.daisukikaffuchino.rebootnya.action.CLOSE" />
+                <action android:name="github.daisukikaffuchino.rebootnya.action.TOGGLE" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

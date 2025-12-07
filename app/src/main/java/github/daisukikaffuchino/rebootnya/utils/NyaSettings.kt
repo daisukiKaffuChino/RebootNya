@@ -137,7 +137,7 @@ object NyaSettings {
 
     @JvmStatic
     fun setLastSelectedOption(option: String) {
-        preferences.edit().putString("last_selected_option", option).apply()
+        preferences.edit().putString("last_selected_option", option).commit()
     }
 
     private class EmptySharedPreferencesImpl : SharedPreferences {

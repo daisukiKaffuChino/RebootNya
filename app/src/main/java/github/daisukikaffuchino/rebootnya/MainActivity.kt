@@ -18,22 +18,24 @@ class MainActivity : BaseActivity() {
     companion object {
         const val ACTION_LAUNCH = "github.daisukikaffuchino.rebootnya.action.LAUNCH"
         const val ACTION_CLOSE = "github.daisukikaffuchino.rebootnya.action.CLOSE"
+        const val ACTION_TOGGLE = "github.daisukikaffuchino.rebootnya.action.TOGGLE"
 
         var listFilterStatus by Delegates.notNull<Boolean>()
         fun checkListFilterStatus(): Boolean {
-            return Shizuku.pingBinder()
-                    && Shizuku.getUid() == 2000
-                    && NyaSettings.getWorkMode() == NyaSettings.MODE.SHIZUKU
+            return NyaSettings.getWorkMode() == NyaSettings.MODE.SHIZUKU
                     && NyaSettings.getIsHideUnavailableOptions()
         }
     }
 
     var uiStyleChanged by Delegates.notNull<Int>()
+    var workModeChanged by Delegates.notNull<Int>()
+    var isActivityVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         listFilterStatus = checkListFilterStatus()
         uiStyleChanged = NyaSettings.getMainInterfaceStyle()
+        workModeChanged = NyaSettings.getWorkMode()
 
         val window = getWindow()
         window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
@@ -67,15 +69,27 @@ class MainActivity : BaseActivity() {
             ACTION_CLOSE -> {
                 finish()
             }
+            ACTION_TOGGLE -> {
+                if (isActivityVisible) {
+                    finish()
+                }
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        isActivityVisible = true
         if (listFilterStatus != checkListFilterStatus() ||
-            uiStyleChanged != NyaSettings.getMainInterfaceStyle()
+            uiStyleChanged != NyaSettings.getMainInterfaceStyle() ||
+            workModeChanged != NyaSettings.getWorkMode()
         )
             recreate()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isActivityVisible = false
     }
 
 }
