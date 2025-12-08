@@ -5,6 +5,7 @@ object AppLocales {
         "SYSTEM",
         "en",
         "es",
+        "ja",
         "ru",
         "zh-CN",
         "zh-TW"
@@ -13,6 +14,7 @@ object AppLocales {
         "SYSTEM",
         "en",
         "es",
+        "ja",
         "ru",
         "zh-Hans",
         "zh-Hant"
