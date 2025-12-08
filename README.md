@@ -15,7 +15,7 @@ English | [简体中文](README.zh.md)
 
 RebootNya is a simple yet advanced reboot app that supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**!
 
-Tested on some devices and works well on Android 8.1 to 15.
+Tested on some devices and works well on Android 8.1 to 16.
 
 > On some ROMs’ default launcher, the transparent background may not display correctly (e.g., ColorOS 15). The solution is to switch to another launcher, such as Lawnchair.
 

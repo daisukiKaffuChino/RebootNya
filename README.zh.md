@@ -15,7 +15,7 @@
 
 RebootNya 是一款简单的高级重启应用，同时支持 **Root** 和 **[Shizuku](https://shizuku.rikka.app/)** 工作方式！
 
-已在一些设备上进行测试，在 Android 8.1 ~ 15 上运行良好。
+已在一些设备上进行测试，在 Android 8.1 ~ 16 上运行良好。
 
 > 在一些 ROM 的默认启动器上可能无法正确显示透明背景，例如 ColorOS 15。解决方案是更换启动器，比如 Lawnchair 等。
 
