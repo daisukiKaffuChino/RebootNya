@@ -19,6 +19,19 @@ Tested on some devices and works well on Android 8.1 to 16.
 
 > On some ROMs’ default launcher, the transparent background may not display correctly (e.g., ColorOS 15). The solution is to switch to another launcher, such as Lawnchair.
 
+## Intent-based Control
+
+RebootNya now supports launching and closing the app via specific intents, allowing integration with external automation tools. Send the following intent to class `github.daisukikaffuchino.rebootnya.MainActivity` to use the feature.
+
+```xml
+<!-- Launch app -->
+<action android:name="github.daisukikaffuchino.rebootnya.action.LAUNCH" />
+<!-- Close app -->
+<action android:name="github.daisukikaffuchino.rebootnya.action.CLOSE" />
+<!-- Switch interface visibility -->
+<action android:name="github.daisukikaffuchino.rebootnya.action.TOGGLE" />
+```
+
 ## Development Background
 
 One of my old phones has both the power and volume buttons broken, so I urgently needed an advanced reboot app that is aesthetically pleasing, lightweight, and easy to use.
