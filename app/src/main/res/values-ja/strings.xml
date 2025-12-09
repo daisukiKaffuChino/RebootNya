@@ -38,8 +38,8 @@
     <string name="developer">開発者</string>
     <string name="about_user_service_content">"Processモードは廃止され、関連する機能はShizuku API 14から削除される予定です。Bound Servicesに似たUserServiceが、機能実装の公式に推奨される方法です。\n\nしかし、一部のROM（例えばMIUI）では、UserServiceが正しく起動しないという報告があります。そのため、RebootNyaではデフォルトで旧モードを使用しています。\n\nUserServiceを手動で有効にして、機能が正常に動作するかどうかをテストすることができます。すべてが正常に動作すれば、パフォーマンスと安定性が向上します。"</string>
     <string name="follow_system">システムのテーマ設定に従う</string>
-    <string name="always_on">ホワイトテーマ</string>
-    <string name="always_off">ダークテーマ</string>
+    <string name="always_on">ダークテーマ</string>
+    <string name="always_off">ホワイトテーマ</string>
     <string name="hide_unavailable">利用できないオプションを非表示にします</string>
     <string name="hide_unavailable_summary">ADB コマンドの権限が不十分なため、一部のオプションが利用できない場合があります。有効にしても、Root モードおよび Root 権限で起動した Shizuku モードには影響しません。</string>
     <string name="contact_me">連絡先</string>
