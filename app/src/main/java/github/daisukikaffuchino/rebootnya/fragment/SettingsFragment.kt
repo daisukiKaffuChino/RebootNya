@@ -90,7 +90,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.about_user_service)
                 .setMessage(R.string.about_user_service_content)
-                .setPositiveButton(R.string.confirm, null)
+                .setPositiveButton(android.R.string.ok, null)
                 .show()
             true
         }
