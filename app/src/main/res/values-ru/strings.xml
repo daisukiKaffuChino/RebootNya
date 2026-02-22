@@ -58,4 +58,5 @@
     <string name="participate_translation">Участвовать в переводе</string>
     <string name="translation_summary">Помогите перевести %s на ваш язык</string>
     <string name="executing">Выполнение…</string>
+    <string name="download_mode">Режим загрузки</string>
 </resources>

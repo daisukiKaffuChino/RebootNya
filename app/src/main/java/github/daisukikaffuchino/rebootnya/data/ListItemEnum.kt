@@ -10,6 +10,7 @@ enum class ListItemEnum(val displayName: String) {
     SYSTEM_UI("system_ui"),
     RECOVERY("Recovery"),
     BOOTLOADER("Bootloader"),
+    SAMSUNG_DOWNLOAD("samsung_download"),
     SAFE_MODE("safe_mode"),
     POWER_OFF("power_off");
 
@@ -19,6 +20,7 @@ enum class ListItemEnum(val displayName: String) {
             REBOOT -> context.getString(R.string.reboot)
             SOFT_REBOOT -> context.getString(R.string.soft_reboot)
             SYSTEM_UI -> context.getString(R.string.system_ui)
+            SAMSUNG_DOWNLOAD -> context.getString(R.string.download_mode)
             SAFE_MODE -> context.getString(R.string.safe_mode)
             POWER_OFF -> context.getString(R.string.power_off)
             else -> displayName

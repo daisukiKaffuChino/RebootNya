@@ -57,4 +57,5 @@
     <string name="participate_translation">翻訳に参加する</string>
     <string name="translation_summary">%s をあなたの言語に翻訳する手伝いをしてください</string>
     <string name="executing">実行中…</string>
+    <string name="download_mode">ダウンロードモード</string>
 </resources>

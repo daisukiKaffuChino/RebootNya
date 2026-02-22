@@ -140,7 +140,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         getString(R.string.power_off),
                         getString(R.string.reboot)
                     )
-                ) { dialogInterface, i ->
+                ) { _, i ->
                     val shortcutHelper = ShortcutHelper(context)
                     shortcutHelper.requestPinShortcut(shortcutHelper.items[i])
                 }
@@ -172,7 +172,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         getString(R.string.email),
                         getString(R.string.bilibili)
                     )
-                ) { dialogInterface, i ->
+                ) { _, i ->
                     when (i) {
                         0 -> sendEmail(context)
                         1 -> openUrlLink(context, "https://space.bilibili.com/178423358")

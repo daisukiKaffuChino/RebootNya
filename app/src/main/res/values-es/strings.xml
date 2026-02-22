@@ -57,4 +57,5 @@
     <string name="participate_translation">Participar en la traducción</string>
     <string name="translation_summary">Ayúdanos a traducir %s a tu idioma</string>
     <string name="executing">Ejecutando…</string>
+    <string name="download_mode">Modo de descarga</string>
 </resources>

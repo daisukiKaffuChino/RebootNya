@@ -63,7 +63,7 @@ class HomeFragment : DialogFragment() {
     override fun onResume() {
         super.onResume()
         if (NyaSettings.getShizukuShellMode() == NyaSettings.MODE.USER_SERVICE)
-            NyaShellManager.bindService(shizukuUtil) { exitCode, message ->
+            NyaShellManager.bindService(shizukuUtil) { exitCode, _ ->
                 Log.d("main", "bind $exitCode")
             }
     }
@@ -127,7 +127,7 @@ class HomeFragment : DialogFragment() {
             }
         }
 
-        for (i in 0..items.size - 1) {
+        for (i in 0..<items.size) {
             val itemData = HomeListItemData(
                 items[i],
                 i,
@@ -137,7 +137,7 @@ class HomeFragment : DialogFragment() {
             data.add(itemData)
         }
 
-        val adapter = HomeRecyclerAdapter(data) { position, item ->
+        val adapter = HomeRecyclerAdapter(data) { _, item ->
             checkedItem = item.indexInSection
         }
         recyclerView.setAdapter(adapter)
@@ -166,14 +166,11 @@ class HomeFragment : DialogFragment() {
 
     @SuppressLint("RestrictedApi")
     private fun setupDialogButtons(dialog: AlertDialog, items: Array<String>): AlertDialog {
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm))
-        { dialogInterface, i -> }
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close))
-        { dialogInterface, i -> }
-        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.setting))
-        { dialogInterface, i -> }
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm)) { _, _ -> }
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close)) { _, _ -> }
+        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.setting)) { _, _ -> }
 
-        dialog.setOnShowListener { dialogInterface ->
+        dialog.setOnShowListener { _ ->
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
 
@@ -184,7 +181,7 @@ class HomeFragment : DialogFragment() {
                 listView.setSelection(checkedItem)
             }
 
-            positiveButton.setOnClickListener { v: View? ->
+            positiveButton.setOnClickListener { _: View? ->
                 val itemEnum = ListItemEnum.fromLocalizedDisplayName(
                     mContext,
                     items[checkedItem]
@@ -192,7 +189,7 @@ class HomeFragment : DialogFragment() {
                 NyaSettings.setLastSelectedOption(itemEnum.name)
                 doAction(itemEnum)
             }
-            neutralButton.setOnClickListener { v: View? ->
+            neutralButton.setOnClickListener { _: View? ->
                 val intent = Intent(mContext, SettingsActivity::class.java)
                 mContext.startActivity(intent)
             }
