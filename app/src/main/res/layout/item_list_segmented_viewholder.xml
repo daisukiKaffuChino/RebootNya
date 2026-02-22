@@ -15,8 +15,7 @@
         android:checkable="true"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="@color/home_item_card_background"
-        app:swipeToPrimaryActionEnabled="true">
+        app:cardBackgroundColor="@color/home_item_card_background">
 
         <LinearLayout
             android:layout_width="match_parent"

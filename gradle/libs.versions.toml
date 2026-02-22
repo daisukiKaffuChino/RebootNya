@@ -1,21 +1,19 @@
 [versions]
-agp = "8.13.1"
+#noinspection AndroidGradlePluginVersion
+agp = "8.13.2"
 api = "13.1.5"
 appcompatVersion = "1.6.1"
 borderview = "1.1.0"
 core = "6.0.0"
-gradlePlugin = "5.2.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-#noinspection GradleDependency
-appcompat = "1.6.1"
-material = "1.14.0-alpha07"
-activity = "1.12.1"
+material = "1.14.0-alpha09"
+activity = "1.12.4"
 constraintlayout = "2.2.1"
 materialPreference = "2.0.0"
-navigationUi = "2.9.6"
-kotlin = "2.2.21"
+navigationUi = "2.9.7"
+kotlin = "2.3.10"
 coreKtx = "1.17.0"
 preference = "1.2.1"
 recyclerviewKtx = "1.3.2"
@@ -26,7 +24,6 @@ api = { module = "dev.rikka.shizuku:api", version.ref = "api" }
 borderview = { module = "dev.rikka.rikkax.widget:borderview", version.ref = "borderview" }
 core = { module = "com.github.topjohnwu.libsu:core", version.ref = "core" }
 dev-appcompat = { module = "dev.rikka.rikkax.appcompat:appcompat", version.ref = "appcompatVersion" }
-gradle-plugin = { module = "com.github.megatronking.stringfog:gradle-plugin", version.ref = "gradlePlugin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

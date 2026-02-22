@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'github.daisukikaffuchino.rebootnya'
-    compileSdk 36
+    compileSdk = 36
 
     defaultConfig {
         applicationId "github.daisukikaffuchino.rebootnya"
