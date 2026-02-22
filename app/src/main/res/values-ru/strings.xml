@@ -59,4 +59,6 @@
     <string name="translation_summary">Помогите перевести %s на ваш язык</string>
     <string name="executing">Выполнение…</string>
     <string name="download_mode">Режим загрузки</string>
+    <string name="open_source_license">Лицензия с открытым исходным кодом</string>
+    <string name="enter_content">Введите содержимое...</string>
 </resources>

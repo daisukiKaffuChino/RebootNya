@@ -1,6 +1,10 @@
+import com.mikepenz.aboutlibraries.plugin.DuplicateMode
+import com.mikepenz.aboutlibraries.plugin.DuplicateRule
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.aboutLibraries)
 }
 
 android {
@@ -47,6 +51,13 @@ configurations.configureEach {
     exclude group: 'androidx.appcompat', module: 'appcompat'
 }
 
+aboutLibraries {
+    library {
+        duplicationMode = DuplicateMode.MERGE
+        duplicationRule = DuplicateRule.EXACT
+    }
+}
+
 dependencies {
 
     implementation libs.dev.appcompat
@@ -63,6 +74,8 @@ dependencies {
     implementation libs.material.preference
     implementation libs.borderview
     implementation libs.recyclerview.ktx
+    implementation(libs.aboutlibraries.core)
+    implementation(libs.aboutlibraries.view)
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

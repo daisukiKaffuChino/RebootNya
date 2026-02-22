@@ -1,6 +1,7 @@
 package github.daisukikaffuchino.rebootnya.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -19,10 +20,12 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mikepenz.aboutlibraries.LibsBuilder
+import github.daisukikaffuchino.rebootnya.LicenseActivity
 import github.daisukikaffuchino.rebootnya.R
+import github.daisukikaffuchino.rebootnya.data.AppLocales
 import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
 import github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
-import github.daisukikaffuchino.rebootnya.data.AppLocales
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
 import github.daisukikaffuchino.rebootnya.utils.openUrlLink
@@ -50,6 +53,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var translationPreference: Preference
     private lateinit var developerPreference: Preference
     private lateinit var projectInfoPreference: Preference
+    private lateinit var licensePreference: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = requireContext()
@@ -71,6 +75,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         translationPreference = findPreference("translation")!!
         developerPreference = findPreference("developer")!!
         projectInfoPreference = findPreference("repo")!!
+        licensePreference = findPreference("licenses")!!
 
         val work = NyaSettings.getWorkMode()
         workModePreference.onPreferenceChangeListener =
@@ -184,6 +189,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         projectInfoPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             openUrlLink(context, "https://github.com/daisukiKaffuChino/RebootNya")
+            true
+        }
+
+        licensePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val intent= Intent(requireActivity(), LicenseActivity::class.java)
+            context.startActivity(intent)
             true
         }
     }

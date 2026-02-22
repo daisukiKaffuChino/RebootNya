@@ -62,4 +62,7 @@
     <style name="Theme.RebootNya.Preference" parent="Base.Theme.RebootNya">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Rikka.Material3</item>
     </style>
+
+    <style name="Theme.RebootNya.Common" parent="Base.Theme.RebootNya" />
+
 </resources>

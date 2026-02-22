@@ -60,4 +60,6 @@
     <string name="translation_summary">Help us translate %s into your language</string>
     <string name="executing">Executing…</string>
     <string name="download_mode">Download Mode</string>
+    <string name="open_source_license">Open Source License</string>
+    <string name="enter_content">Enter content...</string>
 </resources>

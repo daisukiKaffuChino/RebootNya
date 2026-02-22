@@ -82,6 +82,9 @@
             app:key="repo"
             app:summary="@string/license"
             app:title="RebootNya Open-Source Project" />
+        <Preference
+            app:key="licenses"
+            app:title="@string/open_source_license" />
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

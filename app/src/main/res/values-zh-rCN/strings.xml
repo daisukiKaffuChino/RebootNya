@@ -58,4 +58,6 @@
     <string name="translation_summary">帮助我们将 %s 翻译至您的语言</string>
     <string name="executing">执行中…</string>
     <string name="download_mode">下载模式</string>
+    <string name="open_source_license">开放源代码许可</string>
+    <string name="enter_content">输入内容...</string>
 </resources>

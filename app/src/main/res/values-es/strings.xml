@@ -58,4 +58,6 @@
     <string name="translation_summary">Ayúdanos a traducir %s a tu idioma</string>
     <string name="executing">Ejecutando…</string>
     <string name="download_mode">Modo de descarga</string>
+    <string name="open_source_license">Licencia de código abierto</string>
+    <string name="enter_content">Introducir contenido...</string>
 </resources>

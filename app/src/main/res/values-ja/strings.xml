@@ -58,4 +58,6 @@
     <string name="translation_summary">%s をあなたの言語に翻訳する手伝いをしてください</string>
     <string name="executing">実行中…</string>
     <string name="download_mode">ダウンロードモード</string>
+    <string name="open_source_license">オープンソースライセンス</string>
+    <string name="enter_content">内容を入力...</string>
 </resources>

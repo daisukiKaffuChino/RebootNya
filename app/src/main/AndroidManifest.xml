@@ -2,6 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
+
     <application
         android:name=".NyaApplication"
         android:allowBackup="true"
@@ -29,11 +47,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.RebootNya.Preference" />
+        <activity
+            android:name=".LicenseActivity"
+            android:exported="false"
+            android:theme="@style/Theme.RebootNya.Common" />
 
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
@@ -44,18 +65,4 @@
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
     </application>
 
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="http" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="https" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.SENDTO" />
-            <data android:scheme="mailto" />
-        </intent>
-    </queries>
 </manifest>
