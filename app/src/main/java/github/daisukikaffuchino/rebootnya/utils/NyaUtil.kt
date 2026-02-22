@@ -3,11 +3,13 @@ package github.daisukikaffuchino.rebootnya.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.text.Spanned
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
 import github.daisukikaffuchino.rebootnya.R
+import java.util.Locale
 
 //杂项
 fun getAppVer(context: Context): String {
@@ -67,6 +69,12 @@ fun sendEmail(context: Context) {
     } else {
         Toast.makeText(context, R.string.no_app_found_open_link, Toast.LENGTH_SHORT).show()
     }
+}
+
+fun isSamsung(): Boolean {
+    val manufacturer = Build.MANUFACTURER.lowercase(Locale.ROOT)
+    val brand = Build.BRAND.lowercase(Locale.ROOT)
+    return manufacturer.contains("samsung") || brand.contains("samsung")
 }
 
 

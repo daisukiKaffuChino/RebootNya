@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,7 +30,9 @@ import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.RootUtil
 import github.daisukikaffuchino.rebootnya.utils.ShizukuUtil
 import github.daisukikaffuchino.rebootnya.utils.exclude
+import github.daisukikaffuchino.rebootnya.utils.isSamsung
 import java.io.IOException
+import java.util.Locale
 import kotlin.system.exitProcess
 
 
@@ -214,13 +217,25 @@ class HomeFragment : DialogFragment() {
 
     private fun getDisplayItems(): Array<String> {
         var itemList = ArrayList(listMap.keys)
-        if (MainActivity.checkListFilterStatus()) {
+
+        if (MainActivity.checkListFilterStatus())
             itemList = exclude(
                 itemList,
                 ListItemEnum.SAFE_MODE.getLocalizedDisplayName(mContext),
                 ListItemEnum.SOFT_REBOOT.getLocalizedDisplayName(mContext)
             ) as ArrayList<String>
-        }
+
+        itemList = if (isSamsung())
+            exclude(
+                itemList,
+                ListItemEnum.BOOTLOADER.getLocalizedDisplayName(mContext)
+            ) as ArrayList<String>
+        else
+            exclude(
+                itemList,
+                ListItemEnum.SAMSUNG_DOWNLOAD.getLocalizedDisplayName(mContext)
+            ) as ArrayList<String>
+
         return itemList.toTypedArray()
     }
 
@@ -265,6 +280,7 @@ class HomeFragment : DialogFragment() {
             ListItemEnum.SYSTEM_UI -> runRootCommand("pkill -f com.android.systemui")
             ListItemEnum.RECOVERY -> runRootCommand("svc power reboot recovery")
             ListItemEnum.BOOTLOADER -> runRootCommand("svc power reboot bootloader")
+            ListItemEnum.SAMSUNG_DOWNLOAD -> runRootCommand("reboot download")
             ListItemEnum.SAFE_MODE -> {
                 if (rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1"))
                     runRootCommand("svc power reboot")
@@ -318,6 +334,12 @@ class HomeFragment : DialogFragment() {
             )
 
             ListItemEnum.BOOTLOADER -> shizukuUtil.shizukuReboot("bootloader")
+
+            ListItemEnum.SAMSUNG_DOWNLOAD -> shizukuUtil.runShizukuCommand(
+                arrayOf("reboot", "download"),
+                false
+            )
+
             ListItemEnum.SAFE_MODE -> {
                 val exitCode = shizukuUtil.runShizukuCommand(
                     arrayOf("setprop", "persist.sys.safemode", "1"),

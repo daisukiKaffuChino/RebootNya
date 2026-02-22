@@ -4,13 +4,12 @@ import android.content.Context
 import android.widget.Toast
 import com.topjohnwu.superuser.Shell
 import github.daisukikaffuchino.rebootnya.R
-import java.lang.Boolean
 import kotlin.Exception
 import kotlin.String
 
 class RootUtil(private val context: Context){
-    fun runRootCommandWithResult(cmd: String): kotlin.Boolean {
-        if (Boolean.FALSE == Shell.isAppGrantedRoot()) {
+    fun runRootCommandWithResult(cmd: String): Boolean {
+        if (Shell.isAppGrantedRoot() == false) {
             Toast.makeText(context, R.string.no_root, Toast.LENGTH_SHORT).show()
             return false
         } else {
