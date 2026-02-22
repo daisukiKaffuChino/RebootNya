@@ -46,6 +46,28 @@ class LicenseActivity : BaseActivity(){
         searchView.setBackgroundResource(R.drawable.search_bar_bg)
         searchView.queryHint = getString(R.string.enter_content)
 
+        searchView.alpha = 0f
+
+        // 监听展开收起
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                searchView.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                searchView.animate()
+                    .alpha(0f)
+                    .setDuration(150)
+                    .start()
+                return true
+            }
+        })
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 fragment.filter.filter(query)

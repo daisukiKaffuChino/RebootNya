@@ -20,7 +20,6 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.mikepenz.aboutlibraries.LibsBuilder
 import github.daisukikaffuchino.rebootnya.LicenseActivity
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.data.AppLocales

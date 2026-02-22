@@ -50,9 +50,11 @@
         <activity
             android:name=".SettingsActivity"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:theme="@style/Theme.RebootNya.Preference" />
         <activity
             android:name=".LicenseActivity"
+            android:excludeFromRecents="true"
             android:exported="false"
             android:theme="@style/Theme.RebootNya.Common" />
 
