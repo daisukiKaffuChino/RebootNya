@@ -19,8 +19,6 @@ RebootNya requires either:
 • Root access, or
 • Shizuku (via ADB or root)
 
-Translation: https://crowdin.com/project/rebootnya
-
 The app does not exploit vulnerabilities or bypass Android security mechanisms. All privileged actions are executed only after explicit user interaction.
 
 RebootNya is fully open source.

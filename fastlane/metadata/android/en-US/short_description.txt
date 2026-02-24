@@ -1,1 +1,2 @@
 Advanced reboot utility with Root and Shizuku support.
+Translation: https://crowdin.com/project/rebootnya
