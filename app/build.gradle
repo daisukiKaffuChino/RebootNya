@@ -42,6 +42,11 @@ android {
         targetCompatibility JavaVersion.VERSION_21
     }
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
 }
 
 configurations.configureEach {
@@ -71,8 +76,8 @@ dependencies {
     implementation libs.material.preference
     implementation libs.borderview
     implementation libs.recyclerview.ktx
-    implementation(libs.aboutlibraries.core)
-    implementation(libs.aboutlibraries.view)
+    implementation libs.aboutlibraries.core
+    implementation libs.aboutlibraries.view
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
