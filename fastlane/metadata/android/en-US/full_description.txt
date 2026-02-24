@@ -1,0 +1,24 @@
+RebootNya is a simple yet advanced reboot utility for Android devices.
+
+It provides convenient access to various reboot options that normally require elevated privileges. The app supports both Root and Shizuku, allowing users to execute reboot commands safely and transparently.
+
+Features:
+
+• Normal reboot
+• Reboot to recovery
+• Reboot to bootloader
+• App shortcuts support
+• Intent-based launch and exit support
+• Integration with external automation tools
+• Clean Material Design interface
+• No ads, no tracking
+
+Requirements:
+
+RebootNya requires either:
+• Root access, or
+• Shizuku (via ADB or root)
+
+The app does not exploit vulnerabilities or bypass Android security mechanisms. All privileged actions are executed only after explicit user interaction.
+
+RebootNya is fully open source.

@@ -1,0 +1,1 @@
+Advanced reboot utility with Root and Shizuku support.

@@ -1,0 +1,24 @@
+RebootNya 是一款简单而高级的 Android 重启工具。
+
+它提供多种通常需要高级权限才能执行的重启选项。应用同时支持 Root 和 Shizuku，在确保透明与安全的前提下执行系统重启命令。
+
+功能特性：
+
+• 普通重启
+• 重启到 Recovery
+• 重启到 Bootloader
+• 支持应用快捷方式（Shortcut）
+• 支持通过特定 Intent 启动与关闭应用
+• 可与外部自动化工具集成
+• 简洁的 Material Design 界面
+• 无广告、无跟踪
+
+使用要求：
+
+RebootNya 需要满足以下条件之一：
+• 已获取 Root 权限
+• 通过 ADB 或 Root 启动 Shizuku
+
+本应用不会利用漏洞或绕过 Android 安全机制。所有特权操作均需用户主动触发。
+
+本项目完全开源。

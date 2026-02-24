@@ -1,0 +1,1 @@
+支持 Root 和 Shizuku 的高级重启工具
