@@ -4,20 +4,21 @@ It provides convenient access to various reboot options that normally require el
 
 Features:
 
-• Normal reboot
-• Reboot to recovery
-• Reboot to bootloader
-• App shortcuts support
-• Intent-based launch and exit support
-• Integration with external automation tools
-• Clean Material Design interface
-• No ads, no tracking
+- Normal reboot
+- Reboot to recovery
+- Reboot to bootloader
+- App shortcuts support
+- Intent-based launch and exit support
+- Integration with external automation tools
+- Clean Material Design interface
+- No ads, no tracking
 
 Requirements:
 
 RebootNya requires either:
-• Root access, or
-• Shizuku (via ADB or root)
+
+- Root access, or
+- Shizuku (via ADB or root)
 
 The app does not exploit vulnerabilities or bypass Android security mechanisms. All privileged actions are executed only after explicit user interaction.
 
