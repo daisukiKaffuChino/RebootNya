@@ -14,7 +14,7 @@ English | [简体中文](README.zh.md)
 
 [![RB Status](https://shields.rbtlog.dev/simple/github.daisukikaffuchino.rebootnya)](https://shields.rbtlog.dev/github.daisukikaffuchino.rebootnya)
 [![Crowdin](https://badges.crowdin.net/rebootnya/localized.svg)](https://crowdin.com/project/rebootnya)
-[![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/main/LICENSE)
 
 RebootNya is a simple yet advanced reboot utility, and provides convenient access to various reboot options that normally require elevated privileges. The app supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**, allowing users to execute reboot commands safely and transparently.
 

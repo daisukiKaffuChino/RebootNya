@@ -14,7 +14,7 @@
 
 [![RB Status](https://shields.rbtlog.dev/simple/github.daisukikaffuchino.rebootnya)](https://shields.rbtlog.dev/github.daisukikaffuchino.rebootnya)
 [![Crowdin](https://badges.crowdin.net/rebootnya/localized.svg)](https://crowdin.com/project/rebootnya)
-[![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/main/LICENSE)
 
 RebootNya 是一款简单的高级重启工具，提供多种通常需要高级权限才能执行的重启选项。应用同时支持 **Root** 和 **[Shizuku](https://shizuku.rikka.app/)**，在确保透明与安全的前提下执行系统重启命令。
 
