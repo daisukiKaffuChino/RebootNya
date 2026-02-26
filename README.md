@@ -4,16 +4,19 @@ English | [简体中文](README.zh.md)
 
 # RebootNya
 
-[<img src="./image/badges/get-it-on-github.png"
-     alt="Get it on Github"
-     height="80"
-     align="right">](https://github.com/daisukiKaffuChino/RebootNya/releases)
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png"
+     alt="Get it at IzzyOnDroid"
+     height="60"
+     align="right">](https://apt.izzysoft.de/packages/github.daisukikaffuchino.rebootnya)
 
+[![IzzyOnDroid release](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/github.daisukikaffuchino.rebootnya&label=IzzyOnDroid)](https://apt.izzysoft.de/packages/github.daisukikaffuchino.rebootnya)
 [![GitHub release](https://img.shields.io/github/release/daisukiKaffuChino/RebootNya.svg?logo=github)](https://github.com/daisukiKaffuChino/RebootNya/releases/latest)
+
+[![RB Status](https://shields.rbtlog.dev/simple/github.daisukikaffuchino.rebootnya)](https://shields.rbtlog.dev/github.daisukikaffuchino.rebootnya)
 [![Crowdin](https://badges.crowdin.net/rebootnya/localized.svg)](https://crowdin.com/project/rebootnya)
 [![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/master/LICENSE)
 
-RebootNya is a simple yet advanced reboot app that supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**!
+RebootNya is a simple yet advanced reboot utility, and provides convenient access to various reboot options that normally require elevated privileges. The app supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**, allowing users to execute reboot commands safely and transparently.
 
 Tested on some devices and works well on Android 9 to 16.
 
