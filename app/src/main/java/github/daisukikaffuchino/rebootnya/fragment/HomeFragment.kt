@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,19 +28,21 @@ import github.daisukikaffuchino.rebootnya.shizuku.NyaShellManager
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.RootUtil
 import github.daisukikaffuchino.rebootnya.utils.ShizukuUtil
-import github.daisukikaffuchino.rebootnya.utils.exclude
 import github.daisukikaffuchino.rebootnya.utils.isSamsung
-import java.io.IOException
-import java.util.Locale
 import kotlin.system.exitProcess
 
-
 class HomeFragment : DialogFragment() {
+    companion object {
+        private val HIDDEN_FOR_LIMITED_SHIZUKU = setOf(
+            ListItemEnum.SAFE_MODE,
+            ListItemEnum.SOFT_REBOOT
+        )
+    }
+
     private lateinit var mContext: Context
     private var checkedItem = 0
     private lateinit var rootUtil: RootUtil
     private lateinit var shizukuUtil: ShizukuUtil
-    private lateinit var listMap: LinkedHashMap<String, ListItemEnum>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val intent = requireActivity().intent
@@ -49,10 +50,11 @@ class HomeFragment : DialogFragment() {
             return createLoadingDialog(intent)
         }
 
-        return if (NyaSettings.getMainInterfaceStyle() == NyaSettings.STYLE.MATERIAL_BUTTON)
+        return if (NyaSettings.getMainInterfaceStyle() == NyaSettings.STYLE.MATERIAL_BUTTON) {
             createMaterialButtonsDialog()
-        else
+        } else {
             createClassicListDialog()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,151 +62,112 @@ class HomeFragment : DialogFragment() {
         mContext = requireActivity()
         rootUtil = RootUtil(mContext)
         shizukuUtil = ShizukuUtil(mContext)
-        listMap = createListItemMap()
     }
 
     override fun onResume() {
         super.onResume()
-        if (NyaSettings.getShizukuShellMode() == NyaSettings.MODE.USER_SERVICE)
+        if (NyaSettings.getShizukuShellMode() == NyaSettings.MODE.USER_SERVICE) {
             NyaShellManager.bindService(shizukuUtil) { exitCode, _ ->
                 Log.d("main", "bind $exitCode")
             }
+        }
     }
 
     private fun createClassicListDialog(): Dialog {
-        val builder = MaterialAlertDialogBuilder(mContext)
-        val items = getDisplayItems()
+        val items = prepareDisplayItems()
+        val labels = items.map { it.getLocalizedDisplayName(mContext) }.toTypedArray()
 
-        builder.setTitle(R.string.app_name)
-        // Restore last selected item
-        val lastSelected = NyaSettings.getLastSelectedOption()
-        if (lastSelected != null) {
-            val index = items.indexOfFirst {
-                ListItemEnum.fromLocalizedDisplayName(mContext, it).name == lastSelected
-            }
-            if (index != -1) {
-                checkedItem = index
-            } else {
-                // Saved option not found in current list, reset to first item
-                checkedItem = 0
-                val firstItemEnum = ListItemEnum.fromLocalizedDisplayName(mContext, items[0])
-                NyaSettings.setLastSelectedOption(firstItemEnum.name)
-            }
-        }
-        builder.setSingleChoiceItems(items, checkedItem) { _, which -> checkedItem = which }
+        val dialog = MaterialAlertDialogBuilder(mContext)
+            .setTitle(R.string.app_name)
+            .setSingleChoiceItems(labels, checkedItem) { _, which -> checkedItem = which }
+            .create()
 
-
-        val dialog = builder.create()
         return setupDialogButtons(dialog, items)
     }
 
     @SuppressLint("InflateParams", "StringFormatInvalid")
     private fun createMaterialButtonsDialog(): Dialog {
-        val builder = MaterialAlertDialogBuilder(mContext)
-        builder.setCustomTitle(layoutInflater.inflate(R.layout.dialog_custom_title, null))
+        val items = prepareDisplayItems()
+        val recyclerView = layoutInflater.inflate(
+            R.layout.fragment_home_recycler_view,
+            null,
+            false
+        ) as RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(mContext)
 
-        val recyclerView =
-            layoutInflater.inflate(
-                R.layout.fragment_home_recycler_view,
-                null,
-                false
-            ) as RecyclerView
-        recyclerView.setLayoutManager(LinearLayoutManager(mContext))
-
-        val data: MutableList<HomeListItemData> = ArrayList()
-        val items = getDisplayItems()
-
-        // Restore last selected item
-        val lastSelected = NyaSettings.getLastSelectedOption()
-        if (lastSelected != null) {
-            val index = items.indexOfFirst {
-                ListItemEnum.fromLocalizedDisplayName(mContext, it).name == lastSelected
-            }
-            if (index != -1) {
-                checkedItem = index
-            } else {
-                // Saved option not found in current list, reset to first item
-                checkedItem = 0
-                val firstItemEnum = ListItemEnum.fromLocalizedDisplayName(mContext, items[0])
-                NyaSettings.setLastSelectedOption(firstItemEnum.name)
-            }
-        }
-
-        for (i in 0..<items.size) {
-            val itemData = HomeListItemData(
-                items[i],
-                i,
-                items.size,
-                i == checkedItem
+        val data = items.mapIndexed { index, item ->
+            HomeListItemData(
+                text = item.getLocalizedDisplayName(mContext),
+                indexInSection = index,
+                sectionCount = items.size,
+                checked = index == checkedItem
             )
-            data.add(itemData)
-        }
+        }.toMutableList()
 
-        val adapter = HomeRecyclerAdapter(data) { _, item ->
+        recyclerView.adapter = HomeRecyclerAdapter(data) { _, item ->
             checkedItem = item.indexInSection
         }
-        recyclerView.setAdapter(adapter)
-        builder.setView(recyclerView)
         recyclerView.addItemDecoration(HomeRecyclerAdapter.MarginItemDecoration())
 
-        val dialog = builder.create()
+        val dialog = MaterialAlertDialogBuilder(mContext)
+            .setCustomTitle(layoutInflater.inflate(R.layout.dialog_custom_title, null))
+            .setView(recyclerView)
+            .create()
+
         return setupDialogButtons(dialog, items)
     }
 
     @SuppressLint("InflateParams")
     private fun createLoadingDialog(intent: Intent): Dialog {
         val loadingDialog = MaterialAlertDialogBuilder(mContext)
-        loadingDialog.setTitle(R.string.app_name)
+            .setTitle(R.string.app_name)
             .setView(layoutInflater.inflate(R.layout.dialog_progress, null))
             .setCancelable(false)
 
-        val data = intent.getStringExtra("extra")
-        if (data != null)
+        intent.getStringExtra("extra")?.let { displayName ->
             Handler(Looper.getMainLooper()).postDelayed({
-                doAction(ListItemEnum.fromDisplayName(data))
+                doAction(ListItemEnum.fromDisplayName(displayName))
                 dismiss()
             }, 1000)
+        }
+
         return loadingDialog.create()
     }
 
     @SuppressLint("RestrictedApi")
-    private fun setupDialogButtons(dialog: AlertDialog, items: Array<String>): AlertDialog {
+    private fun setupDialogButtons(
+        dialog: AlertDialog,
+        items: List<ListItemEnum>
+    ): AlertDialog {
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.confirm)) { _, _ -> }
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.close)) { _, _ -> }
         dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.setting)) { _, _ -> }
 
-        dialog.setOnShowListener { _ ->
+        dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             val neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
 
-            // Fix: Force selection update for Classic List style to override View State Restoration
             if (NyaSettings.getMainInterfaceStyle() == NyaSettings.STYLE.CLASSIC_LIST) {
-                val listView = dialog.listView
-                listView.setItemChecked(checkedItem, true)
-                listView.setSelection(checkedItem)
+                dialog.listView.setItemChecked(checkedItem, true)
+                dialog.listView.setSelection(checkedItem)
             }
 
-            positiveButton.setOnClickListener { _: View? ->
-                val itemEnum = ListItemEnum.fromLocalizedDisplayName(
-                    mContext,
-                    items[checkedItem]
-                )
+            positiveButton.setOnClickListener {
+                val itemEnum = items.getOrNull(checkedItem) ?: return@setOnClickListener
                 NyaSettings.setLastSelectedOption(itemEnum.name)
                 doAction(itemEnum)
             }
-            neutralButton.setOnClickListener { _: View? ->
-                val intent = Intent(mContext, SettingsActivity::class.java)
-                mContext.startActivity(intent)
+            neutralButton.setOnClickListener {
+                mContext.startActivity(Intent(mContext, SettingsActivity::class.java))
             }
-            val decor = dialog.window?.decorView
-            val buttonBar = findButtonBarLayout(decor)
-            buttonBar?.setAllowStacking(false)
+
+            findButtonBarLayout(dialog.window?.decorView)?.setAllowStacking(false)
         }
         return dialog
     }
 
     @SuppressLint("RestrictedApi")
-    fun findButtonBarLayout(root: View?): ButtonBarLayout? {
+    private fun findButtonBarLayout(root: View?): ButtonBarLayout? {
         if (root == null) return null
         if (root is ButtonBarLayout) return root
         if (root is ViewGroup) {
@@ -215,61 +178,50 @@ class HomeFragment : DialogFragment() {
         return null
     }
 
-    private fun getDisplayItems(): Array<String> {
-        var itemList = ArrayList(listMap.keys)
-
-        if (MainActivity.checkListFilterStatus())
-            itemList = exclude(
-                itemList,
-                ListItemEnum.SAFE_MODE.getLocalizedDisplayName(mContext),
-                ListItemEnum.SOFT_REBOOT.getLocalizedDisplayName(mContext)
-            ) as ArrayList<String>
-
-        itemList = if (isSamsung())
-            exclude(
-                itemList,
-                ListItemEnum.BOOTLOADER.getLocalizedDisplayName(mContext)
-            ) as ArrayList<String>
-        else
-            exclude(
-                itemList,
-                ListItemEnum.SAMSUNG_DOWNLOAD.getLocalizedDisplayName(mContext)
-            ) as ArrayList<String>
-
-        return itemList.toTypedArray()
+    private fun prepareDisplayItems(): List<ListItemEnum> {
+        val items = getAvailableItems()
+        checkedItem = resolveCheckedItem(items)
+        return items
     }
 
-    private fun createListItemMap(): LinkedHashMap<String, ListItemEnum> {
-        val map = LinkedHashMap<String, ListItemEnum>()
-        for (item in ListItemEnum.entries) {
-            map[item.getLocalizedDisplayName(mContext)] = item
+    private fun getAvailableItems(): List<ListItemEnum> {
+        val shizukuFilterEnabled = MainActivity.checkListFilterStatus()
+        val samsungDevice = isSamsung()
+
+        return ListItemEnum.entries.filterNot { item ->
+            (shizukuFilterEnabled && item in HIDDEN_FOR_LIMITED_SHIZUKU) ||
+                    (samsungDevice && item == ListItemEnum.BOOTLOADER) ||
+                    (!samsungDevice && item == ListItemEnum.SAMSUNG_DOWNLOAD)
         }
-        return map
     }
 
-    private fun doAction(listItemEnum: ListItemEnum?) {
-        if (listItemEnum == null) {
-            Log.e("HomeFragment", "doAction called with null ListItemEnum")
-            Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
-            return
+    private fun resolveCheckedItem(items: List<ListItemEnum>): Int {
+        val lastSelected = NyaSettings.getLastSelectedOption()
+        val selectedIndex = items.indexOfFirst { it.name == lastSelected }
+        if (selectedIndex >= 0) {
+            return selectedIndex
         }
+
+        if (lastSelected != null) {
+            items.firstOrNull()?.let { NyaSettings.setLastSelectedOption(it.name) }
+        }
+        return 0
+    }
+
+    private fun doAction(listItemEnum: ListItemEnum) {
         if (NyaSettings.getWorkMode() == NyaSettings.MODE.ROOT) {
             funcRoot(listItemEnum)
         } else {
-            try {
-                funcShizuku(listItemEnum)
-            } catch (e: IOException) {
-                e.fillInStackTrace()
-                Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
-            }
+            funcShizuku(listItemEnum)
         }
     }
 
     private fun runRootCommand(cmd: String) {
-        if (rootUtil.runRootCommandWithResult(cmd))
+        if (rootUtil.runRootCommandWithResult(cmd)) {
             dismiss()
-        else
+        } else {
             Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun funcRoot(listItemEnum: ListItemEnum) {
@@ -282,8 +234,9 @@ class HomeFragment : DialogFragment() {
             ListItemEnum.BOOTLOADER -> runRootCommand("svc power reboot bootloader")
             ListItemEnum.SAMSUNG_DOWNLOAD -> runRootCommand("reboot download")
             ListItemEnum.SAFE_MODE -> {
-                if (rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1"))
+                if (rootUtil.runRootCommandWithResult("setprop persist.sys.safemode 1")) {
                     runRootCommand("svc power reboot")
+                }
             }
 
             ListItemEnum.POWER_OFF -> runRootCommand("reboot -p")
@@ -295,35 +248,31 @@ class HomeFragment : DialogFragment() {
             Toast.makeText(mContext, R.string.shizuku_denied, Toast.LENGTH_SHORT).show()
             return
         }
+
         when (listItemEnum) {
             ListItemEnum.LOCK_SCREEN -> {
                 val lockExitCode = shizukuUtil.runShizukuCommand(
                     arrayOf("input", "keyevent", "KEYCODE_POWER"),
                     false
                 )
-                if (lockExitCode == 0) dismiss()
+                if (lockExitCode == 0) {
+                    dismiss()
+                }
             }
 
             ListItemEnum.REBOOT -> shizukuUtil.shizukuReboot(null)
             ListItemEnum.SOFT_REBOOT -> shizukuUtil.runShizukuCommand(
-                arrayOf(
-                    "setprop",
-                    "ctl.restart",
-                    "zygote"
-                ), true
+                arrayOf("setprop", "ctl.restart", "zygote"),
+                true
             )
 
             ListItemEnum.SYSTEM_UI -> {
                 val stopUiCode = shizukuUtil.runShizukuCommand(
-                    arrayOf(
-                        "am",
-                        "force-stop",
-                        "com.android.systemui"
-                    ), false
+                    arrayOf("am", "force-stop", "com.android.systemui"),
+                    false
                 )
                 if (stopUiCode == 0) {
-                    Toast.makeText(mContext, R.string.stop_system_ui_tip, Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(mContext, R.string.stop_system_ui_tip, Toast.LENGTH_LONG).show()
                     dismiss()
                 }
             }
@@ -345,27 +294,24 @@ class HomeFragment : DialogFragment() {
                     arrayOf("setprop", "persist.sys.safemode", "1"),
                     true
                 )
-                if (exitCode == 0)
+                if (exitCode == 0) {
                     shizukuUtil.shizukuReboot(null)
-                else
+                } else {
                     Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
+                }
             }
 
-            ListItemEnum.POWER_OFF -> shizukuUtil.runShizukuCommand(arrayOf("reboot", "-p"), false)
+            ListItemEnum.POWER_OFF -> {
+                shizukuUtil.runShizukuCommand(arrayOf("reboot", "-p"), false)
+            }
         }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        /*
-        为什么使用 System.exit(0) ?
-        因为 KernelSU 授权后需要杀死并重启进程使权限生效。
-        通常 activity.finish() 仅限于关闭活动，进程由系统决定回收。
-        对于像本项目这样的单线程应用，这种做法是安全的。
-         */
         NyaShellManager.unbindService()
-        if (!requireActivity().isChangingConfigurations)
+        if (!requireActivity().isChangingConfigurations) {
             exitProcess(0)
+        }
     }
-
 }

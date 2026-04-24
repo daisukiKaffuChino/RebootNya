@@ -11,7 +11,6 @@ import androidx.core.text.HtmlCompat
 import github.daisukikaffuchino.rebootnya.R
 import java.util.Locale
 
-//杂项
 fun getAppVer(context: Context): String {
     val manager = context.packageManager
     try {
@@ -41,26 +40,9 @@ fun openUrlLink(context: Context, url: String) {
     }
 }
 
-fun <T> exclude(source: List<T>, vararg excludes: T): List<T> {
-    val result = mutableListOf<T>()
-    for (item in source) {
-        var shouldExclude = false
-        for (ex in excludes) {
-            if (item == ex) {
-                shouldExclude = true
-                break
-            }
-        }
-        if (!shouldExclude) {
-            result.add(item)
-        }
-    }
-    return result
-}
-
 fun sendEmail(context: Context) {
     val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = "mailto:".toUri() // 只处理邮件应用
+        data = "mailto:".toUri()
         putExtra(Intent.EXTRA_EMAIL, arrayOf("konohatamira@outlook.com"))
         putExtra(Intent.EXTRA_SUBJECT, "RebootNya Feedback")
     }
@@ -76,11 +58,3 @@ fun isSamsung(): Boolean {
     val brand = Build.BRAND.lowercase(Locale.ROOT)
     return manufacturer.contains("samsung") || brand.contains("samsung")
 }
-
-
-
-
-
-
-
-
