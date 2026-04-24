@@ -1,9 +1,5 @@
-import com.mikepenz.aboutlibraries.plugin.DuplicateMode
-import com.mikepenz.aboutlibraries.plugin.DuplicateRule
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.aboutLibraries)
 }
 
@@ -33,6 +29,8 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,18 +44,10 @@ android {
         includeInApk = false
         includeInBundle = false
     }
-
 }
 
 configurations.configureEach {
     exclude group: 'androidx.appcompat', module: 'appcompat'
-}
-
-aboutLibraries {
-    library {
-        duplicationMode = DuplicateMode.MERGE
-        duplicationRule = DuplicateRule.EXACT
-    }
 }
 
 dependencies {
