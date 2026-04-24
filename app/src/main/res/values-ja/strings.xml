@@ -60,4 +60,5 @@
     <string name="download_mode">ダウンロードモード</string>
     <string name="open_source_license">オープンソースライセンス</string>
     <string name="enter_content">内容を入力…</string>
+    <string name="tile_power_menu">電源メニュー</string>
 </resources>

@@ -38,22 +38,22 @@
     <string name="license">Лицензия Apache-2.0</string>
     <string name="developer">Разработчик</string>
     <string name="about_user_service_content">"Режим Process устарел, и соответствующая функция будет удалена из Shizuku API 14. UserService, аналогичный Bound Services, является официально рекомендуемым способом реализации функций.\n\nОднако имеются сообщения о том, что в некоторых прошивках (например, MIUI) UserService может запускаться некорректно. Поэтому RebootNya по-прежнему использует старый режим по умолчанию.\n\nВы можете попробовать вручную включить UserService и проверить корректность работы функций. Если всё будет работать корректно, это обеспечит лучшую производительность и стабильность."</string>
-    <string name="follow_system">По умолчанию</string>
-    <string name="always_on">Всегда включён</string>
-    <string name="always_off">Всегда выключен</string>
+    <string name="follow_system">Как в системе</string>
+    <string name="always_on">Всегда включена</string>
+    <string name="always_off">Всегда выключена</string>
     <string name="hide_unavailable">Скрыть недоступные параметры</string>
     <string name="hide_unavailable_summary">Из-за недостатка прав доступа для команд ADB некоторые параметры могут быть недоступны. При включении этого параметра режимы Root и Shizuku, активированные с правами Root, не будут затронуты.</string>
     <string name="contact_me">Свяжитесь со мной</string>
     <string name="email">Электронная почта</string>
-    <string name="no_app_found_open_link">Не найдено приложения, чтобы открыть ссылку</string>
+    <string name="no_app_found_open_link">Не найдено приложение для открытия ссылки</string>
     <string name="stop_system_ui_tip">В некоторых прошивках SystemUI автоматически перезапускается системными службами, поэтому он перезапустится вскоре после завершения.</string>
     <string name="main_interface_style">Стиль главного интерфейса</string>
     <string name="style_classic_list">Классический список</string>
     <string name="style_md_buttons">Кнопки в стиле Material Design</string>
-    <string name="request_pin_shortcuts">Запрос на закрепление ярлыков на панели запуска</string>
-    <string name="others">Остальные</string>
+    <string name="request_pin_shortcuts">Закрепить ярлыки на главном экране</string>
+    <string name="others">Другое</string>
     <string name="clear_created_shortcuts">Удалить созданные ярлыки</string>
-    <string name="create_next_launch">Будет воссоздан при следующем запуске</string>
+    <string name="create_next_launch">Будут созданы снова при следующем запуске</string>
     <string name="cleared">Очищено</string>
     <string name="participate_translation">Участвовать в переводе</string>
     <string name="translation_summary">Помогите перевести %s на ваш язык</string>
@@ -61,4 +61,5 @@
     <string name="download_mode">Режим загрузки</string>
     <string name="open_source_license">Лицензия с открытым исходным кодом</string>
     <string name="enter_content">Введите содержимое…</string>
+    <string name="tile_power_menu">Меню питания</string>
 </resources>

@@ -1,9 +1,11 @@
 package github.daisukikaffuchino.rebootnya
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
+import github.daisukikaffuchino.rebootnya.data.ListItemEnum
 import github.daisukikaffuchino.rebootnya.databinding.ActivityMainBinding
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
@@ -19,6 +21,25 @@ class MainActivity : BaseActivity() {
         const val ACTION_LAUNCH = "github.daisukikaffuchino.rebootnya.action.LAUNCH"
         const val ACTION_CLOSE = "github.daisukikaffuchino.rebootnya.action.CLOSE"
         const val ACTION_TOGGLE = "github.daisukikaffuchino.rebootnya.action.TOGGLE"
+        const val EXTRA_ACTION_ITEM = "extra"
+
+        private const val EXTERNAL_LAUNCH_FLAGS =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        fun createLaunchIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                action = ACTION_LAUNCH
+                flags = EXTERNAL_LAUNCH_FLAGS
+            }
+        }
+
+        fun createRunIntent(context: Context, item: ListItemEnum): Intent {
+            return Intent(context, MainActivity::class.java).apply {
+                action = Intent.ACTION_RUN
+                flags = EXTERNAL_LAUNCH_FLAGS
+                putExtra(EXTRA_ACTION_ITEM, item.displayName)
+            }
+        }
 
         var listFilterStatus by Delegates.notNull<Boolean>()
         fun checkListFilterStatus(): Boolean {

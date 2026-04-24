@@ -60,4 +60,5 @@
     <string name="download_mode">下载模式</string>
     <string name="open_source_license">开放源代码许可</string>
     <string name="enter_content">输入内容…</string>
+    <string name="tile_power_menu">电源菜单</string>
 </resources>

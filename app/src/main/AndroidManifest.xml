@@ -58,6 +58,28 @@
             android:exported="false"
             android:theme="@style/Theme.RebootNya.Common" />
 
+        <service
+            android:name=".tile.PowerMenuTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_power_menu"
+            android:label="@string/tile_power_menu"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".tile.LockScreenTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_lock_screen"
+            android:label="@string/lock_screen"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
             android:authorities="${applicationId}.shizuku"

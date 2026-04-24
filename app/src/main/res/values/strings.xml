@@ -62,4 +62,5 @@
     <string name="download_mode">Download Mode</string>
     <string name="open_source_license">Open Source License</string>
     <string name="enter_content">Enter content...</string>
+    <string name="tile_power_menu">Power Menu</string>
 </resources>

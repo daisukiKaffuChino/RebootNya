@@ -1,17 +1,17 @@
 package github.daisukikaffuchino.rebootnya.utils
 
 import android.content.Context
-import android.content.Intent
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import github.daisukikaffuchino.rebootnya.MainActivity
 import github.daisukikaffuchino.rebootnya.R
+import github.daisukikaffuchino.rebootnya.data.ListItemEnum
 
 class ShortcutHelper(private val context: Context) {
 
     data class ShortcutItem(
-        val id: String,
+        val item: ListItemEnum,
         val shortLabel: String,
         val iconRes: Int,
     )
@@ -20,17 +20,17 @@ class ShortcutHelper(private val context: Context) {
         get() {
             return listOf(
                 ShortcutItem(
-                    "lock_screen",
+                    ListItemEnum.LOCK_SCREEN,
                     context.getString(R.string.lock_screen),
                     R.mipmap.ic_lock_screen,
                 ),
                 ShortcutItem(
-                    "power_off",
+                    ListItemEnum.POWER_OFF,
                     context.getString(R.string.power_off),
                     R.mipmap.ic_shutdown,
                 ),
                 ShortcutItem(
-                    "reboot",
+                    ListItemEnum.REBOOT,
                     context.getString(R.string.reboot),
                     R.mipmap.ic_reboot,
                 )
@@ -41,14 +41,13 @@ class ShortcutHelper(private val context: Context) {
         val builder = ShortcutInfoCompat.Builder(context, item.id)
             .setShortLabel(item.shortLabel)
             .setIcon(IconCompat.createWithResource(context, item.iconRes))
-            .setIntent(Intent(context, MainActivity::class.java).apply {
-                action = Intent.ACTION_RUN
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                putExtra("extra", item.id)
-            })
+            .setIntent(MainActivity.createRunIntent(context, item.item))
 
         return builder.build()
     }
+
+    private val ShortcutItem.id: String
+        get() = item.displayName
 
     fun setDynamicShortcuts(items: List<ShortcutItem>) {
         val shortcuts = items.map { buildShortcutInfo(it) }

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import github.daisukikaffuchino.rebootnya.MainActivity
+import github.daisukikaffuchino.rebootnya.MainActivity.Companion.EXTRA_ACTION_ITEM
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.SettingsActivity
 import github.daisukikaffuchino.rebootnya.adapter.HomeRecyclerAdapter
@@ -124,7 +125,7 @@ class HomeFragment : DialogFragment() {
             .setView(layoutInflater.inflate(R.layout.dialog_progress, null))
             .setCancelable(false)
 
-        intent.getStringExtra("extra")?.let { displayName ->
+        intent.getStringExtra(EXTRA_ACTION_ITEM)?.let { displayName ->
             Handler(Looper.getMainLooper()).postDelayed({
                 doAction(ListItemEnum.fromDisplayName(displayName))
                 dismiss()
