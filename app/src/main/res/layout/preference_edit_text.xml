@@ -20,7 +20,7 @@
         app:boxCornerRadiusTopEnd="16dp"
         app:boxCornerRadiusTopStart="16dp"
         app:endIconCheckable="true"
-        app:endIconDrawable="@drawable/rounded_send_24"
+        app:endIconDrawable="@drawable/ic_send"
         app:endIconMode="custom"
         app:endIconTint="?attr/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
