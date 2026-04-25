@@ -52,6 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var nightModePreference: IntegerSimpleMenuPreference
     private lateinit var languagePreference: ListPreference
     private lateinit var editTextPreference: EditTextPreference
+    private lateinit var xposedSettingsPreference: Preference
     private lateinit var quickAddTilePreference: Preference
     private lateinit var pinShortcutsPreference: Preference
     private lateinit var clearShortcutsPreference: Preference
@@ -75,6 +76,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         nightModePreference = findPreference("night_mode")!!
         languagePreference = findPreference("language")!!
         editTextPreference = findPreference("edit_text")!!
+        xposedSettingsPreference = findPreference("xposed_settings")!!
         quickAddTilePreference = findPreference("quick_add_tile")!!
         pinShortcutsPreference = findPreference("pin_shortcuts")!!
         clearShortcutsPreference = findPreference("clear_shortcuts")!!
@@ -174,6 +176,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
             ShortcutManagerCompat.removeAllDynamicShortcuts(context)
             NyaSettings.preferences.edit { putBoolean("isShortcutCreated", false) }
             Toast.makeText(context, R.string.cleared, Toast.LENGTH_SHORT).show()
+            true
+        }
+
+        xposedSettingsPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            (activity as? SettingsActivity)?.openXposedFragment()
             true
         }
 
@@ -297,7 +304,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    @androidx.annotation.RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showQuickAddTileDialog(context: Context) {
         val tileOptions = listOf(
             QuickTileOption(

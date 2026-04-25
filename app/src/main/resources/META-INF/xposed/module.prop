@@ -1,0 +1,4 @@
+minApiVersion=100
+targetApiVersion=101
+staticScope=true
+description=Long press power key to launch RebootNya with configurable fallback and very-long-press policy.

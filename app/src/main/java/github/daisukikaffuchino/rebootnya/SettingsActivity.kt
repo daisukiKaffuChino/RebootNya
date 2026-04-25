@@ -12,6 +12,7 @@ import com.topjohnwu.superuser.Shell
 import github.daisukikaffuchino.rebootnya.databinding.ActivitySettingsBinding
 import github.daisukikaffuchino.rebootnya.fragment.LicenseFragment
 import github.daisukikaffuchino.rebootnya.fragment.SettingsFragment
+import github.daisukikaffuchino.rebootnya.fragment.XposedFragment
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.RootUtil
 import github.daisukikaffuchino.rebootnya.utils.ShizukuUtil
@@ -127,6 +128,19 @@ class SettingsActivity : BaseActivity() {
             .commit()
     }
 
+    fun openXposedFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.fragment_slide_in_right,
+                R.anim.fragment_slide_out_left,
+                R.anim.fragment_slide_in_left,
+                R.anim.fragment_slide_out_right
+            )
+            .replace(R.id.settings_fragment_container, XposedFragment())
+            .addToBackStack(XposedFragment::class.java.name)
+            .commit()
+    }
+
     private fun onRequestPermissionsResult(requestCode: Int, grantResult: Int) {
         val granted = grantResult == PackageManager.PERMISSION_GRANTED
         if (granted && NyaSettings.getWorkMode()== NyaSettings.MODE.SHIZUKU
@@ -165,6 +179,11 @@ class SettingsActivity : BaseActivity() {
             is LicenseFragment -> {
                 binding.cardStatus.visibility = View.GONE
                 supportActionBar?.title = getString(R.string.open_source_license)
+            }
+
+            is XposedFragment -> {
+                binding.cardStatus.visibility = View.GONE
+                supportActionBar?.title = getString(R.string.xposed_settings)
             }
 
             else -> {

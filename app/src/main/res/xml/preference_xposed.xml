@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/xposed_module">
+        <github.daisukikaffuchino.rebootnya.preference.XposedStatusPreference
+            app:key="xposed_status"
+            app:title="@string/xposed_service_status" />
+        <Preference
+            app:key="xposed_scope_info"
+            app:selectable="false"
+            app:summary="@string/xposed_scope_android_summary"
+            app:title="@string/xposed_scope" />
+        <Preference
+            app:key="xposed_sync_now"
+            app:title="@string/xposed_sync_now" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/xposed_power_long_press">
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="false"
+            app:key="xposed_power_key_enabled"
+            app:summary="@string/xposed_power_key_enabled_summary"
+            app:title="@string/xposed_power_key_enabled" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="true"
+            app:key="xposed_fallback_app_missing"
+            app:summary="@string/xposed_fallback_app_missing_summary"
+            app:title="@string/xposed_fallback_app_missing" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="true"
+            app:key="xposed_fallback_start_failed"
+            app:summary="@string/xposed_fallback_start_failed_summary"
+            app:title="@string/xposed_fallback_start_failed" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="true"
+            app:key="xposed_fallback_when_locked"
+            app:summary="@string/xposed_fallback_when_locked_summary"
+            app:title="@string/xposed_fallback_when_locked" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="true"
+            app:key="xposed_keep_very_long_press"
+            app:summary="@string/xposed_keep_very_long_press_summary"
+            app:title="@string/xposed_keep_very_long_press" />
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

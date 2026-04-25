@@ -26,6 +26,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/advanced">
+        <Preference
+            app:key="xposed_settings"
+            app:summary="@string/xposed_settings_summary"
+            app:title="@string/xposed_settings" />
         <github.daisukikaffuchino.rebootnya.preference.EditTextPreference
             app:key="edit_text"
             app:selectable="false" />

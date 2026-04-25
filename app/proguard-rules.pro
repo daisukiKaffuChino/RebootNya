@@ -45,3 +45,4 @@
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
+-keep class github.daisukikaffuchino.rebootnya.xposed.PowerKeyXposedModule { *; }

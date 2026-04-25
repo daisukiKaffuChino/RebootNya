@@ -44,6 +44,12 @@ android {
         includeInApk = false
         includeInBundle = false
     }
+
+    packaging {
+        resources {
+            merges += "META-INF/xposed/*"
+        }
+    }
 }
 
 configurations.configureEach {
@@ -68,6 +74,9 @@ dependencies {
     implementation libs.recyclerview.ktx
     implementation libs.aboutlibraries.core
     implementation libs.aboutlibraries.view
+    implementation libs.xposed.service
+
+    compileOnly libs.xposed.api
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

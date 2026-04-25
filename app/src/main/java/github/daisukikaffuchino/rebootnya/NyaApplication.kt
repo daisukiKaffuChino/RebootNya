@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
+import github.daisukikaffuchino.rebootnya.xposed.XposedServiceBridge
 import rikka.material.app.LocaleDelegate
 import kotlin.system.exitProcess
 
@@ -20,6 +21,7 @@ class NyaApplication : Application() {
         NyaSettings.initialize(applicationContext)
         LocaleDelegate.defaultLocale = NyaSettings.getLocale()
         AppCompatDelegate.setDefaultNightMode(NyaSettings.getNightMode(this))
+        XposedServiceBridge.initialize()
     }
 
     override fun onTrimMemory(level: Int) {
