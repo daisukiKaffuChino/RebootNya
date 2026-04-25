@@ -5,14 +5,15 @@ plugins {
 
 android {
     namespace 'github.daisukikaffuchino.rebootnya'
-    compileSdk = 36
+    compileSdk 36
+    compileSdkMinor 1
 
     defaultConfig {
         applicationId "github.daisukikaffuchino.rebootnya"
         minSdk 28
         targetSdk 36
-        versionCode 260223
-        versionName "1.7.1"
+        versionCode 260426
+        versionName "1.8.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
