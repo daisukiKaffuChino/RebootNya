@@ -1,7 +1,10 @@
 package github.daisukikaffuchino.rebootnya.fragment
 
+import android.app.StatusBarManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -25,6 +28,8 @@ import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.data.AppLocales
 import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
 import github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
+import github.daisukikaffuchino.rebootnya.tile.LockScreenTileService
+import github.daisukikaffuchino.rebootnya.tile.PowerMenuTileService
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
 import github.daisukikaffuchino.rebootnya.utils.openUrlLink
@@ -47,6 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var nightModePreference: IntegerSimpleMenuPreference
     private lateinit var languagePreference: ListPreference
     private lateinit var editTextPreference: EditTextPreference
+    private lateinit var quickAddTilePreference: Preference
     private lateinit var pinShortcutsPreference: Preference
     private lateinit var clearShortcutsPreference: Preference
     private lateinit var translationPreference: Preference
@@ -69,6 +75,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         nightModePreference = findPreference("night_mode")!!
         languagePreference = findPreference("language")!!
         editTextPreference = findPreference("edit_text")!!
+        quickAddTilePreference = findPreference("quick_add_tile")!!
         pinShortcutsPreference = findPreference("pin_shortcuts")!!
         clearShortcutsPreference = findPreference("clear_shortcuts")!!
         translationPreference = findPreference("translation")!!
@@ -119,6 +126,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
         } else {
             dynamicColorPreference.isEnabled = false
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            quickAddTilePreference.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener {
+                    showQuickAddTileDialog(context)
+                    true
+                }
+        } else {
+            quickAddTilePreference.isEnabled = false
+            quickAddTilePreference.summary = getString(R.string.require_a13)
         }
 
         languagePreference.onPreferenceChangeListener =
@@ -192,7 +210,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         licensePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val intent= Intent(requireActivity(), LicenseActivity::class.java)
+            val intent = Intent(requireActivity(), LicenseActivity::class.java)
             context.startActivity(intent)
             true
         }
@@ -279,5 +297,59 @@ class SettingsFragment : PreferenceFragmentCompat() {
             else -> "Error"
         }
     }
+
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showQuickAddTileDialog(context: Context) {
+        val tileOptions = listOf(
+            QuickTileOption(
+                R.string.tile_power_menu,
+                R.drawable.ic_tile_power_menu,
+                PowerMenuTileService::class.java
+            ),
+            QuickTileOption(
+                R.string.lock_screen,
+                R.drawable.ic_tile_lock_screen,
+                LockScreenTileService::class.java
+            )
+        )
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.quick_add_tile)
+            .setItems(tileOptions.map { getString(it.labelResId) }.toTypedArray()) { _, which ->
+                requestAddTile(tileOptions[which])
+            }
+            .show()
+    }
+
+    @androidx.annotation.RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun requestAddTile(option: QuickTileOption) {
+        val activity = activity ?: return
+        val statusBarManager = activity.getSystemService(StatusBarManager::class.java)
+        if (statusBarManager == null) {
+            Toast.makeText(activity, R.string.not_support, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        statusBarManager.requestAddTileService(
+            ComponentName(activity, option.serviceClass),
+            getString(option.labelResId),
+            Icon.createWithResource(activity, option.iconResId),
+            activity.mainExecutor
+        ) { result ->
+            val messageResId = when (result) {
+                StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED -> R.string.tile_add_success
+                StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED -> R.string.tile_already_added
+                StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED -> R.string.tile_add_cancelled
+                else -> R.string.tile_add_failed
+            }
+            Toast.makeText(activity, messageResId, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private data class QuickTileOption(
+        val labelResId: Int,
+        val iconResId: Int,
+        val serviceClass: Class<*>
+    )
 
 }

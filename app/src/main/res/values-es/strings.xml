@@ -15,7 +15,7 @@
     <string name="click_request_pm">Toca para solicitar permiso</string>
     <string name="work_mode">Modo de trabajo</string>
     <string name="dynamic_color">Colores dinámicos</string>
-    <string name="require_a12">Necesitas Android 12 o superior</string>
+    <string name="require_a12">Requiere Android 12 o superior</string>
     <string name="shizuku_denied">Permiso de Shizuku denegado</string>
     <string name="shizuku_too_old">Tu versión de Shizuku es muy vieja</string>
     <string name="shizuku_not_run">Shizuku no está en ejecución</string>
@@ -61,4 +61,10 @@
     <string name="open_source_license">Licencia de código abierto</string>
     <string name="enter_content">Introducir contenido…</string>
     <string name="tile_power_menu">Menú de encendido</string>
+    <string name="quick_add_tile">Añadir mosaico rápido</string>
+    <string name="require_a13">Requiere Android 13 o superior</string>
+    <string name="tile_add_success">Mosaico añadido</string>
+    <string name="tile_already_added">El mosaico ya se ha añadido</string>
+    <string name="tile_add_cancelled">No se añadió el mosaico</string>
+    <string name="tile_add_failed">No se pudo añadir el mosaico</string>
 </resources>

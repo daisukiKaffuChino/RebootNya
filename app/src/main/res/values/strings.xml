@@ -53,9 +53,15 @@
     <string name="style_md_buttons">Material Design buttons</string>
     <string name="request_pin_shortcuts">Request to pin Shortcuts to launcher</string>
     <string name="others">Others</string>
+    <string name="quick_add_tile">Quick add tile</string>
     <string name="clear_created_shortcuts">Clear created shortcuts</string>
     <string name="create_next_launch">Will be recreated at next launch</string>
     <string name="cleared">Cleared</string>
+    <string name="require_a13">Requires at least Android 13</string>
+    <string name="tile_add_success">Tile added</string>
+    <string name="tile_already_added">Tile has already been added</string>
+    <string name="tile_add_cancelled">Tile was not added</string>
+    <string name="tile_add_failed">Failed to add tile</string>
     <string name="participate_translation">Participate in translation</string>
     <string name="translation_summary">Help us translate %s into your language</string>
     <string name="executing">Executing…</string>

@@ -16,7 +16,7 @@
     <string name="click_request_pm">Нажмите, чтобы получить разрешение</string>
     <string name="work_mode">Режим работы</string>
     <string name="dynamic_color">Динамический цвет</string>
-    <string name="require_a12">Требуется как минимум Android 12</string>
+    <string name="require_a12">Требуется Android 12 или новее</string>
     <string name="shizuku_denied">Нет разрешения для работы приложения Shizuku</string>
     <string name="shizuku_too_old">Версия Shizuku устарела</string>
     <string name="shizuku_not_run">Shizuku не запущен</string>
@@ -62,4 +62,10 @@
     <string name="open_source_license">Лицензия с открытым исходным кодом</string>
     <string name="enter_content">Введите содержимое…</string>
     <string name="tile_power_menu">Меню питания</string>
+    <string name="quick_add_tile">Быстро добавить плитку</string>
+    <string name="require_a13">Требуется Android 13 или новее</string>
+    <string name="tile_add_success">Плитка добавлена</string>
+    <string name="tile_already_added">Плитка уже добавлена</string>
+    <string name="tile_add_cancelled">Плитка не добавлена</string>
+    <string name="tile_add_failed">Не удалось добавить плитку</string>
 </resources>

@@ -54,6 +54,9 @@
 
     <PreferenceCategory app:title="@string/others">
         <Preference
+            app:key="quick_add_tile"
+            app:title="@string/quick_add_tile" />
+        <Preference
             app:key="pin_shortcuts"
             app:title="@string/request_pin_shortcuts" />
         <Preference

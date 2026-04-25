@@ -15,7 +15,7 @@
     <string name="click_request_pm">點擊以進行授權</string>
     <string name="work_mode">運作模式</string>
     <string name="dynamic_color">動態取色</string>
-    <string name="require_a12">至少需要 Android 12</string>
+    <string name="require_a12">需要 Android 12 或更高版本</string>
     <string name="shizuku_denied">Shizuku 權限已被拒絕</string>
     <string name="shizuku_too_old">Shizuku 版本過舊</string>
     <string name="shizuku_not_run">Shizuku 未啟動</string>
@@ -61,4 +61,10 @@
     <string name="open_source_license">開放原始碼授權</string>
     <string name="enter_content">輸入內容…</string>
     <string name="tile_power_menu">電源選單</string>
+    <string name="quick_add_tile">快速添加瓷貼</string>
+    <string name="require_a13">需要 Android 13 或更高版本</string>
+    <string name="tile_add_success">已添加瓷貼</string>
+    <string name="tile_already_added">瓷貼已添加</string>
+    <string name="tile_add_cancelled">未添加瓷貼</string>
+    <string name="tile_add_failed">添加瓷貼失敗</string>
 </resources>

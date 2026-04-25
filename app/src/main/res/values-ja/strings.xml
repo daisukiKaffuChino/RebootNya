@@ -15,7 +15,7 @@
     <string name="click_request_pm">タップして権限を要求する</string>
     <string name="work_mode">動作方法</string>
     <string name="dynamic_color">ダイナミック カラー</string>
-    <string name="require_a12">Android 12 以上が対象です</string>
+    <string name="require_a12">Android 12 以上が必要です</string>
     <string name="shizuku_denied">Shizukuの権限が付与されていません</string>
     <string name="shizuku_too_old">Shizukuのバージョンが古いです</string>
     <string name="shizuku_not_run">Shizukuが動作していません</string>
@@ -61,4 +61,10 @@
     <string name="open_source_license">オープンソースライセンス</string>
     <string name="enter_content">内容を入力…</string>
     <string name="tile_power_menu">電源メニュー</string>
+    <string name="quick_add_tile">クイック設定タイルをすばやく追加</string>
+    <string name="require_a13">Android 13 以上が必要です</string>
+    <string name="tile_add_success">タイルを追加しました</string>
+    <string name="tile_already_added">タイルはすでに追加されています</string>
+    <string name="tile_add_cancelled">タイルは追加されませんでした</string>
+    <string name="tile_add_failed">タイルの追加に失敗しました</string>
 </resources>
