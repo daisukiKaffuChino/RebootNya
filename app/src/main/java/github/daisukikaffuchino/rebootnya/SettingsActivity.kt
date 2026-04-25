@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.topjohnwu.superuser.Shell
 import github.daisukikaffuchino.rebootnya.databinding.ActivitySettingsBinding
+import github.daisukikaffuchino.rebootnya.fragment.LicenseFragment
 import github.daisukikaffuchino.rebootnya.fragment.SettingsFragment
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.RootUtil
@@ -52,8 +54,11 @@ class SettingsActivity : BaseActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.settings_fragment_container, SettingsFragment())
-                .commit()
+                .commitNow()
         }
+
+        supportFragmentManager.addOnBackStackChangedListener { updateChrome() }
+        updateChrome()
     }
 
     @SuppressLint("SetTextI18n")
@@ -99,10 +104,27 @@ class SettingsActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            if (supportFragmentManager.backStackEntryCount > 0) {
+                supportFragmentManager.popBackStack()
+            } else {
+                finish()
+            }
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun openLicenseFragment() {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.fragment_slide_in_right,
+                R.anim.fragment_slide_out_left,
+                R.anim.fragment_slide_in_left,
+                R.anim.fragment_slide_out_right
+            )
+            .replace(R.id.settings_fragment_container, LicenseFragment())
+            .addToBackStack(LicenseFragment::class.java.name)
+            .commit()
     }
 
     private fun onRequestPermissionsResult(requestCode: Int, grantResult: Int) {
@@ -136,6 +158,21 @@ class SettingsActivity : BaseActivity() {
             taffy.setImageResource(R.drawable.taffy_ok)
             cardStatus.setOnClickListener(null)
         }
+    }
+
+    private fun updateChrome() {
+        when (supportFragmentManager.findFragmentById(R.id.settings_fragment_container)) {
+            is LicenseFragment -> {
+                binding.cardStatus.visibility = View.GONE
+                supportActionBar?.title = getString(R.string.open_source_license)
+            }
+
+            else -> {
+                binding.cardStatus.visibility = View.VISIBLE
+                supportActionBar?.title = getString(R.string.setting)
+            }
+        }
+        invalidateOptionsMenu()
     }
 
 }

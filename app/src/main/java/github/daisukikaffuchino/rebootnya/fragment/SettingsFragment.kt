@@ -3,7 +3,6 @@ package github.daisukikaffuchino.rebootnya.fragment
 import android.app.StatusBarManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Icon
 import android.graphics.Rect
 import android.os.Build
@@ -14,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -23,8 +23,8 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import github.daisukikaffuchino.rebootnya.LicenseActivity
 import github.daisukikaffuchino.rebootnya.R
+import github.daisukikaffuchino.rebootnya.SettingsActivity
 import github.daisukikaffuchino.rebootnya.data.AppLocales
 import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
 import github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
@@ -210,8 +210,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         licensePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val intent = Intent(requireActivity(), LicenseActivity::class.java)
-            context.startActivity(intent)
+            (activity as? SettingsActivity)?.openLicenseFragment()
             true
         }
     }
@@ -321,7 +320,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             .show()
     }
 
-    @androidx.annotation.RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestAddTile(option: QuickTileOption) {
         val activity = activity ?: return
         val statusBarManager = activity.getSystemService(StatusBarManager::class.java)
