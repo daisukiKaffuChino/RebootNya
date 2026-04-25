@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import io.github.libxposed.api.XposedModule;
 import io.github.libxposed.api.XposedModuleInterface;
@@ -31,6 +33,17 @@ public final class PowerKeyXposedModule extends XposedModule {
             "com.android.server.policy.PhoneWindowManager";
     private static final String CLASS_POWER_KEY_RULE =
             "com.android.server.policy.PhoneWindowManager$PowerKeyRule";
+    private static final String[] POLICY_CLASS_CANDIDATES = new String[] {
+            "com.android.server.policy.PhoneWindowManager",
+            "com.android.server.policy.OplusPhoneWindowManager",
+            "com.android.server.policy.PhoneWindowManagerExtImpl",
+            "com.android.server.policy.OplusPhoneWindowManagerEx"
+    };
+    private static final String[] POWER_RULE_CLASS_CANDIDATES = new String[] {
+            "com.android.server.policy.PhoneWindowManager$PowerKeyRule",
+            "com.android.server.policy.OplusPhoneWindowManager$PowerKeyRule"
+    };
+    private static final int[] LONG_PRESS_PARAMETER_COUNTS = new int[] {0, 1, 2, 3};
 
     @Override
     public void onModuleLoaded(@NonNull XposedModuleInterface.ModuleLoadedParam param) {
@@ -47,54 +60,87 @@ public final class PowerKeyXposedModule extends XposedModule {
     }
 
     private void hookLongPress(@NonNull ClassLoader classLoader) {
-        final Class<?> pwmClass = findClass(CLASS_PHONE_WINDOW_MANAGER, classLoader);
-        if (pwmClass == null) {
-            log(Log.WARN, TAG, CLASS_PHONE_WINDOW_MANAGER + " not found");
-            return;
+        boolean hooked = false;
+        final Set<String> hookedMethods = new HashSet<>();
+
+        for (String className : POLICY_CLASS_CANDIDATES) {
+            final Class<?> clazz = findClass(className, classLoader);
+            if (clazz == null) {
+                continue;
+            }
+            for (int parameterCount : LONG_PRESS_PARAMETER_COUNTS) {
+                final Method method = findMethod(clazz, "powerLongPress", parameterCount);
+                if (method == null || !hookedMethods.add(method.toGenericString())) {
+                    continue;
+                }
+                installIntercept(method, className + "#powerLongPress/" + parameterCount);
+                tryDeoptimize(method, className + "#powerLongPress/" + parameterCount);
+                log(Log.INFO, TAG, "Hooked " + method.toGenericString());
+                hooked = true;
+            }
         }
 
-        final Method longPressMethod = findMethod(pwmClass, "powerLongPress", 1);
-        if (longPressMethod != null) {
-            installIntercept(longPressMethod, "powerLongPress");
-            tryDeoptimize(longPressMethod, "powerLongPress");
-            log(Log.INFO, TAG, "Hooked " + longPressMethod.getName());
+        for (String className : POWER_RULE_CLASS_CANDIDATES) {
+            final Class<?> clazz = findClass(className, classLoader);
+            if (clazz == null) {
+                continue;
+            }
+            for (int parameterCount : LONG_PRESS_PARAMETER_COUNTS) {
+                final Method method = findMethod(clazz, "onLongPress", parameterCount);
+                if (method == null || !hookedMethods.add(method.toGenericString())) {
+                    continue;
+                }
+                installIntercept(method, className + "#onLongPress/" + parameterCount);
+                tryDeoptimize(method, className + "#onLongPress/" + parameterCount);
+                log(Log.INFO, TAG, "Hooked fallback " + method.toGenericString());
+                hooked = true;
+            }
         }
 
-        final Class<?> powerRuleClass = findClass(CLASS_POWER_KEY_RULE, classLoader);
-        final Method onLongPress = findMethod(powerRuleClass, "onLongPress", 1);
-        if (onLongPress != null) {
-            installIntercept(onLongPress, "PowerKeyRule.onLongPress");
-            tryDeoptimize(onLongPress, "onLongPress");
-            log(Log.INFO, TAG, "Hooked fallback " + onLongPress.getName());
-        }
-
-        if (longPressMethod == null && onLongPress == null) {
+        if (!hooked) {
             log(Log.WARN, TAG, "No long press hook point found");
         }
     }
 
     private void hookVeryLongPress(@NonNull ClassLoader classLoader) {
-        final Class<?> pwmClass = findClass(CLASS_PHONE_WINDOW_MANAGER, classLoader);
-        if (pwmClass == null) {
-            return;
+        boolean hooked = false;
+        final Set<String> hookedMethods = new HashSet<>();
+
+        for (String className : POLICY_CLASS_CANDIDATES) {
+            final Class<?> clazz = findClass(className, classLoader);
+            if (clazz == null) {
+                continue;
+            }
+            for (int parameterCount : LONG_PRESS_PARAMETER_COUNTS) {
+                final Method method = findMethod(clazz, "powerVeryLongPress", parameterCount);
+                if (method == null || !hookedMethods.add(method.toGenericString())) {
+                    continue;
+                }
+                installVeryLongPressIntercept(method, className + "#powerVeryLongPress/" + parameterCount);
+                tryDeoptimize(method, className + "#powerVeryLongPress/" + parameterCount);
+                log(Log.INFO, TAG, "Hooked " + method.toGenericString());
+                hooked = true;
+            }
         }
 
-        Method veryLongPressMethod = findMethod(pwmClass, "powerVeryLongPress", 0);
-        if (veryLongPressMethod != null) {
-            installVeryLongPressIntercept(veryLongPressMethod, "powerVeryLongPress");
-            tryDeoptimize(veryLongPressMethod, "powerVeryLongPress");
-            log(Log.INFO, TAG, "Hooked " + veryLongPressMethod.getName());
+        for (String className : POWER_RULE_CLASS_CANDIDATES) {
+            final Class<?> clazz = findClass(className, classLoader);
+            if (clazz == null) {
+                continue;
+            }
+            for (int parameterCount : LONG_PRESS_PARAMETER_COUNTS) {
+                final Method method = findMethod(clazz, "onVeryLongPress", parameterCount);
+                if (method == null || !hookedMethods.add(method.toGenericString())) {
+                    continue;
+                }
+                installVeryLongPressIntercept(method, className + "#onVeryLongPress/" + parameterCount);
+                tryDeoptimize(method, className + "#onVeryLongPress/" + parameterCount);
+                log(Log.INFO, TAG, "Hooked fallback " + method.toGenericString());
+                hooked = true;
+            }
         }
 
-        final Class<?> powerRuleClass = findClass(CLASS_POWER_KEY_RULE, classLoader);
-        final Method onVeryLongPress = findMethod(powerRuleClass, "onVeryLongPress", 1);
-        if (onVeryLongPress != null) {
-            installVeryLongPressIntercept(onVeryLongPress, "PowerKeyRule.onVeryLongPress");
-            tryDeoptimize(onVeryLongPress, "onVeryLongPress");
-            log(Log.INFO, TAG, "Hooked fallback " + onVeryLongPress.getName());
-        }
-
-        if (veryLongPressMethod == null && onVeryLongPress == null) {
+        if (!hooked) {
             log(Log.WARN, TAG, "No very long press hook point found");
         }
     }
@@ -137,6 +183,11 @@ public final class PowerKeyXposedModule extends XposedModule {
 
     private boolean handlePowerLongPress(Object policyOwner) {
         final Config config = readConfig();
+        log(Log.DEBUG, TAG, "handlePowerLongPress config: enabled=" + config.enabled
+                + ", fallbackWhenAppMissing=" + config.fallbackWhenAppMissing
+                + ", fallbackWhenStartFailed=" + config.fallbackWhenStartFailed
+                + ", fallbackWhenLocked=" + config.fallbackWhenLocked
+                + ", keepVeryLongPress=" + config.keepVeryLongPress);
         if (!config.enabled) {
             log(Log.INFO, TAG, "Power key hook is active, but feature is disabled in config");
             return false;
@@ -169,6 +220,7 @@ public final class PowerKeyXposedModule extends XposedModule {
     private Config readConfig() {
         final SharedPreferences preferences = getRemotePreferencesSafely();
         if (preferences == null) {
+            log(Log.WARN, TAG, "Remote preferences unavailable, using defaults");
             return Config.defaults();
         }
 
@@ -211,18 +263,44 @@ public final class PowerKeyXposedModule extends XposedModule {
     }
 
     private boolean launchTargetActivity(@NonNull Context context) {
-        final Intent intent = new Intent(TARGET_ACTION)
-                .setComponent(new ComponentName(TARGET_PACKAGE, TARGET_ACTIVITY))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        closeSystemDialogs(context);
 
-        try {
-            if (startAsCurrentUser(context, intent)) {
+        final Intent explicitIntent = new Intent(TARGET_ACTION)
+                .setComponent(new ComponentName(TARGET_PACKAGE, TARGET_ACTIVITY))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        if (tryLaunchIntent(context, explicitIntent, "explicitLaunchIntent")) {
+            return true;
+        }
+
+        final Intent packageLaunchIntent = context.getPackageManager().getLaunchIntentForPackage(TARGET_PACKAGE);
+        if (packageLaunchIntent != null) {
+            packageLaunchIntent.setAction(TARGET_ACTION);
+            packageLaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            if (tryLaunchIntent(context, packageLaunchIntent, "packageLaunchIntent")) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private boolean tryLaunchIntent(@NonNull Context context, @NonNull Intent intent, @NonNull String label) {
+        try {
+            if (startAsCurrentUser(context, intent)) {
+                log(Log.INFO, TAG, "Launch success via startActivityAsUser: " + label);
+                return true;
+            }
+
             context.startActivity(intent);
+            log(Log.INFO, TAG, "Launch success via startActivity: " + label);
             return true;
         } catch (Throwable throwable) {
-            log(Log.ERROR, TAG, "Failed to start target activity", throwable);
+            log(Log.WARN, TAG, "Launch strategy failed: " + label, throwable);
             return false;
         }
     }
@@ -232,17 +310,36 @@ public final class PowerKeyXposedModule extends XposedModule {
             final Method getCurrentUser = ActivityManager.class.getDeclaredMethod("getCurrentUser");
             getCurrentUser.setAccessible(true);
             final int userId = (Integer) getCurrentUser.invoke(null);
-            final Method ofMethod = UserHandle.class.getDeclaredMethod("of", int.class);
-            ofMethod.setAccessible(true);
-            final UserHandle userHandle = (UserHandle) ofMethod.invoke(null, userId);
-
-            final Method startActivityAsUser = context.getClass()
-                    .getMethod("startActivityAsUser", Intent.class, UserHandle.class);
+            final UserHandle userHandle = createUserHandle(userId);
+            final Method startActivityAsUser = findMethodInHierarchy(
+                    context.getClass(),
+                    "startActivityAsUser",
+                    Intent.class,
+                    UserHandle.class
+            );
+            if (startActivityAsUser == null) {
+                log(Log.WARN, TAG, "startActivityAsUser not found on " + context.getClass().getName());
+                return false;
+            }
             startActivityAsUser.setAccessible(true);
             startActivityAsUser.invoke(context, intent, userHandle);
             return true;
-        } catch (Throwable ignored) {
+        } catch (Throwable throwable) {
+            log(Log.WARN, TAG, "startAsCurrentUser failed", throwable);
             return false;
+        }
+    }
+
+    private UserHandle createUserHandle(int userId) throws Throwable {
+        try {
+            final Method ofMethod = UserHandle.class.getDeclaredMethod("of", int.class);
+            ofMethod.setAccessible(true);
+            return (UserHandle) ofMethod.invoke(null, userId);
+        } catch (Throwable ignored) {
+            final java.lang.reflect.Constructor<UserHandle> constructor =
+                    UserHandle.class.getDeclaredConstructor(int.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(userId);
         }
     }
 
@@ -346,6 +443,26 @@ public final class PowerKeyXposedModule extends XposedModule {
             current = current.getSuperclass();
         }
         return null;
+    }
+
+    private Method findMethodInHierarchy(Class<?> clazz, String name, Class<?>... parameterTypes) {
+        Class<?> current = clazz;
+        while (current != null) {
+            try {
+                return current.getDeclaredMethod(name, parameterTypes);
+            } catch (NoSuchMethodException ignored) {
+                current = current.getSuperclass();
+            }
+        }
+        return null;
+    }
+
+    private void closeSystemDialogs(@NonNull Context context) {
+        try {
+            context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        } catch (Throwable throwable) {
+            log(Log.WARN, TAG, "Failed to close system dialogs before launch", throwable);
+        }
     }
 
     private void tryDeoptimize(@NonNull Method method, @NonNull String label) {
