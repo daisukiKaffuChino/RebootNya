@@ -23,6 +23,7 @@ import rikka.sui.Sui
 
 class SettingsActivity : BaseActivity() {
     lateinit var binding: ActivitySettingsBinding
+    private var chromeInitialized = false
     private val requestPermissionResultListener =
         OnRequestPermissionResultListener { requestCode: Int, grantResult: Int ->
             this.onRequestPermissionsResult(
@@ -129,7 +130,7 @@ class SettingsActivity : BaseActivity() {
 
     private fun onRequestPermissionsResult(requestCode: Int, grantResult: Int) {
         val granted = grantResult == PackageManager.PERMISSION_GRANTED
-        if (granted && NyaSettings.getWorkMode()== NyaSettings.MODE.SHIZUKU
+        if (granted && NyaSettings.getWorkMode() == NyaSettings.MODE.SHIZUKU
             && requestCode == SHIZUKU_REQUEST_CODE
         ) {
             setWorkingStatus(NyaSettings.MODE.SHIZUKU)
@@ -163,16 +164,53 @@ class SettingsActivity : BaseActivity() {
     private fun updateChrome() {
         when (supportFragmentManager.findFragmentById(R.id.settings_fragment_container)) {
             is LicenseFragment -> {
-                binding.cardStatus.visibility = View.GONE
+                setStatusCardVisible(false)
                 supportActionBar?.title = getString(R.string.open_source_license)
             }
 
             else -> {
-                binding.cardStatus.visibility = View.VISIBLE
+                setStatusCardVisible(true)
                 supportActionBar?.title = getString(R.string.setting)
             }
         }
+        chromeInitialized = true
         invalidateOptionsMenu()
+    }
+
+    private fun setStatusCardVisible(visible: Boolean) {
+        val card = binding.cardStatus
+        val shouldAnimate = chromeInitialized && card.isShown != visible
+        card.animate().cancel()
+
+        if (!shouldAnimate) {
+            card.visibility = if (visible) View.VISIBLE else View.GONE
+            card.alpha = 1f
+            card.translationY = 0f
+            return
+        }
+
+        val offset = resources.displayMetrics.density * 12f
+        if (visible) {
+            card.visibility = View.VISIBLE
+            card.alpha = 0f
+            card.translationY = -offset
+            card.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(180L)
+                .start()
+        } else {
+            card.animate()
+                .alpha(0f)
+                .translationY(-offset)
+                .setDuration(140L)
+                .withEndAction {
+                    card.visibility = View.GONE
+                    card.alpha = 1f
+                    card.translationY = 0f
+                }
+                .start()
+        }
     }
 
 }
