@@ -32,12 +32,13 @@ class LicenseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val libsFragment = childFragmentManager.findFragmentByTag(LIBS_FRAGMENT_TAG) as? LibsSupportFragment
-            ?: LibsSupportFragment().also {
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.license_fragment_container, it, LIBS_FRAGMENT_TAG)
-                    .commit()
-            }
+        val libsFragment =
+            childFragmentManager.findFragmentByTag(LIBS_FRAGMENT_TAG) as? LibsSupportFragment
+                ?: LibsSupportFragment().also {
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.license_fragment_container, it, LIBS_FRAGMENT_TAG)
+                        .commit()
+                }
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {

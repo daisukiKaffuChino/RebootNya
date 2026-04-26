@@ -297,7 +297,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    @androidx.annotation.RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showQuickAddTileDialog(context: Context) {
         val tileOptions = listOf(
             QuickTileOption(
