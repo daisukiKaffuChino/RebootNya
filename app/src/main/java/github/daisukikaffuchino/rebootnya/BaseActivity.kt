@@ -12,15 +12,23 @@ open class BaseActivity : AppCompatActivity() {
     private val localeDelegate by lazy {
         LocaleDelegate()
     }
+    private var recreateWithFadePending = false
+    private var playEnterFadeAfterRecreate = false
 
     lateinit var themeChanged: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        recreateWithFadePending = false
+        playEnterFadeAfterRecreate =
+            savedInstanceState?.getBoolean(STATE_PLAY_ENTER_FADE_AFTER_RECREATE, false) == true
         localeDelegate.onCreate(this)
         if (NyaSettings.preferences.getBoolean("dynamic_color", false))
             DynamicColors.applyToActivityIfAvailable(this)
         super.onCreate(savedInstanceState)
         themeChanged = computeThemeChanged()
+        if (playEnterFadeAfterRecreate) {
+            window?.decorView?.alpha = 0f
+        }
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -33,7 +41,47 @@ open class BaseActivity : AppCompatActivity() {
         super.onResume()
         if (localeDelegate.isLocaleChanged ||
             themeChanged != computeThemeChanged()
-        ) recreate()
+        ) recreateWithFade()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        if (playEnterFadeAfterRecreate) {
+            playEnterFadeAfterRecreate = false
+            window?.decorView?.animate()
+                ?.alpha(1f)
+                ?.setDuration(180L)
+                ?.start()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(
+            STATE_PLAY_ENTER_FADE_AFTER_RECREATE,
+            playEnterFadeAfterRecreate || recreateWithFadePending
+        )
+    }
+
+    fun recreateWithFade() {
+        if (recreateWithFadePending) return
+        recreateWithFadePending = true
+        playEnterFadeAfterRecreate = true
+
+        val decorView = window?.decorView ?: run {
+            recreate()
+            return
+        }
+        decorView.animate().cancel()
+        decorView.animate()
+            .alpha(0f)
+            .setDuration(140L)
+            .withEndAction {
+                if (!isFinishing && !isDestroyed) {
+                    recreate()
+                }
+            }
+            .start()
     }
 
     private fun computeThemeChanged(): String {
@@ -41,4 +89,7 @@ open class BaseActivity : AppCompatActivity() {
             .toString() + ResourceUtils.isNightMode(getResources().configuration).toString()
     }
 
+    companion object {
+        private const val STATE_PLAY_ENTER_FADE_AFTER_RECREATE = "play_enter_fade_after_recreate"
+    }
 }

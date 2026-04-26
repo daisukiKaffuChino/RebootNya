@@ -4,297 +4,396 @@ import android.app.StatusBarManager
 import android.content.ComponentName
 import android.content.Context
 import android.graphics.drawable.Icon
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import androidx.core.os.BundleCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.preference.ListPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.TwoStatePreference
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import github.daisukikaffuchino.rebootnya.BaseActivity
 import github.daisukikaffuchino.rebootnya.R
 import github.daisukikaffuchino.rebootnya.SettingsActivity
+import github.daisukikaffuchino.rebootnya.adapter.SettingsAdapter
+import github.daisukikaffuchino.rebootnya.adapter.SettingsItemSpacingDecoration
+import github.daisukikaffuchino.rebootnya.adapter.SettingsRow
+import github.daisukikaffuchino.rebootnya.adapter.SettingsSection
 import github.daisukikaffuchino.rebootnya.data.AppLocales
-import github.daisukikaffuchino.rebootnya.preference.EditTextPreference
-import github.daisukikaffuchino.rebootnya.preference.IntegerSimpleMenuPreference
 import github.daisukikaffuchino.rebootnya.tile.LockScreenTileService
 import github.daisukikaffuchino.rebootnya.tile.PowerMenuTileService
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
 import github.daisukikaffuchino.rebootnya.utils.ShortcutHelper
 import github.daisukikaffuchino.rebootnya.utils.openUrlLink
 import github.daisukikaffuchino.rebootnya.utils.sendEmail
-import github.daisukikaffuchino.rebootnya.utils.toHtml
 import rikka.material.app.LocaleDelegate
-import rikka.recyclerview.addEdgeSpacing
-import rikka.recyclerview.fixEdgeEffect
-import rikka.widget.borderview.BorderRecyclerView
 import java.util.Locale
 
+class SettingsFragment : Fragment() {
+    private lateinit var recyclerView: RecyclerView
+    private var recyclerLayoutState: Parcelable? = null
+    private var settingsAdapter: SettingsAdapter? = null
+    private var commandText: String? = null
+    private var commandEditText: TextInputEditText? = null
+    private var keyboardLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
+    private val commandExecutor by lazy {
+        SettingsCommandExecutor(this, ::clearCommand)
+    }
 
-class SettingsFragment : PreferenceFragmentCompat() {
-
-    private lateinit var workModePreference: IntegerSimpleMenuPreference
-    private lateinit var shellModePreference: IntegerSimpleMenuPreference
-    private lateinit var userServiceInfoPreference: Preference
-    private lateinit var hideUnavailableOptionsPreference: TwoStatePreference
-    private lateinit var dynamicColorPreference: TwoStatePreference
-    private lateinit var nightModePreference: IntegerSimpleMenuPreference
-    private lateinit var languagePreference: ListPreference
-    private lateinit var editTextPreference: EditTextPreference
-    private lateinit var quickAddTilePreference: Preference
-    private lateinit var pinShortcutsPreference: Preference
-    private lateinit var clearShortcutsPreference: Preference
-    private lateinit var translationPreference: Preference
-    private lateinit var developerPreference: Preference
-    private lateinit var projectInfoPreference: Preference
-    private lateinit var licensePreference: Preference
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val context = requireContext()
-        preferenceManager.setStorageDeviceProtected()
-        preferenceManager.sharedPreferencesName = NyaSettings.NAME
-        preferenceManager.sharedPreferencesMode = Context.MODE_PRIVATE
-        setPreferencesFromResource(R.xml.preference_settings, null)
-
-        workModePreference = findPreference("work_mode")!!
-        shellModePreference = findPreference("shizuku_shell_mode")!!
-        userServiceInfoPreference = findPreference("user_service_mode_info")!!
-        hideUnavailableOptionsPreference = findPreference("hide_unavailable_options")!!
-        dynamicColorPreference = findPreference("dynamic_color")!!
-        nightModePreference = findPreference("night_mode")!!
-        languagePreference = findPreference("language")!!
-        editTextPreference = findPreference("edit_text")!!
-        quickAddTilePreference = findPreference("quick_add_tile")!!
-        pinShortcutsPreference = findPreference("pin_shortcuts")!!
-        clearShortcutsPreference = findPreference("clear_shortcuts")!!
-        translationPreference = findPreference("translation")!!
-        developerPreference = findPreference("developer")!!
-        projectInfoPreference = findPreference("repo")!!
-        licensePreference = findPreference("licenses")!!
-
-        val work = NyaSettings.getWorkMode()
-        workModePreference.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
-                if (value is Int && work != value)
-                    activity?.recreate()
-                true
-            }
-
-        if (work == NyaSettings.MODE.ROOT) {
-            shellModePreference.isVisible = false
-            userServiceInfoPreference.isVisible = false
-            hideUnavailableOptionsPreference.isVisible = false
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        commandText = savedInstanceState?.getString(STATE_COMMAND_TEXT)
+        recyclerLayoutState = savedInstanceState?.let {
+            BundleCompat.getParcelable(it, STATE_RECYCLER_LAYOUT, Parcelable::class.java)
         }
-
-        userServiceInfoPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.about_user_service)
-                .setMessage(R.string.about_user_service_content)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
-            true
-        }
-
-        nightModePreference.value = NyaSettings.getNightMode(context)
-        nightModePreference.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
-                if (value is Int && NyaSettings.getNightMode(context) != value) {
-                    AppCompatDelegate.setDefaultNightMode(value)
-                    activity?.recreate()
-                }
-                true
-            }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            dynamicColorPreference.onPreferenceChangeListener =
-                Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
-                    if (value is Boolean && NyaSettings.isUsingSystemColor() != value) {
-                        activity?.recreate()
-                    }
-                    true
-                }
-        } else {
-            dynamicColorPreference.isEnabled = false
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            quickAddTilePreference.onPreferenceClickListener =
-                Preference.OnPreferenceClickListener {
-                    showQuickAddTileDialog(context)
-                    true
-                }
-        } else {
-            quickAddTilePreference.isEnabled = false
-            quickAddTilePreference.summary = getString(R.string.require_a13)
-        }
-
-        languagePreference.onPreferenceChangeListener =
-            Preference.OnPreferenceChangeListener { _: Preference?, newValue: Any ->
-                if (newValue is String) {
-                    val locale: Locale = if ("SYSTEM" == newValue)
-                        LocaleDelegate.systemLocale
-                    else
-                        Locale.forLanguageTag(newValue)
-                    LocaleDelegate.defaultLocale = locale
-                    activity?.recreate()
-                }
-                true
-            }
-        setupLocalePreference()
-
-        pinShortcutsPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.request_pin_shortcuts)
-                .setItems(
-                    arrayOf(
-                        getString(R.string.lock_screen),
-                        getString(R.string.power_off),
-                        getString(R.string.reboot)
-                    )
-                ) { _, i ->
-                    val shortcutHelper = ShortcutHelper(context)
-                    shortcutHelper.requestPinShortcut(shortcutHelper.items[i])
-                }
-                .show()
-            true
-        }
-
-        clearShortcutsPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-            NyaSettings.preferences.edit { putBoolean("isShortcutCreated", false) }
-            Toast.makeText(context, R.string.cleared, Toast.LENGTH_SHORT).show()
-            true
-        }
-
-        translationPreference.summary =
-            context.getString(
-                R.string.translation_summary, context.getString(R.string.app_name)
-            )
-        translationPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlLink(context, "https://crowdin.com/project/rebootnya")
-            true
-        }
-
-        developerPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.contact_me)
-                .setItems(
-                    arrayOf(
-                        getString(R.string.email),
-                        getString(R.string.bilibili)
-                    )
-                ) { _, i ->
-                    when (i) {
-                        0 -> sendEmail(context)
-                        1 -> openUrlLink(context, "https://space.bilibili.com/178423358")
-                    }
-                }
-                .show()
-            true
-        }
-
-        projectInfoPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlLink(context, "https://github.com/daisukiKaffuChino/RebootNya")
-            true
-        }
-
-        licensePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            (activity as? SettingsActivity)?.openLicenseFragment()
-            true
-        }
+        return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById<RecyclerView>(R.id.settings_recycler_view).apply {
+            layoutManager = LinearLayoutManager(context)
+            addItemDecoration(SettingsItemSpacingDecoration(context))
+            adapter = SettingsAdapter(
+                sections = buildSections(),
+                initialCommandText = commandText,
+                onCommandEditTextBound = { commandEditText = it },
+                onCommandSubmit = commandExecutor::execute
+            ).also { settingsAdapter = it }
+        }
+        recyclerLayoutState?.let { state ->
+            recyclerView.post {
+                recyclerView.layoutManager?.onRestoreInstanceState(state)
+                recyclerLayoutState = null
+            }
+        }
         val rootView = requireActivity().window.decorView
-        rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
+        keyboardLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
             rootView.getWindowVisibleDisplayFrame(rect)
             val screenHeight = rootView.rootView.height
             val keypadHeight = screenHeight - rect.bottom
-            if (keypadHeight < screenHeight * 0.15)
-                editTextPreference.getTextInputEditText()?.clearFocus()
-        }
-    }
-
-    override fun onCreateRecyclerView(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        savedInstanceState: Bundle?
-    ): RecyclerView {
-        val recyclerView =
-            super.onCreateRecyclerView(inflater, parent, savedInstanceState) as BorderRecyclerView
-        recyclerView.fixEdgeEffect()
-        recyclerView.addEdgeSpacing(bottom = 8f, unit = TypedValue.COMPLEX_UNIT_DIP)
-
-        return recyclerView
-    }
-
-    private fun setupLocalePreference() {
-        val localeTags = AppLocales.LOCALES
-        val displayLocaleTags = AppLocales.DISPLAY_LOCALES
-
-        languagePreference.entries = displayLocaleTags
-        languagePreference.entryValues = localeTags
-
-        val currentLocaleTag = languagePreference.value
-        val currentLocaleIndex = localeTags.indexOf(currentLocaleTag)
-        val currentLocale = NyaSettings.getLocale()
-        val localizedLocales = mutableListOf<CharSequence>()
-
-        for ((index, displayLocale) in displayLocaleTags.withIndex()) {
-            if (index == 0) {
-                localizedLocales.add(getString(R.string.follow_system))
-                continue
+            if (keypadHeight < screenHeight * 0.15) {
+                commandEditText?.clearFocus()
+                val context = context ?: return@OnGlobalLayoutListener
+                val imm = context.getSystemService(InputMethodManager::class.java)
+                imm?.hideSoftInputFromWindow(commandEditText?.windowToken, 0)
             }
+        }
+        keyboardLayoutListener?.let(rootView.viewTreeObserver::addOnGlobalLayoutListener)
+    }
 
-            val locale = Locale.forLanguageTag(displayLocale.toString())
-            val localeName = if (!TextUtils.isEmpty(locale.script))
-                locale.getDisplayScript(locale)
-            else
-                locale.getDisplayName(locale)
+    override fun onDestroyView() {
+        val rootView = activity?.window?.decorView
+        keyboardLayoutListener?.let { listener ->
+            rootView?.viewTreeObserver?.removeOnGlobalLayoutListener(listener)
+        }
+        keyboardLayoutListener = null
+        commandEditText = null
+        settingsAdapter = null
+        super.onDestroyView()
+    }
 
-            val localizedLocaleName = if (!TextUtils.isEmpty(locale.script))
-                locale.getDisplayScript(currentLocale)
-            else
-                locale.getDisplayName(currentLocale)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_COMMAND_TEXT, settingsAdapter?.commandText ?: commandText)
+        outState.putParcelable(
+            STATE_RECYCLER_LAYOUT,
+            recyclerView.layoutManager?.onSaveInstanceState()
+        )
+    }
 
-            localizedLocales.add(
-                if (index != currentLocaleIndex)
-                    "$localeName<br><small>$localizedLocaleName<small>".toHtml()
-                else
-                    localizedLocaleName
+    private fun buildSections(): List<SettingsSection> {
+        return listOf(
+            buildLaunchSection(),
+            buildAdvancedSection(),
+            buildAppearanceSection(),
+            buildOtherSection(),
+            buildLanguageSection(),
+            buildAboutSection()
+        )
+    }
+
+    private fun buildLaunchSection(): SettingsSection {
+        val context = requireContext()
+        val workMode = NyaSettings.getWorkMode()
+
+        return SettingsSection(
+            title = getString(R.string.launch),
+            rows = buildList {
+                add(
+                    SettingsRow.Choice(
+                        title = getString(R.string.work_mode),
+                        entries = context.resources.getStringArray(R.array.work_mode).toList(),
+                        values = context.resources.getIntArray(R.array.work_mode_value).toList(),
+                        selectedValue = workMode,
+                        onSelected = { value ->
+                            if (workMode != value) {
+                                NyaSettings.preferences.edit { putInt("work_mode", value) }
+                                (activity as? BaseActivity)?.recreateWithFade() ?: activity?.recreate()
+                            }
+                        }
+                    )
+                )
+                if (workMode == NyaSettings.MODE.SHIZUKU) {
+                    add(
+                        SettingsRow.Choice(
+                            title = getString(R.string.shizuku_exec_mode),
+                            entries = context.resources.getStringArray(R.array.shell_mode).toList(),
+                            values = context.resources.getIntArray(R.array.shell_mode_value).toList(),
+                            selectedValue = NyaSettings.getShizukuShellMode(),
+                            onSelected = { value ->
+                                NyaSettings.preferences.edit { putInt("shizuku_shell_mode", value) }
+                            }
+                        )
+                    )
+                    add(
+                        SettingsRow.Action(
+                            title = getString(R.string.about_user_service),
+                            onClick = ::showUserServiceInfo
+                        )
+                    )
+                    add(
+                        SettingsRow.Switch(
+                            title = getString(R.string.hide_unavailable),
+                            summary = getString(R.string.hide_unavailable_summary),
+                            checked = NyaSettings.getIsHideUnavailableOptions(),
+                            onCheckedChange = { checked ->
+                                NyaSettings.preferences.edit {
+                                    putBoolean("hide_unavailable_options", checked)
+                                }
+                            }
+                        )
+                    )
+                }
+            }
+        )
+    }
+
+    private fun buildAdvancedSection(): SettingsSection {
+        return SettingsSection(
+            title = getString(R.string.advanced),
+            rows = listOf(SettingsRow.Command)
+        )
+    }
+
+    private fun buildAppearanceSection(): SettingsSection {
+        val context = requireContext()
+        return SettingsSection(
+            title = getString(R.string.interface_appearance),
+            rows = listOf(
+                SettingsRow.Choice(
+                    title = getString(R.string.dark_theme),
+                    entries = context.resources.getStringArray(R.array.night_mode).toList(),
+                    values = context.resources.getIntArray(R.array.night_mode_value).toList(),
+                    selectedValue = NyaSettings.getNightMode(context),
+                    onSelected = { value ->
+                        if (NyaSettings.getNightMode(context) != value) {
+                            NyaSettings.preferences.edit { putInt("night_mode", value) }
+                            AppCompatDelegate.setDefaultNightMode(value)
+                            (activity as? BaseActivity)?.recreateWithFade() ?: activity?.recreate()
+                        }
+                    }
+                ),
+                SettingsRow.Switch(
+                    title = getString(R.string.dynamic_color),
+                    summary = getString(R.string.require_a12),
+                    checked = NyaSettings.isUsingSystemColor(),
+                    enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+                    disableAnimation = true,
+                    onCheckedChange = { checked ->
+                        if (NyaSettings.isUsingSystemColor() != checked) {
+                            NyaSettings.preferences.edit { putBoolean("dynamic_color", checked) }
+                            (activity as? BaseActivity)?.recreateWithFade() ?: activity?.recreate()
+                        }
+                    }
+                ),
+                SettingsRow.Choice(
+                    title = getString(R.string.main_interface_style),
+                    entries = context.resources.getStringArray(R.array.main_interface_style).toList(),
+                    values = context.resources.getIntArray(R.array.main_interface_style_value).toList(),
+                    selectedValue = NyaSettings.getMainInterfaceStyle(),
+                    onSelected = { value ->
+                        NyaSettings.preferences.edit { putInt("main_interface_style", value) }
+                    }
+                )
             )
-        }
+        )
+    }
 
-        languagePreference.entries = localizedLocales.toTypedArray()
+    private fun buildOtherSection(): SettingsSection {
+        val context = requireContext()
+        return SettingsSection(
+            title = getString(R.string.others),
+            rows = listOf(
+                SettingsRow.Action(
+                    title = getString(R.string.quick_add_tile),
+                    summary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) null
+                    else getString(R.string.require_a13),
+                    enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU,
+                    onClick = {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            showQuickAddTileDialog(context)
+                        }
+                    }
+                ),
+                SettingsRow.Action(
+                    title = getString(R.string.request_pin_shortcuts),
+                    onClick = ::showPinShortcutDialog
+                ),
+                SettingsRow.Action(
+                    title = getString(R.string.clear_created_shortcuts),
+                    summary = getString(R.string.create_next_launch),
+                    onClick = {
+                        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+                        NyaSettings.preferences.edit { putBoolean("isShortcutCreated", false) }
+                        Toast.makeText(context, R.string.cleared, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            )
+        )
+    }
 
-        languagePreference.summary = when {
-            TextUtils.isEmpty(currentLocaleTag) || "SYSTEM" == currentLocaleTag ->
-                getString(R.string.follow_system)
+    private fun buildLanguageSection(): SettingsSection {
+        val context = requireContext()
+        return SettingsSection(
+            title = getString(R.string.language),
+            rows = listOf(
+                SettingsRow.StringChoice(
+                    title = getString(R.string.language),
+                    entries = buildLocalizedLocales(),
+                    values = AppLocales.LOCALES.map { it.toString() },
+                    selectedValue = getCurrentLanguageValue(),
+                    onSelected = ::setLanguage
+                ),
+                SettingsRow.Action(
+                    title = getString(R.string.participate_translation),
+                    summary = getString(
+                        R.string.translation_summary,
+                        getString(R.string.app_name)
+                    ),
+                    onClick = { openUrlLink(context, "https://crowdin.com/project/rebootnya") }
+                )
+            )
+        )
+    }
 
-            currentLocaleIndex != -1 -> {
-                val localizedLocale = localizedLocales[currentLocaleIndex]
-                val newLineIndex = localizedLocale.indexOf('\n')
-                if (newLineIndex == -1)
-                    localizedLocale.toString()
-                else
-                    localizedLocale.subSequence(0, newLineIndex).toString()
+    private fun buildAboutSection(): SettingsSection {
+        val context = requireContext()
+        return SettingsSection(
+            title = getString(R.string.about),
+            rows = listOf(
+                SettingsRow.Action(
+                    title = getString(R.string.developer),
+                    summary = "Github@daisukiKaffuChino",
+                    onClick = ::showDeveloperDialog
+                ),
+                SettingsRow.Action(
+                    title = "RebootNya Open-Source Project",
+                    summary = getString(R.string.license),
+                    onClick = {
+                        openUrlLink(context, "https://github.com/daisukiKaffuChino/RebootNya")
+                    }
+                ),
+                SettingsRow.Action(
+                    title = getString(R.string.open_source_license),
+                    onClick = {
+                        (activity as? SettingsActivity)?.openLicenseFragment()
+                    }
+                )
+            )
+        )
+    }
+
+    private fun showUserServiceInfo() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.about_user_service)
+            .setMessage(R.string.about_user_service_content)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    private fun showPinShortcutDialog() {
+        val context = requireContext()
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.request_pin_shortcuts)
+            .setItems(
+                arrayOf(
+                    getString(R.string.lock_screen),
+                    getString(R.string.power_off),
+                    getString(R.string.reboot)
+                )
+            ) { _, index ->
+                val shortcutHelper = ShortcutHelper(context)
+                shortcutHelper.requestPinShortcut(shortcutHelper.items[index])
             }
+            .show()
+    }
 
-            else -> "Error"
+    private fun showDeveloperDialog() {
+        val context = requireContext()
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.contact_me)
+            .setItems(
+                arrayOf(
+                    getString(R.string.email),
+                    getString(R.string.bilibili)
+                )
+            ) { _, index ->
+                when (index) {
+                    0 -> sendEmail(context)
+                    1 -> openUrlLink(context, "https://space.bilibili.com/178423358")
+                }
+            }
+            .show()
+    }
+
+    private fun buildLocalizedLocales(): List<CharSequence> {
+        val displayLocaleTags = AppLocales.DISPLAY_LOCALES
+        val currentLocale = NyaSettings.getLocale()
+        return displayLocaleTags.mapIndexed { index, displayLocale ->
+            if (index == 0) {
+                getString(R.string.follow_system)
+            } else {
+                val locale = Locale.forLanguageTag(displayLocale.toString())
+                if (!TextUtils.isEmpty(locale.script)) {
+                    locale.getDisplayScript(currentLocale)
+                } else {
+                    locale.getDisplayName(currentLocale)
+                }
+            }
         }
+    }
+
+    private fun getCurrentLanguageValue(): String {
+        val language = NyaSettings.preferences.getString("language", "SYSTEM")
+        return if (TextUtils.isEmpty(language)) "SYSTEM" else language.toString()
+    }
+
+    private fun setLanguage(newValue: String) {
+        if (NyaSettings.preferences.getString("language", "SYSTEM") == newValue) return
+        NyaSettings.preferences.edit { putString("language", newValue) }
+        LocaleDelegate.defaultLocale = if ("SYSTEM" == newValue) {
+            LocaleDelegate.systemLocale
+        } else {
+            Locale.forLanguageTag(newValue)
+        }
+        (activity as? BaseActivity)?.recreateWithFade() ?: activity?.recreate()
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -345,10 +444,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    private fun clearCommand() {
+        commandText = null
+        settingsAdapter?.clearCommandText()
+    }
+
     private data class QuickTileOption(
         val labelResId: Int,
         val iconResId: Int,
         val serviceClass: Class<*>
     )
 
+    companion object {
+        private const val STATE_COMMAND_TEXT = "command_text"
+        private const val STATE_RECYCLER_LAYOUT = "recycler_layout"
+    }
 }

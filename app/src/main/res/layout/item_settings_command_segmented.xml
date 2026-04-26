@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.listitem.ListItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    tools:viewBindingIgnore="true">
+
+    <com.google.android.material.listitem.ListItemCardView
+        android:id="@+id/settings_item_card"
+        style="?attr/listItemCardViewSegmentedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/colorSurfaceContainer">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/item_cmd_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/exec_custom_shell"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="18dp"
+            app:boxCornerRadiusBottomStart="18dp"
+            app:boxCornerRadiusTopEnd="18dp"
+            app:boxCornerRadiusTopStart="18dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_send"
+            app:endIconMode="custom"
+            app:endIconTint="?attr/colorSecondary"
+            app:startIconCheckable="false"
+            app:startIconDrawable="@drawable/ic_console"
+            app:startIconTint="?attr/colorPrimary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/item_cmd_text_input_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="2" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.listitem.ListItemCardView>
+</com.google.android.material.listitem.ListItemLayout>
