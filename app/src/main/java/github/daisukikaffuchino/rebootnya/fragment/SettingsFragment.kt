@@ -1,8 +1,10 @@
 package github.daisukikaffuchino.rebootnya.fragment
 
+import android.app.UiModeManager
 import android.app.StatusBarManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.graphics.Rect
 import android.os.Build
@@ -60,6 +62,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var projectInfoPreference: Preference
     private lateinit var licensePreference: Preference
 
+    private fun recreateActivityWithFade() {
+        (activity as? SettingsActivity)?.recreateWithFade() ?: activity?.recreate()
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = requireContext()
         preferenceManager.setStorageDeviceProtected()
@@ -87,7 +93,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         workModePreference.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
                 if (value is Int && work != value)
-                    activity?.recreate()
+                    recreateActivityWithFade()
                 true
             }
 
@@ -111,7 +117,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
             Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
                 if (value is Int && NyaSettings.getNightMode(context) != value) {
                     AppCompatDelegate.setDefaultNightMode(value)
-                    activity?.recreate()
+                    if (shouldRecreateForNightModeChange(context, value)) {
+                        recreateActivityWithFade()
+                    }
                 }
                 true
             }
@@ -120,7 +128,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             dynamicColorPreference.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { _: Preference?, value: Any? ->
                     if (value is Boolean && NyaSettings.isUsingSystemColor() != value) {
-                        activity?.recreate()
+                        recreateActivityWithFade()
                     }
                     true
                 }
@@ -147,7 +155,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     else
                         Locale.forLanguageTag(newValue)
                     LocaleDelegate.defaultLocale = locale
-                    activity?.recreate()
+                    recreateActivityWithFade()
                 }
                 true
             }
@@ -239,6 +247,32 @@ class SettingsFragment : PreferenceFragmentCompat() {
         recyclerView.addEdgeSpacing(bottom = 8f, unit = TypedValue.COMPLEX_UNIT_DIP)
 
         return recyclerView
+    }
+
+    private fun shouldRecreateForNightModeChange(context: Context, nightMode: Int): Boolean {
+        val targetNightMode = resolveNightModeState(context, nightMode) ?: return true
+        val currentNightMode =
+            (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+                    Configuration.UI_MODE_NIGHT_YES
+        return currentNightMode != targetNightMode
+    }
+
+    private fun resolveNightModeState(context: Context, nightMode: Int): Boolean? {
+        return when (nightMode) {
+            AppCompatDelegate.MODE_NIGHT_YES -> true
+            AppCompatDelegate.MODE_NIGHT_NO -> false
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
+                val uiModeManager = context.getSystemService(UiModeManager::class.java)
+                    ?: return null
+                when (uiModeManager.nightMode) {
+                    UiModeManager.MODE_NIGHT_YES -> true
+                    UiModeManager.MODE_NIGHT_NO -> false
+                    else -> null
+                }
+            }
+
+            else -> null
+        }
     }
 
     private fun setupLocalePreference() {

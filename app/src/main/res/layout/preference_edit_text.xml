@@ -31,10 +31,16 @@
         app:startIconDrawable="@drawable/ic_console"
         app:startIconTint="?attr/colorPrimary">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/item_cmd_text_input_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:maxLines="2" />
+            android:gravity="start|center_vertical"
+            android:inputType="textMultiLine"
+            android:maxLines="2"
+            android:minHeight="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
+            android:textAppearance="?attr/textAppearanceBodyLarge" />
     </com.google.android.material.textfield.TextInputLayout>
 </FrameLayout>

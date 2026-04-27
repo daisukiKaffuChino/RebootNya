@@ -22,8 +22,16 @@ import rikka.sui.Sui
 
 
 class SettingsActivity : BaseActivity() {
+    companion object {
+        const val SHIZUKU_REQUEST_CODE: Int = 1000
+        private const val STATE_PLAY_FADE_IN = "state_play_fade_in"
+        private const val RECREATE_FADE_DURATION_MS = 240L
+    }
+
     lateinit var binding: ActivitySettingsBinding
     private var chromeInitialized = false
+    private var playFadeInOnNextCreate = false
+    private var isRecreatingWithFade = false
     private val requestPermissionResultListener =
         OnRequestPermissionResultListener { requestCode: Int, grantResult: Int ->
             this.onRequestPermissionsResult(
@@ -34,13 +42,10 @@ class SettingsActivity : BaseActivity() {
 
     lateinit var context: Context
 
-    companion object {
-        const val SHIZUKU_REQUEST_CODE: Int = 1000
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        playFadeInOnNextCreate = savedInstanceState?.getBoolean(STATE_PLAY_FADE_IN, false) == true
         this.theme.applyStyle(
             rikka.material.preference.R.style.ThemeOverlay_Rikka_Material3_Preference,
             true
@@ -60,6 +65,12 @@ class SettingsActivity : BaseActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener { updateChrome() }
         updateChrome()
+        applyPendingFadeIn()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(STATE_PLAY_FADE_IN, playFadeInOnNextCreate)
+        super.onSaveInstanceState(outState)
     }
 
     @SuppressLint("SetTextI18n")
@@ -126,6 +137,13 @@ class SettingsActivity : BaseActivity() {
             .replace(R.id.settings_fragment_container, LicenseFragment())
             .addToBackStack(LicenseFragment::class.java.name)
             .commit()
+    }
+
+    fun recreateWithFade() {
+        if (isRecreatingWithFade) return
+        isRecreatingWithFade = true
+        playFadeInOnNextCreate = true
+        recreate()
     }
 
     private fun onRequestPermissionsResult(requestCode: Int, grantResult: Int) {
@@ -208,6 +226,26 @@ class SettingsActivity : BaseActivity() {
                     card.visibility = View.GONE
                     card.alpha = 1f
                     card.translationY = 0f
+                }
+                .start()
+        }
+    }
+
+    private fun applyPendingFadeIn() {
+        if (!playFadeInOnNextCreate) {
+            binding.root.alpha = 1f
+            return
+        }
+
+        binding.root.alpha = 0.5f
+        binding.root.post {
+            binding.root.animate().cancel()
+            binding.root.animate()
+                .alpha(1f)
+                .setDuration(RECREATE_FADE_DURATION_MS)
+                .withEndAction {
+                    playFadeInOnNextCreate = false
+                    isRecreatingWithFade = false
                 }
                 .start()
         }
