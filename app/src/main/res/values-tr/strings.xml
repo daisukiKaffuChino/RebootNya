@@ -47,7 +47,7 @@
     <string name="email">E-posta</string>
     <string name="no_app_found_open_link">Bağlantıyı açacak uygulama bulunamadı</string>
     <string name="bilibili" translatable="false">Bilibili</string>
-    <string name="stop_system_ui_tip">Bazı ROM'larda SystemUI sistem servisleri tarafından otomatik olarak yeniden başlatılır, bu yüzden sonlandırıldıktan kısa bir süre sonra tekrar açılacaktır.</string>
+    <string name="stop_system_ui_tip">Bazı ROM\'larda SystemUI sistem servisleri tarafından otomatik olarak yeniden başlatılır, bu yüzden sonlandırıldıktan kısa bir süre sonra tekrar açılacaktır.</string>
     <string name="main_interface_style">Ana arayüz stili</string>
     <string name="style_classic_list">Klasik liste</string>
     <string name="style_md_buttons">Material Design butonları</string>
@@ -67,6 +67,6 @@
     <string name="executing">Yürütülüyor…</string>
     <string name="download_mode">İndirme Modu</string>
     <string name="open_source_license">Açık Kaynak Lisansı</string>
-    <string name="enter_content">İçerik girin...</string>
+    <string name="enter_content">İçerik girin…</string>
     <string name="tile_power_menu">Güç Menüsü</string>
 </resources>

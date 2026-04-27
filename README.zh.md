@@ -1,4 +1,4 @@
-[English](README.md) | 简体中文
+[English](README.md) | 简体中文 | [Türkçe](README.tr.md)
 
 <img src="./image/banner.png" alt="Banner"/>
 
