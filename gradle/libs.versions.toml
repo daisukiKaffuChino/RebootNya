@@ -1,5 +1,5 @@
 [versions]
-agp = "9.1.1"
+agp = "9.2.0"
 api = "13.1.5"
 appcompatVersion = "1.6.1"
 borderview = "1.1.0"
