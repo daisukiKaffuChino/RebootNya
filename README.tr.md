@@ -17,7 +17,8 @@
 [![GitHub license](https://img.shields.io/github/license/daisukiKaffuChino/RebootNya)](https://github.com/daisukiKaffuChino/RebootNya/blob/main/LICENSE)
 
 RebootNya, basit ama gelişmiş bir yeniden başlatma aracıdır ve normalde yükseltilmiş ayrıcalıklar gerektiren çeşitli yeniden başlatma seçeneklerine kolay erişim sağlar. Uygulama hem **Root** hem de **[Shizuku](https://shizuku.rikka.app/)** desteğine sahiptir; bu sayede kullanıcılar yeniden başlatma komutlarını güvenli ve şeffaf bir şekilde yürütebilirler.
-Tested on some devices and works well on Android 9 to 16.
+
+Tested on some devices and works well on Android 9 to 17.
 
 > Bazı ROM'ların varsayılan başlatıcısında (launcher), şeffaf arka plan düzgün görüntülenmeyebilir (örneğin, ColorOS 15). Çözüm, Lawnchair gibi başka bir başlatıcıya geçmektir.
 

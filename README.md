@@ -18,7 +18,7 @@ English | [简体中文](README.zh.md) | [Türkçe](README.tr.md)
 
 RebootNya is a simple yet advanced reboot utility, and provides convenient access to various reboot options that normally require elevated privileges. The app supports both **Root** and **[Shizuku](https://shizuku.rikka.app/)**, allowing users to execute reboot commands safely and transparently.
 
-Tested on some devices and works well on Android 9 to 16.
+Tested on some devices and works well on Android 9 to 17.
 
 > On some ROMs’ default launcher, the transparent background may not display correctly (e.g., ColorOS 15). The solution is to switch to another launcher, such as Lawnchair.
 
