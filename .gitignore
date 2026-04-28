@@ -1,5 +1,6 @@
 # Gradle files
 .gradle/
+.gradle-user/
 build/
 
 # Local configuration file (sdk path, etc)
@@ -35,3 +36,6 @@ google-services.json
 
 # macOS
 .DS_Store
+
+# aboutlibraries
+.tmp-aboutlibraries
