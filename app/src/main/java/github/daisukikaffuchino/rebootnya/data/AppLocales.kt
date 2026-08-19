@@ -3,9 +3,12 @@ package github.daisukikaffuchino.rebootnya.data
 object AppLocales {
     val LOCALES: Array<String?> = arrayOf(
         "SYSTEM",
+        "de",
         "en",
         "es",
         "ja",
+        "pt-PT",
+        "pt-BR",
         "ru",
         "tr",
         "zh-CN",
@@ -13,9 +16,12 @@ object AppLocales {
     )
     val DISPLAY_LOCALES: Array<String?> = arrayOf(
         "SYSTEM",
+        "de",
         "en",
         "es",
         "ja",
+        "pt-PT",
+        "pt-BR",
         "ru",
         "tr",
         "zh-Hans",
