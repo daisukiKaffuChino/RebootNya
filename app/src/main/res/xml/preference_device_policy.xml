@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/device_policy_authorization_category">
+        <Preference
+            app:key="device_policy_authorize"
+            app:title="@string/device_policy_authorize" />
+        <rikka.material.preference.MaterialSwitchPreference
+            app:defaultValue="false"
+            app:key="device_policy_enabled"
+            app:summary="@string/device_policy_enabled_summary"
+            app:title="@string/device_policy_enabled" />
+        <Preference
+            app:key="device_policy_revoke"
+            app:summary="@string/device_policy_revoke_summary"
+            app:title="@string/device_policy_revoke" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/device_policy_about_category">
+        <Preference
+            app:key="device_policy_about"
+            app:summary="@string/device_policy_about"
+            app:title="@string/device_policy_about_title" />
+        <Preference
+            app:key="device_policy_reference"
+            app:summary="F33RNI/LockdownUtility"
+            app:title="@string/device_policy_reference" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

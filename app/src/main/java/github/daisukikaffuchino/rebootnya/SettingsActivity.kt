@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.topjohnwu.superuser.Shell
 import github.daisukikaffuchino.rebootnya.databinding.ActivitySettingsBinding
+import github.daisukikaffuchino.rebootnya.fragment.DevicePolicyFragment
 import github.daisukikaffuchino.rebootnya.fragment.LicenseFragment
 import github.daisukikaffuchino.rebootnya.fragment.SettingsFragment
 import github.daisukikaffuchino.rebootnya.utils.NyaSettings
@@ -127,7 +128,9 @@ class SettingsActivity : BaseActivity() {
     }
 
     fun openLicenseFragment() {
+        showSubPage(R.string.open_source_license)
         supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
             .setCustomAnimations(
                 R.anim.fragment_slide_in_right,
                 R.anim.fragment_slide_out_left,
@@ -136,6 +139,21 @@ class SettingsActivity : BaseActivity() {
             )
             .replace(R.id.settings_fragment_container, LicenseFragment())
             .addToBackStack(LicenseFragment::class.java.name)
+            .commit()
+    }
+
+    fun openDevicePolicyFragment() {
+        showSubPage(R.string.device_policy)
+        supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .setCustomAnimations(
+                R.anim.fragment_slide_in_right,
+                R.anim.fragment_slide_out_left,
+                R.anim.fragment_slide_in_left,
+                R.anim.fragment_slide_out_right
+            )
+            .replace(R.id.settings_fragment_container, DevicePolicyFragment())
+            .addToBackStack(DevicePolicyFragment::class.java.name)
             .commit()
     }
 
@@ -186,6 +204,11 @@ class SettingsActivity : BaseActivity() {
                 supportActionBar?.title = getString(R.string.open_source_license)
             }
 
+            is DevicePolicyFragment -> {
+                setStatusCardVisible(false)
+                supportActionBar?.title = getString(R.string.device_policy)
+            }
+
             else -> {
                 setStatusCardVisible(true)
                 supportActionBar?.title = getString(R.string.setting)
@@ -193,6 +216,11 @@ class SettingsActivity : BaseActivity() {
         }
         chromeInitialized = true
         invalidateOptionsMenu()
+    }
+
+    private fun showSubPage(titleResId: Int) {
+        setStatusCardVisible(false)
+        supportActionBar?.setTitle(titleResId)
     }
 
     private fun setStatusCardVisible(visible: Boolean) {

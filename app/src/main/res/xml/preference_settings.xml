@@ -23,6 +23,9 @@
             app:key="hide_unavailable_options"
             app:summary="@string/hide_unavailable_summary"
             app:title="@string/hide_unavailable" />
+        <Preference
+            app:key="device_policy"
+            app:title="@string/device_policy" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/advanced">

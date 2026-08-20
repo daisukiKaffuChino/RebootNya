@@ -49,6 +49,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var workModePreference: IntegerSimpleMenuPreference
     private lateinit var shellModePreference: IntegerSimpleMenuPreference
     private lateinit var userServiceInfoPreference: Preference
+    private lateinit var devicePolicyPreference: Preference
     private lateinit var hideUnavailableOptionsPreference: TwoStatePreference
     private lateinit var dynamicColorPreference: TwoStatePreference
     private lateinit var nightModePreference: IntegerSimpleMenuPreference
@@ -76,6 +77,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         workModePreference = findPreference("work_mode")!!
         shellModePreference = findPreference("shizuku_shell_mode")!!
         userServiceInfoPreference = findPreference("user_service_mode_info")!!
+        devicePolicyPreference = findPreference("device_policy")!!
         hideUnavailableOptionsPreference = findPreference("hide_unavailable_options")!!
         dynamicColorPreference = findPreference("dynamic_color")!!
         nightModePreference = findPreference("night_mode")!!
@@ -109,6 +111,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 .setMessage(R.string.about_user_service_content)
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
+            true
+        }
+
+        devicePolicyPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            (activity as? SettingsActivity)?.openDevicePolicyFragment()
             true
         }
 
@@ -273,6 +280,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             else -> null
         }
+
     }
 
     private fun setupLocalePreference() {

@@ -2,6 +2,8 @@ package github.daisukikaffuchino.rebootnya.fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -18,6 +20,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import github.daisukikaffuchino.rebootnya.DeviceAdminReceiver
 import github.daisukikaffuchino.rebootnya.MainActivity
 import github.daisukikaffuchino.rebootnya.MainActivity.Companion.EXTRA_ACTION_ITEM
 import github.daisukikaffuchino.rebootnya.R
@@ -210,10 +213,39 @@ class HomeFragment : DialogFragment() {
     }
 
     private fun doAction(listItemEnum: ListItemEnum) {
+        if (listItemEnum == ListItemEnum.LOCK_SCREEN &&
+            NyaSettings.preferences.getBoolean("device_policy_enabled", false)
+        ) {
+            lockWithDevicePolicy()
+            return
+        }
         if (NyaSettings.getWorkMode() == NyaSettings.MODE.ROOT) {
             funcRoot(listItemEnum)
         } else {
             funcShizuku(listItemEnum)
+        }
+    }
+
+    private fun lockWithDevicePolicy() {
+        val manager = mContext.getSystemService(DevicePolicyManager::class.java)
+        if (manager == null) {
+            Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
+            return
+        }
+        val admin = ComponentName(mContext, DeviceAdminReceiver::class.java)
+        if (!manager.isAdminActive(admin)) {
+            NyaSettings.preferences.edit().putBoolean("device_policy_enabled", false).apply()
+            Toast.makeText(mContext, R.string.device_policy_not_authorized, Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        try {
+            manager.lockNow()
+            dismiss()
+        } catch (_: SecurityException) {
+            NyaSettings.preferences.edit().putBoolean("device_policy_enabled", false).apply()
+            Toast.makeText(mContext, R.string.exec_fail, Toast.LENGTH_SHORT).show()
         }
     }
 
