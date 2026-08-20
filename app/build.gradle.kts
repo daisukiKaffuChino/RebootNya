@@ -65,7 +65,6 @@ dependencies {
     implementation(libs.dev.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
-    implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.preference)
 

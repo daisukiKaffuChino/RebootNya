@@ -9,7 +9,6 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 material = "1.14.0"
 activity = "1.13.0"
-constraintlayout = "2.2.2"
 materialPreference = "2.0.0"
 navigationUi = "2.9.8"
 coreKtx = "1.19.0"
@@ -28,7 +27,6 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitV
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material-preference = { module = "dev.rikka.rikkax.material:material-preference", version.ref = "materialPreference" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationUi" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
